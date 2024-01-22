@@ -1,0 +1,5 @@
+files:
+  - source: /src/usr/local/emhttp/plugins/tailscale/**/*.php
+    translation: /src/usr/loca/emhttp/languages/%locale_with_underscore%/tailscale.txt
+  - source: /src/usr/local/emhttp/plugins/tailscale/**/*.page
+    translation: /src/usr/loca/emhttp/languages/%locale_with_underscore%/tailscale.txt
