@@ -110,7 +110,7 @@ _(Use Tailscale Subnets)_
 </select>
 
 > _(Accept routes from the tailnet.)_
-> _(If set to _("Ignore"), the plugin will not modify the setting.)_
+> _(If set to Ignore, the plugin will not modify the setting.)_
 
 _(Use Tailscale DNS settings)_
 : <select name='ACCEPT_DNS' size='1'>
