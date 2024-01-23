@@ -7,81 +7,57 @@ Type="xmenu"
 
 ## _(Initial Configuration)_
 
-You may want to disable key expiration for your server (either by using an 
-auth key and connecting via the CLI, or afterwards via the Tailscale admin
-console).
+_(You may want to disable key expiration for your server (either by using an auth key and connecting via the CLI, or afterwards via the Tailscale admin console).)_
 
 ## _(System Settings)_
 
 ### _(Unraid services listen on Tailscale IP)_
 
-Configures Unraid services (SSH, WebGUI, SMB, etc.) to listen on Tailscale 
-addresses.
+_(Configures Unraid services (SSH, WebGUI, SMB, etc.) to listen on Tailscale addresses.)_
 
 ### _(Enable IP Forwarding)_
 
-This setting modifies the sysctl settings for IPv4 and IPv6 forwarding.
-This is useful when Tailscale is configured to be a subnet router or
-exit node.
+_(This setting modifies the sysctl settings for IPv4 and IPv6 forwarding.)_
+_(This is useful when Tailscale is configured to be a subnet router or exit node.)_
 
-When set to Yes, IPv4 and IPv6 forwarding are both turned on.  
-When set to No, the plugin does not modify the forwarding settings.
+_(When set to Yes, IPv4 and IPv6 forwarding are both turned on.)_
+_(When set to No, the plugin does not modify the forwarding settings.)_
 
 ### _(Taildrop Location)_
 
-Enter a valid path here to enable the Unraid server to accept files via
-Taildrop.
+_(Enter a valid path here to enable the Unraid server to accept files via Taildrop.)_
 
-If this setting is configured, Tailscale will be restarted when the array
-starts; this is required for the Taildrop folder to be detected and used.
+_(If this setting is configured, Tailscale will be restarted when the array starts; this is required for the Taildrop folder to be detected and used.)_
 
 ### _(Allow Usage Data Collection)_
 
-Allows usage information to be collected:
+_(Allows usage information to be collected)_:
 
-- Anonymized identifier
-- Tailscale plugin version
-- Unraid version
+- _(Anonymized identifier)_
+- _(Tailscale plugin version)_
+- _(Unraid version)_
 
 ## _(Tailscale Settings)_
 
-If a setting is set to "Ignore", the plugin will not make any changes to the 
-setting in Tailscale. This is useful if you wish to configure settings via 
-CLI instead of the WebGUI.
+_(If a setting is set to "Ignore", the plugin will not make any changes to the setting in Tailscale.)_
+_(This is useful if you wish to configure settings via CLI instead of the WebGUI.)_
 
 ### _(Use Tailscale Subnets)_
 
-When enabled, Unraid will accept routes advertisted from subnet routers in the 
-tailnet.
+_(When enabled, Unraid will accept routes advertisted from subnet routers in the tailnet.)_
 
-When disabled, Unraid will not accept routes from subnet routers.
+_(When disabled, Unraid will not accept routes from subnet routers.)_
 
 ### _(Use Tailscale DNS Settings)_
 
-When enabled, Unraid will use the DNS settings configured in the Tailscale 
-admin console, including MagicDNS and nameservers.
+_(When enabled, Unraid will use the DNS settings configured in the Tailscale admin console, including MagicDNS and nameservers.)_
 
-When disabled, Unraid will use the DNS settings configured in the Unraid 
-network settings.
-
-Refer to [https://tailscale.com/kb/1054/dns/](https://tailscale.com/kb/1054/dns/)
-for more information on Tailscale DNS configuration.
-
-### _(Use Tailscale SSH)_
-
-When enabled, the Tailscale policy is used to manage access to SSH via 
-Tailscale.
-
-When disabled, the built-in Unraid SSH server manages connections via 
-Tailscale.
-
-Refer to [https://tailscale.com/kb/1193/tailscale-ssh/](https://tailscale.com/kb/1193/tailscale-ssh/) 
-for more information on Tailscale SSH.
+_(When disabled, Unraid will use the DNS settings configured in the Unraid network settings.)_
 
 ## _(Certificates)_
 
-A Tailscale HTTPS certificate can be used for the WebGUI. Your hostname must
-match the name used for the machine in Tailscale.
+_(A Tailscale HTTPS certificate can be used for the WebGUI.)_
+_(Your hostname must match the name used for the machine in Tailscale.)_
 
 1. Enable HTTPS for your tailnet.
 2. Set the **Local TLD** in **Settings**->**Management Access** to your
@@ -124,10 +100,8 @@ docker restart Minio
 
 ## _(Support)_
 
-Support for this plugin is available via the [support thread](https://forums.unraid.net/topic/136889-plugin-tailscale/)
-on the Unraid forums.
+_(Support for this plugin is available via the support thread on the Unraid forums)_:
 
-**Support for use of advanced networking features such as
-subnet routers or docker ipvlan/macvlan networks will be
-limited since advanced network features can be dependent 
-by the underlying network configuration.**
+[https://forums.unraid.net/topic/136889-plugin-tailscale/](https://forums.unraid.net/topic/136889-plugin-tailscale/)
+
+_(Support for use of advanced networking features such as subnet routers or docker ipvlan/macvlan networks will be limited since advanced network features can be dependent on the underlying network configuration.)_
