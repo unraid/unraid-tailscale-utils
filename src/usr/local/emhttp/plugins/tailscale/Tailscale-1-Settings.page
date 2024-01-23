@@ -37,9 +37,6 @@ _(Enable Tailscale)_
     <?= mk_option($tailscale_config["ENABLE_TAILSCALE"], '0', _("No"));?>
 </select>
 
-> <?= $_SESSION['locale'] ?>
-> _(Enable Tailscale)_
-
 _(Unraid services listen on Tailscale IP)_
 : <select name='INCLUDE_INTERFACE' size='1'>
     <?= mk_option($tailscale_config["INCLUDE_INTERFACE"], '1', _("Yes"));?>
