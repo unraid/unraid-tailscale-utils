@@ -1,3 +1,3 @@
-<h3><?= _("Tailscale Lock") ?></h3>
+<h3><?= _tr("tailscale_lock") ?></h3>
 
-<p><?= _("Your tailnet does not have lock enabled") ?>.</p>
+<p><?= _tr("lock.disabled") ?></p>

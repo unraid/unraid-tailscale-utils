@@ -1,5 +1,7 @@
 <?php
 
+require_once("/usr/local/emhttp/plugins/tailscale/include/translate.php");
+
 function logmsg($message, $priority = LOG_INFO)
 {
     $timestamp = date('Y/m/d H:i:s');

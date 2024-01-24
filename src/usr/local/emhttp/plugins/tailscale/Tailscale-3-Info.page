@@ -10,7 +10,7 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
 <table class="share_status">
     <thead>
         <tr>
-            <td>_(Status)_</td>
+            <td><?= _tr('status') ?></td>
             <td>&nbsp;</td>
         </tr>
     </thead>
@@ -19,7 +19,7 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
     </tbody>
     <thead>
         <tr>
-            <td>_(Connection)_</td>
+            <td><?= _tr('connection') ?></td>
             <td>&nbsp;</td>
         </tr>
     </thead>
@@ -27,6 +27,8 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
         <?= $tailscale_output['connection_info']; ?>
     </tbody>
 </table>
-<?php } else { ?>
-_(Tailscale is currently disabled - it can be enabled via the Settings tab.)_
-<?php } ?>
+<?php 
+} else { 
+    echo(_tr("tailscale_disabled"));
+} 
+?>

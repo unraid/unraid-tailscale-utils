@@ -4,67 +4,35 @@ Title="Help"
 Tag="question"
 Type="xmenu"
 ---
+<?php
+function help_block($section, $header="h3") {
+    $title = _tr("settings.{$section}");
+    $body = _tr("help.{$section}");
+    echo <<<END
+    <{$header}>{$title}</{$header}>
+    <p>{$body}</p>
+    END;
+}
+?>
 
-## _(Initial Configuration)_
+## <?= _tr("help.initial") ?>
+<?= _tr("help.key_expiration") ?>
 
-_(You may want to disable key expiration for your server (either by using an auth key and connecting via the CLI, or afterwards via the Tailscale admin console).)_
+## <?= _tr("settings.system_settings") ?>
+<?= help_block('unraid_listen') ?>
+<?= help_block('ip_forward') ?>
+<?= help_block('taildrop') ?>
 
-## _(System Settings)_
+### <?= _tr("settings.usage") ?>
+<?= _tr("settings.context.usage") ?>
 
-### _(Unraid services listen on Tailscale IP)_
+<?= help_block('outbound_network', "h2") ?>
+<?= help_block('subnets') ?>
+<?= help_block('dns') ?>
 
-_(Configures Unraid services (SSH, WebGUI, SMB, etc.) to listen on Tailscale addresses.)_
+## <?= _tr("help.certificates") ?>
 
-### _(Enable IP Forwarding)_
-
-_(This setting modifies the sysctl settings for IPv4 and IPv6 forwarding.)_
-_(This is useful when Tailscale is configured to be a subnet router or exit node.)_
-
-_(When set to Yes, IPv4 and IPv6 forwarding are both turned on.)_
-_(When set to No, the plugin does not modify the forwarding settings.)_
-
-### _(Taildrop Location)_
-
-_(Enter a valid path here to enable the Unraid server to accept files via Taildrop.)_
-
-_(If this setting is configured, Tailscale will be restarted when the array starts; this is required for the Taildrop folder to be detected and used.)_
-
-### _(Allow Usage Data Collection)_
-
-_(Allows usage information to be collected)_:
-
-- _(Anonymized identifier)_
-- _(Tailscale plugin version)_
-- _(Unraid version)_
-
-## _(Tailscale Settings)_
-
-_(If a setting is set to "Ignore", the plugin will not make any changes to the setting in Tailscale.)_
-_(This is useful if you wish to configure settings via CLI instead of the WebGUI.)_
-
-### _(Use Tailscale Subnets)_
-
-_(When enabled, Unraid will accept routes advertisted from subnet routers in the tailnet.)_
-
-_(When disabled, Unraid will not accept routes from subnet routers.)_
-
-### _(Use Tailscale DNS Settings)_
-
-_(When enabled, Unraid will use the DNS settings configured in the Tailscale admin console, including MagicDNS and nameservers.)_
-
-_(When disabled, Unraid will use the DNS settings configured in the Unraid network settings.)_
-
-## _(Certificates)_
-
-_(A Tailscale HTTPS certificate can be used for the WebGUI.)_
-_(Your hostname must match the name used for the machine in Tailscale.)_
-
-1. Enable HTTPS for your tailnet.
-2. Set the **Local TLD** in **Settings**->**Management Access** to your
-   Tailnet name (as displayed in the [DNS](https://login.tailscale.com/admin/dns)
-   page of your Tailscale admin console)
-2. Generate a new certificate and copy the to the WebGUI configuration.
-   (This can also be run via the User Scripts plugin.)
+<?= _tr("help.certificates_instructions") ?>
 ```
 #!/bin/bash
 mkdir -p /boot/config/plugins/tailscale/certs
@@ -87,8 +55,7 @@ echo "Restarting WebGUI"
 /etc/rc.d/rc.nginx reload
 ```
 
-It is also possible to use these certificates for Docker containers. For
-example, to use the generated certificate for Minio:
+<?= _tr("help.certificates_docker") ?>
 ```
 # Copy the files to the Minio container
 echo "Copying certificate to Minio"
@@ -98,10 +65,10 @@ echo "Restarting Minio"
 docker restart Minio
 ```
 
-## _(Support)_
+## <?= _tr("help.support") ?>
 
-_(Support for this plugin is available via the support thread on the Unraid forums)_:
+<?= _tr("help.support_forums") ?>
 
 [https://forums.unraid.net/topic/136889-plugin-tailscale/](https://forums.unraid.net/topic/136889-plugin-tailscale/)
 
-_(Support for use of advanced networking features such as subnet routers or docker ipvlan/macvlan networks will be limited since advanced network features can be dependent on the underlying network configuration.)_
+**<?= _tr("help.support_advanced") ?>**

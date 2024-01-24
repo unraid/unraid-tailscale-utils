@@ -12,35 +12,37 @@ function printDash($title, $value)
 
 function getStatusInfo($status, $prefs, $lock)
 {
-    $tsVersion     = isset($status->Version) ? $status->Version : _("Unknown");
-    $keyExpiration = isset($status->Self->KeyExpiry) ? $status->Self->KeyExpiry : _("Disabled");
-    $online        = isset($status->Self->Online) ? ($status->Self->Online ? _("Yes") : _("No")) : _("Unknown");
-    $inNetMap      = isset($status->Self->InNetworkMap) ? ($status->Self->InNetworkMap ? _("Yes") : _("No")) : _("Unknown");
+    $tsVersion     = isset($status->Version) ? $status->Version : _tr("unknown");
+    $keyExpiration = isset($status->Self->KeyExpiry) ? $status->Self->KeyExpiry : _tr("disabled");
+    $online        = isset($status->Self->Online) ? ($status->Self->Online ? _tr("yes") : _tr("no")) : _tr("unknown");
+    $inNetMap      = isset($status->Self->InNetworkMap) ? ($status->Self->InNetworkMap ? _tr("yes") : _tr("no")) : _tr("unknown");
     $tags          = isset($status->Self->Tags) ? implode("<br />", $status->Self->Tags) : "";
-    $loggedIn      = isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? _("No") : _("Yes")) : _("Unknown");
+    $loggedIn      = isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? _tr("no") : _tr("yes")) : _tr("unknown");
     $tsHealth      = isset($status->Health) ? implode("<br />", $status->Health) : "";
-    $lockEnabled   = getTailscaleLockEnabled($lock) ? _("Yes") : _("No");
+    $lockEnabled   = getTailscaleLockEnabled($lock) ? _tr("yes") : _tr("no");
+
+    $lockTranslate = _tr("tailscale_lock");
 
     $output = "";
-    $output .= printRow(_("Tailscale Version"), $tsVersion);
-    $output .= printRow(_("Tailscale Health"), $tsHealth);
-    $output .= printRow(_("Logged In"), $loggedIn);
-    $output .= printRow(_("In Network Map"), $inNetMap);
-    $output .= printRow(_("Online"), $online);
-    $output .= printRow(_("Key Expiration"), $keyExpiration);
-    $output .= printRow(_("Tags"), $tags);
-    $output .= printRow(_("Tailscale Lock: Enabled"), $lockEnabled);
+    $output .= printRow(_tr("info.version"), $tsVersion);
+    $output .= printRow(_tr("info.health"), $tsHealth);
+    $output .= printRow(_tr("info.login"), $loggedIn);
+    $output .= printRow(_tr("info.netmap"), $inNetMap);
+    $output .= printRow(_tr("info.online"), $online);
+    $output .= printRow(_tr("info.key_expire"), $keyExpiration);
+    $output .= printRow(_tr("info.tags"), $tags);
+    $output .= printRow("{$lockTranslate}: " . _tr("enabled"), $lockEnabled);
 
     if (getTailscaleLockEnabled($lock)) {
-        $lockSigned  = getTailscaleLockSigned($lock) ? _("Yes") : _("No");
-        $lockSigning = getTailscaleLockSigning($lock) ? _("Yes") : _("No");
+        $lockSigned  = getTailscaleLockSigned($lock) ? _tr("yes") : _tr("no");
+        $lockSigning = getTailscaleLockSigning($lock) ? _tr("yes") : _tr("no");
         $pubKey      = getTailscaleLockPubkey($lock);
         $nodeKey     = getTailscaleLockNodekey($lock);
 
-        $output .= printRow(_("Tailscale Lock: Node Key Signed"), $lockSigned);
-        $output .= printRow(_("Tailscale Lock: Is Signing Node"), $lockSigning);
-        $output .= printRow(_("Tailscale Lock: Node Key"), $nodeKey);
-        $output .= printRow(_("Tailscale Lock: Public Key"), $pubKey);
+        $output .= printRow("{$lockTranslate}: " . _tr("info.lock.signed"), $lockSigned);
+        $output .= printRow("{$lockTranslate}: " . _tr("info.lock.signing"), $lockSigning);
+        $output .= printRow("{$lockTranslate}: " . _tr("info.lock.node_key"), $nodeKey);
+        $output .= printRow("{$lockTranslate}: " . _tr("info.lock.public_key"), $pubKey);
     }
 
     return $output;
@@ -48,38 +50,38 @@ function getStatusInfo($status, $prefs, $lock)
 
 function getConnectionInfo($status, $prefs)
 {
-    $hostName         = isset($status->Self->HostName) ? $status->Self->HostName : _("Unknown");
-    $dnsName          = isset($status->Self->DNSName) ? $status->Self->DNSName : _("Unknown");
-    $tailscaleIPs     = isset($status->TailscaleIPs) ? implode("<br />", $status->TailscaleIPs) : _("Unknown");
-    $magicDNSSuffix   = isset($status->MagicDNSSuffix) ? $status->MagicDNSSuffix : _("Unknown");
-    $advertisedRoutes = isset($prefs->AdvertiseRoutes) ? implode("<br />", $prefs->AdvertiseRoutes) : _("None");
-    $acceptRoutes     = isset($prefs->RouteAll) ? ($prefs->RouteAll ? _("Yes") : _("No")) : _("Unknown");
-    $acceptDNS        = isset($prefs->CorpDNS) ? ($prefs->CorpDNS ? _("Yes") : _("No")) : _("Unknown");
+    $hostName         = isset($status->Self->HostName) ? $status->Self->HostName : _tr("unknown");
+    $dnsName          = isset($status->Self->DNSName) ? $status->Self->DNSName : _tr("unknown");
+    $tailscaleIPs     = isset($status->TailscaleIPs) ? implode("<br />", $status->TailscaleIPs) : _tr("unknown");
+    $magicDNSSuffix   = isset($status->MagicDNSSuffix) ? $status->MagicDNSSuffix : _tr("unknown");
+    $advertisedRoutes = isset($prefs->AdvertiseRoutes) ? implode("<br />", $prefs->AdvertiseRoutes) : _tr("none");
+    $acceptRoutes     = isset($prefs->RouteAll) ? ($prefs->RouteAll ? _tr("yes") : _tr("no")) : _tr("unknown");
+    $acceptDNS        = isset($prefs->CorpDNS) ? ($prefs->CorpDNS ? _tr("yes") : _tr("no")) : _tr("unknown");
 
     $output = "";
-    $output .= printRow(_("Hostname"), $hostName);
-    $output .= printRow(_("DNS Name"), $dnsName);
-    $output .= printRow(_("Tailscale IPs"), $tailscaleIPs);
-    $output .= printRow(_("MagicDNS Suffix"), $magicDNSSuffix);
-    $output .= printRow(_("Advertised Routes"), $advertisedRoutes);
-    $output .= printRow(_("Accept Routes"), $acceptRoutes);
-    $output .= printRow(_("Accept DNS"), $acceptDNS);
+    $output .= printRow(_tr("info.hostname"), $hostName);
+    $output .= printRow(_tr("info.dns"), $dnsName);
+    $output .= printRow(_tr("info.ip"), $tailscaleIPs);
+    $output .= printRow(_tr("info.magicdns"), $magicDNSSuffix);
+    $output .= printRow(_tr("info.routes"), $advertisedRoutes);
+    $output .= printRow(_tr("info.accept_routes"), $acceptRoutes);
+    $output .= printRow(_tr("info.accept_dns"), $acceptDNS);
 
     return $output;
 }
 
 function getDashboardInfo($status)
 {
-    $hostName     = isset($status->Self->HostName) ? $status->Self->HostName : _("Unknown");
-    $dnsName      = isset($status->Self->DNSName) ? $status->Self->DNSName : _("Unknown");
-    $tailscaleIPs = isset($status->TailscaleIPs) ? implode("<br /><span class='w26'>&nbsp;</span>", $status->TailscaleIPs) : _("Unknown");
-    $online       = isset($status->Self->Online) ? ($status->Self->Online ? _("Yes") : _("No")) : _("Unknown");
+    $hostName     = isset($status->Self->HostName) ? $status->Self->HostName : _tr("Unknown");
+    $dnsName      = isset($status->Self->DNSName) ? $status->Self->DNSName : _tr("Unknown");
+    $tailscaleIPs = isset($status->TailscaleIPs) ? implode("<br /><span class='w26'>&nbsp;</span>", $status->TailscaleIPs) : _tr("unknown");
+    $online       = isset($status->Self->Online) ? ($status->Self->Online ? _tr("yes") : _tr("no")) : _tr("unknown");
 
     $output = "";
-    $output .= printDash(_("Online"), $online);
-    $output .= printDash(_("Hostname"), $hostName);
-    $output .= printDash(_("DNS Name"), $dnsName);
-    $output .= printDash(_("Tailscale IPs"), $tailscaleIPs);
+    $output .= printDash(_tr("info.online"), $online);
+    $output .= printDash(_tr("info.hostname"), $hostName);
+    $output .= printDash(_tr("info.dns"), $dnsName);
+    $output .= printDash(_tr("info.ip"), $tailscaleIPs);
 
     return $output;
 }

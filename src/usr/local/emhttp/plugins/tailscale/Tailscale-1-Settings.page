@@ -28,126 +28,118 @@ Tag="gears"
 <input type="hidden" name="#cleanup" value="" />
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh" />
 
-### _(System Settings)_
+### <?= _tr("settings.system_settings") ?>
 
 <div class="advanced" markdown="1">
-_(Enable Tailscale)_
+<?= _tr("settings.enable_tailscale") ?>
 : <select name='ENABLE_TAILSCALE' size='1'>
-    <?= mk_option($tailscale_config["ENABLE_TAILSCALE"], '1', _("Yes"));?>
-    <?= mk_option($tailscale_config["ENABLE_TAILSCALE"], '0', _("No"));?>
+    <?= mk_option($tailscale_config["ENABLE_TAILSCALE"], '1', _tr("yes"));?>
+    <?= mk_option($tailscale_config["ENABLE_TAILSCALE"], '0', _tr("no"));?>
 </select>
 
-_(Unraid services listen on Tailscale IP)_
+<?= _tr("settings.unraid_listen") ?>
 : <select name='INCLUDE_INTERFACE' size='1'>
-    <?= mk_option($tailscale_config["INCLUDE_INTERFACE"], '1', _("Yes"));?>
-    <?= mk_option($tailscale_config["INCLUDE_INTERFACE"], '0', _("No"));?>
+    <?= mk_option($tailscale_config["INCLUDE_INTERFACE"], '1', _tr("yes"));?>
+    <?= mk_option($tailscale_config["INCLUDE_INTERFACE"], '0', _tr("no"));?>
 </select>
 
-> _(Adds the Tailscale interface to the Unraid 'extra interfaces' setting.)_
-> _(This allows services such as the Web GUI and SSH to be accessed via the Tailscale IP.)_
+> <?= _tr("settings.context.unraid_listen") ?>
 
-_(Enable IP Forwarding)_
+<?= _tr("settings.ip_forward") ?>
 : <select name='SYSCTL_IP_FORWARD' size='1'>
-    <?= mk_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', _("Yes"));?>
-    <?= mk_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', _("No"));?>
+    <?= mk_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', _tr("yes"));?>
+    <?= mk_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', _tr("no"));?>
 </select>
 
-> _(Sets net.ipv4.ip_forward and net.ipv6.conf.all.forwarding to 1 in sysctl.)_
-> _(This change occurs immediately when being enabled.)_
+> <?= _tr("settings.context.ip_forward") ?>
 </div>
 
-_(Taildrop Location)_
+<?= _tr("settings.taildrop") ?>
 : <input type="text" id="taildropdir" name="TAILDROP_DIR" autocomplete="off" spellcheck="false"
     data-pickfolders="true" data-pickfilter="HIDE_FILES_FILTER" data-pickroot="/mnt" pattern="^[^\\]*/$"
     value="<?= htmlspecialchars($tailscale_config['TAILDROP_DIR']);?>">
 
-> _(Specify the path for incoming Taildrop files.)_
+> <?= _tr("settings.context.taildrop") ?>
 
-_(Allow Usage Data Collection)_
+<?= _tr("settings.usage") ?>
 : <select name='USAGE' size='1'>
-    <?= mk_option($tailscale_config["USAGE"], '1', _("Yes"));?>
-    <?= mk_option($tailscale_config["USAGE"], '0', _("No"));?>
+    <?= mk_option($tailscale_config["USAGE"], '1', _tr("yes"));?>
+    <?= mk_option($tailscale_config["USAGE"], '0', _tr("no"));?>
 </select>
 
-> _(Allows collection of usage data for the Tailscale plugin)_.
-> _(This sends an anonymized identifier and the current version of the plugin)_.
+> <?= _tr("settings.context.usage") ?>
 
-### _(Tailscale Services)_
+### <?= _tr("settings.services") ?>
 
-_(Use Tailscale SSH)_
+<?= _tr("settings.ssh") ?>
 : <select name='SSH' size='1'>
-    <?= mk_option($tailscale_config['SSH'], '0', _("No"));?>
-    <?= mk_option($tailscale_config['SSH'], '1', _("Yes"));?>
-    <?= mk_option($tailscale_config['SSH'], '2', _("Ignore"));?>
+    <?= mk_option($tailscale_config['SSH'], '0', _tr("no"));?>
+    <?= mk_option($tailscale_config['SSH'], '1', _tr("yes"));?>
+    <?= mk_option($tailscale_config['SSH'], '2', _tr("ignore"));?>
 </select>
 
-> _(Use Tailscale policy for SSH connections via Tailscale.)_
-> _(If set to Ignore, the plugin will not modify the setting.)_
+> <?= _tr("settings.context.ssh") ?>
+> <?= _tr("settings.context.ignore") ?>
 
 <div class="advanced" markdown="1">
-_(Wireguard Port)_
+<?= _tr("settings.wireguard") ?>
 : <input type="number" name="WG_PORT" class="narrow" min="1" max="65535" value="<?=$tailscale_config['WG_PORT']?>" placeholder="41641">
 
-> _(Change the port used for Wireguard conections.)_
-> _(This usually does not need to be changed.)_
+> <?= _tr("settings.context.wireguard") ?>
 
-### _(Tailscale Outbound Networking)_
+### <?= _tr("settings.outbound_network") ?>
 
-#### _(These settings only apply to outbound network traffic from Unraid or running containers.)_
+#### <?= _tr("settings.context.outbound_network") ?>
 
-#### _(They do not affect advertised routes, exit nodes, or the ability to access Unraid via MagicDNS.)_
-
-#### _(These should generally be left off unless specifically needed.)_
-
-_(Use Tailscale Subnets)_
+<?= _tr("settings.subnets") ?>
 : <select name='ACCEPT_ROUTES' size='1'>
-    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '0', _("No"));?>
-    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '1', _("Yes"));?>
-    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '2', _("Ignore"));?>
+    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '0', _tr("no"));?>
+    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '1', _tr("yes"));?>
+    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '2', _tr("ignore"));?>
 </select>
 
-> _(Accept routes from the tailnet.)_
-> _(If set to Ignore, the plugin will not modify the setting.)_
+> <?= _tr("settings.context.subnets") ?>
+> <?= _tr("settings.context.ignore") ?>
 
-_(Use Tailscale DNS settings)_
+<?= _tr("settings.dns") ?>
 : <select name='ACCEPT_DNS' size='1'>
-    <?= mk_option($tailscale_config['ACCEPT_DNS'], '0', _("No"));?>
-    <?= mk_option($tailscale_config['ACCEPT_DNS'], '1', _("Yes"));?>
-    <?= mk_option($tailscale_config['ACCEPT_DNS'], '2', _("Ignore"));?>
+    <?= mk_option($tailscale_config['ACCEPT_DNS'], '0', _tr("no"));?>
+    <?= mk_option($tailscale_config['ACCEPT_DNS'], '1', _tr("yes"));?>
+    <?= mk_option($tailscale_config['ACCEPT_DNS'], '2', _tr("ignore"));?>
 </select>
 
-> _(Accept DNS from the tailnet.)_
-> _(If set to Ignore, the plugin will not modify the setting.)_
+> <?= _tr("settings.context.dns") ?>
+> <?= _tr("settings.context.ignore") ?>
 </div>
-### _(Save Settings)_
+### <?= _tr("settings.save") ?>
 
-**<?= _("Tailscale will be restarted when changes are applied") ?>.**
-: <input type="submit" name="#apply" value="<?= _('Apply') ?>"><input type="button" id="DONE" value="<?= _('Done') ?>" onclick="done()">
+**<?= _tr("settings.context.save") ?>**
+: <input type="submit" name="#apply" value="<?= _tr('Apply') ?>"><input type="button" id="DONE" value="<?= _tr('Back') ?>" onclick="done()">
 </form>
 
-### _(Restart Tailscale)_
+### <?= _tr("settings.restart") ?>
 
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh" />
-_(Restart the Tailscale daemon and reapply settings.)_
-: <input type="submit" value="<?= _('Restart') ?>">
+<?= _tr("settings.context.restart") ?>
+: <input type="submit" value="<?= _tr('Restart') ?>">
 </form>
 
-### _(Plugin Diagnostics)_
+### <?= _tr("settings.diagnostics") ?>
 
 <form markdown="1" method="GET" action="/plugins/plugin-diagnostics/download.php" target="_blank">
 <input type="hidden" name="plugin" value="tailscale" />
-_(Download diagnostics (this may take some time to complete))_
-: <input type="submit" value="<?= _('Download') ?> ">
+<?= _tr("settings.context.diagnostics") ?>
+: <input type="submit" value="<?= _tr('Download') ?> ">
 </form>
 
 <div class="advanced" markdown="1">
-### _(Reset Tailscale)_
+### <?= _tr("settings.erase") ?>
 
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/erase.sh" />
-_(Erase the Tailscale configuration)_
-: <input type="button" value="<?= _('Erase') ?>" onclick="requestErase(this)"><input id="tailscale_erase_confirm" type="submit" value="<?= _('Confirm') ?>" style="display: none;">
+<?= _tr("settings.context.erase") ?>
+: <input type="button" value="<?= _tr('Erase') ?>" onclick="requestErase(this)"><input id="tailscale_erase_confirm" type="submit" value="<?= _tr('Confirm') ?>" style="display: none;">
 </form>
 </div>
 
@@ -171,8 +163,8 @@ _(Erase the Tailscale configuration)_
 
         $('.advancedview').switchButton({
             labels_placement: "left",
-            on_label: "_(Advanced View)_",
-            off_label: "_(Basic View)_",
+            on_label: "<?= _tr("settings.advanced") ?>",
+            off_label: "<?= _tr("settings.basic") ?>",
             checked: $.cookie('tailscale_view_mode') == 'advanced'
         });
         $('.advancedview').change(function(){

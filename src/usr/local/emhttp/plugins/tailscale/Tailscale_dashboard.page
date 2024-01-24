@@ -8,14 +8,14 @@ require_once "{$docroot}/plugins/tailscale/include/common.php";
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
     require_once "{$docroot}/plugins/tailscale/include/webgui-interface.php";
 } else {
-    $tailscale_dashboard = "<tr><td>" . _("Tailscale is currently disabled") . "</td></tr>";
+    $tailscale_dashboard = "<tr><td>" . _tr("tailscale_disabled") . "</td></tr>";
 }
 
 $mytiles['tailscale']['column2'] =
 <<<EOT
-<tbody title="_(Tailscale)_">
+<tbody title="Tailscale">
 <tr><td>
-<img style="margin-right: 8px; width: 32px; height: 32px" src="/plugins/tailscale/tailscale.png" /><div class='section'>_(Tailscale)_<br><span id='tailscale-temp'></span><br></div>
+<img style="margin-right: 8px; width: 32px; height: 32px" src="/plugins/tailscale/tailscale.png" /><div class='section'>Tailscale<br><span id='tailscale-temp'></span><br></div>
 <a href="/Settings/Tailscale" title="_(Settings)_"><i class="fa fa-fw fa-cog control"></i></a>
 </td></tr>
 $tailscale_dashboard

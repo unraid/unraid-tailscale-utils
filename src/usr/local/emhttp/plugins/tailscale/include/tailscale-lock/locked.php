@@ -1,10 +1,9 @@
-<h3><?= _("Tailscale Lock") ?></h3>
+<h3><?= _tr("tailscale_lock") ?></h3>
 
 <p>
-<?= _('Your tailnet has lock enabled and the current node is not signed') ?>.
-<strong><?= _('This node cannot communicate with the tailnet') ?>.</strong>
+<?= _tr('lock.unsigned') ?>.
 </p>
 
-<p><?= _('To allow this node to communicate, you will need to trust the following key from a signing node') ?>:</p>
+<p><?= _tr('lock.unsigned_instructions') ?></p>
 
 <pre><?= $tailscale_output['lock_nodekey']; ?></pre>
