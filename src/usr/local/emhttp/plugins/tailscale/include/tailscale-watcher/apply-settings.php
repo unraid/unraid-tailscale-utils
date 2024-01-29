@@ -18,4 +18,3 @@ function apply_flag($setting, $flag)
 
 apply_flag('ACCEPT_ROUTES', '--accept-routes');
 apply_flag('ACCEPT_DNS', '--accept-dns');
-apply_flag('SSH', '--ssh');

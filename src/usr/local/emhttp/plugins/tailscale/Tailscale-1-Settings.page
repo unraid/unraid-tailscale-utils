@@ -69,19 +69,9 @@ Tag="gears"
 
 > <?= _tr("settings.context.usage") ?>
 
+<div class="advanced" markdown="1">
 ### <?= _tr("settings.services") ?>
 
-<?= _tr("settings.ssh") ?>
-: <select name='SSH' size='1'>
-    <?= mk_option($tailscale_config['SSH'], '0', _tr("no"));?>
-    <?= mk_option($tailscale_config['SSH'], '1', _tr("yes"));?>
-    <?= mk_option($tailscale_config['SSH'], '2', _tr("ignore"));?>
-</select>
-
-> <?= _tr("settings.context.ssh") ?>
-> <?= _tr("settings.context.ignore") ?>
-
-<div class="advanced" markdown="1">
 <?= _tr("settings.wireguard") ?>
 : <input type="number" name="WG_PORT" class="narrow" min="1" max="65535" value="<?=$tailscale_config['WG_PORT']?>" placeholder="41641">
 
