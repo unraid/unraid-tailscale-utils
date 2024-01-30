@@ -31,12 +31,14 @@ if ($tailscale_config['USAGE']) {
 
     logmsg("Sending usage data: {$queryString}");
     $attempts = 0;
+    $delay = 0;
     do {
-        sleep(rand(0, 600));
+        sleep(rand($delay,$delay+60));
+        $delay = 300;
 
         $attempts++;
         $result = send_usage("{$endpoint}?{$queryString}");
-    } while (($result != '201') && ($attempts < 5));
+    } while (($result != '201') && ($attempts < 3));
 
     if ($result != '201') {
         logmsg("Error occurred while transmitting usage data.");
