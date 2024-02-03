@@ -2,7 +2,7 @@
 
 $ips = parse_ini_file("/boot/config/network.cfg");
 if (array_key_exists(('IPADDR'), $ips)) {
-    $route_table = run_command("ip route list table 52");
+    $route_table = run_command("ip route list table 52",$false,$false);
 
     foreach ($ips['IPADDR'] as $ip) {
         foreach ($route_table as $route) {
