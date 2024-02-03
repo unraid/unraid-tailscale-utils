@@ -133,6 +133,10 @@ Tag="gears"
 </form>
 </div>
 
+### <?= _tr("settings.donate") ?>
+<?= _tr("settings.context.donate") ?>
+: <input type="button" value="Paypal" onclick="window.open('https://paypal.me/edacerton', '_blank')"> <input type="button" value="GitHub" onclick="window.open('https://github.com/sponsors/dkaser', '_blank')">
+
 <script src="<?autov('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
 <script src="<?autov('/webGui/javascript/jquery.switchbutton.js')?>"></script>
 <script>

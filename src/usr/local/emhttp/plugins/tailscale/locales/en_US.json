@@ -35,6 +35,7 @@
         "restart": "Restart Tailscale",
         "erase": "Erase Tailscale Configuration",
         "diagnostics": "Plugin Diagnostics",
+        "donate": "Donate",
         "context": {
             "unraid_listen": "Configures Unraid services (SSH, WebGUI, SMB, etc.) to listen on Tailscale addresses.",
             "ip_forward": "Sets net.ipv4.ip_forward and net.ipv6.conf.all.forwarding to 1 in sysctl. This change occurs immediately when being enabled.",
@@ -48,7 +49,8 @@
             "diagnostics": "Download diagnostics (this may take some time to complete)",
             "ignore": "If set to ignore, the plugin will not modify the setting",
             "outbound_network": "These settings only apply to outbound network traffic from Unraid or running containers. They do not affect advertised routes, exit nodes, or the ability to access Unraid via MagicDNS. These should generally be left off unless specifically needed.",
-            "save": "Tailscale will be restarted when changes are applied"
+            "save": "Tailscale will be restarted when changes are applied",
+            "donate": "If this plugin helps you, please consider donating."
         }
     },
     "help": {
