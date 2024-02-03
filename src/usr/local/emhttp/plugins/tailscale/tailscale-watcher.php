@@ -20,7 +20,7 @@ while (true) {
             if (isset($interface["address"])) {
                 $new_addresses[] = $interface["address"];
                 $timer           = 60;
-                if($interface["family"] == 2) { 
+                if ($interface["family"] == 2) {
                     $tailscale_ipv4 = $interface["address"];
                 }
             }

@@ -1,10 +1,10 @@
-<h3><?= _tr("tailscale_lock") ?></h3>
-<h4><?= _tr("lock.sign") ?></h4>
+<h3><?= _tr("tailscale_lock"); ?></h3>
+<h4><?= _tr("lock.sign"); ?></h4>
 <p>
-    <?= _tr("lock.signing_node") ?>
+    <?= _tr("lock.signing_node"); ?>
 </p>
 <p>
-<?= _tr("lock.signing_instructions") ?>
+<?= _tr("lock.signing_instructions"); ?>
 </p>
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/approve-nodes.php" />
@@ -16,5 +16,5 @@ foreach ($tailscale_output['lock_pending'] as $lockHost => $lockKey) {
 ?>
 </table>
 
-<input type="submit" name="#apply" value="<?= _tr('Sign') ?>">
+<input type="submit" name="#apply" value="<?= _tr('Sign'); ?>">
 </form>

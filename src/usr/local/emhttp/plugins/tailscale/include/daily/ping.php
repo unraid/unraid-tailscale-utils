@@ -2,11 +2,12 @@
 
 $endpoint = "https://plugin-usage.edacerton.win/";
 
-function send_usage($url) {
+function send_usage($url)
+{
     $c = curl_init();
     curl_setopt($c, CURLOPT_URL, $url);
     curl_exec($c);
-    if (!curl_errno($c)) {
+    if ( ! curl_errno($c)) {
         $info = curl_getinfo($c);
         return $info['http_code'];
     }
@@ -23,7 +24,7 @@ if ($tailscale_config['USAGE']) {
         'clientId' => hash("crc32b", $var['flashGUID']),
         'plugin'   => 'tailscale',
         'version'  => $version['VERSION'],
-        'branch'    => $version['BRANCH'],
+        'branch'   => $version['BRANCH'],
         'unraid'   => $var['version']
     );
 
@@ -31,9 +32,9 @@ if ($tailscale_config['USAGE']) {
 
     logmsg("Sending usage data: {$queryString}");
     $attempts = 0;
-    $delay = 0;
+    $delay    = 0;
     do {
-        sleep(rand($delay,$delay+60));
+        sleep(rand($delay, $delay + 60));
         $delay = 300;
 
         $attempts++;
