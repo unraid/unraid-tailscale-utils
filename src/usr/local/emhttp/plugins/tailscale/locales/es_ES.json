@@ -27,7 +27,6 @@
         "taildrop": "Ubicación de Taildrop",
         "usage": "Permitir recolección de datos de uso",
         "services": "Servicios de Tailscale",
-        "ssh": "Usar SSH de Tailscale",
         "wireguard": "Puerto Wireguard",
         "outbound_network": "Redes salientes de Tailscale",
         "subnets": "Uso de subredes de Tailscale",
@@ -36,13 +35,13 @@
         "restart": "Reiniciar Tailscale",
         "erase": "Borrar configuración de Tailscale",
         "diagnostics": "Diagnósticos de plugin",
+        "donate": "Donar",
         "context": {
             "unraid_listen": "Configura los servicios de Unraid (SSH, WebGUI, SMB, etc.) para escuchar las direcciones de Tailscale.",
             "ip_forward": "Establece net.ipv4.ip_forward y net.ipv6.conf.all.forwarding a 1 en sysctl. Este cambio ocurre inmediatamente cuando se activa.",
             "taildrop": "Especifique la ruta para los archivos entrantes de Taildrop.",
             "dns": "Acepte DNS de Tailscale.",
             "subnets": "Acepte rutas de Tailscale.",
-            "ssh": "Utilice la directiva Tailscale para las conexiones SSH a través de Tailscale.",
             "wireguard": "Cambie el puerto utilizado para las conexiones de Wireguard. Por lo general, no es necesario cambiarlo.",
             "usage": "Permite la recopilación de datos de uso para el plugin Tailscale. Esto envía un identificador anónimo, la versión actual de Unraid y la versión actual del plugin.",
             "erase": "Cierra sesión en Tailscale y restablece todos los ajustes a los valores predeterminados",
@@ -50,7 +49,8 @@
             "diagnostics": "Descargar diagnóstico (esto puede tardar algún tiempo en completarse)",
             "ignore": "Si se establece en Ignorar, el plugin no modificará la configuración",
             "outbound_network": "Esta configuración solo se aplica al tráfico de red saliente de Unraid o contenedores en ejecución. No afectan a las rutas anunciadas, a los nodos de salida ni a la capacidad de acceder a Unraid a través de MagicDNS. Por lo general, deben dejarse a menos que sea específicamente necesario.",
-            "save": "Tailscale se reiniciará cuando se apliquen los cambios"
+            "save": "Tailscale se reiniciará cuando se apliquen los cambios",
+            "donate": "Si este plugin le ayuda, por favor considere la posibilidad de donar."
         }
     },
     "help": {
