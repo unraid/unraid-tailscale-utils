@@ -43,6 +43,14 @@
         {
             "command": "ip route list table 52",
             "file": "ip-route-tailscale.txt"
+        },
+        {
+            "command": "ip route list table all",
+            "file": "ip-route-all.txt"
+        },
+        {
+            "command": "netstat -4nl",
+            "file": "ipv4-listening.txt"
         }
     ],
     "files": [
