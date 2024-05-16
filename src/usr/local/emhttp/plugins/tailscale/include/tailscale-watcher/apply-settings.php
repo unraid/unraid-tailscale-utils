@@ -18,3 +18,5 @@ function apply_flag($setting, $flag)
 
 apply_flag('ACCEPT_ROUTES', '--accept-routes');
 apply_flag('ACCEPT_DNS', '--accept-dns');
+
+run_command("/usr/local/sbin/tailscale set --stateful-filtering=false");
