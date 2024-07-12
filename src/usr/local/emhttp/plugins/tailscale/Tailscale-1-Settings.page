@@ -73,7 +73,7 @@ Tag="gears"
 ### <?= _tr("settings.services") ?>
 
 <?= _tr("settings.wireguard") ?>
-: <input type="number" name="WG_PORT" class="narrow" min="1" max="65535" value="<?=$tailscale_config['WG_PORT']?>" placeholder="41641">
+: <input type="number" name="WG_PORT" class="narrow" min="0" max="65535" value="<?=$tailscale_config['WG_PORT']?>" placeholder="0">
 
 > <?= _tr("settings.context.wireguard") ?>
 
