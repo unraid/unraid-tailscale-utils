@@ -39,7 +39,7 @@ mkdir -p /boot/config/plugins/tailscale/certs
 cd /boot/config/plugins/tailscale/certs
 
 source /boot/config/ident.cfg
-FQDN=$(hostname).${LOCAL_TLD%%[[:cntrl:]]}
+FQDN=$(hostname | tr '[:upper:]' '[:lower:]').${LOCAL_TLD%%[[:cntrl:]]}
 
 # Have Tailscale generate a new certificate if needed
 tailscale cert $FQDN
