@@ -1,8 +1,7 @@
 <?php
 
-// Wait for two minutes, then check to see if nginx is listening on the Unraid address
-// If it isn't, this probably means that nginx didn't reload properly and needs to be forced.
-if (isset($tailscale_ipv4)) {
+// Make certain that the WebGUI is listening on the Tailscale interface
+if ($tailscale_config["INCLUDE_INTERFACE"] == 1) {
     $ident_config = parse_ini_file("/boot/config/ident.cfg");
 
     $connection = @fsockopen($tailscale_ipv4, $ident_config['PORT']);
