@@ -43,7 +43,7 @@
             "dns": "接受来自 Tailnet 的 DNS。",
             "subnets": "接受来自 Tailnet 的路由。",
             "wireguard": "更改用于 Wireguard 连接的端口。这项通常不需要更改。",
-            "usage": "允许收集 Tailscale 插件的使用数据。这将会发送一个匿名标识符、当前 Unraid 版本和插件的当前版本。",
+            "usage": "允许收集 Tailscale 插件的使用数据。这将发送一个匿名标识符、当前 Unraid 版本、插件的当前版本以及某些功能的启用/禁用状态。不会收集任何个人或网络信息。",
             "erase": "注销 Tailscale 并重置所有设置为默认值",
             "restart": "重新启动 Tailscale 守护程序并重新应用设置。",
             "diagnostics": "下载诊断记录（这可能需要一些时间才能完成）",

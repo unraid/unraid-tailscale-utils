@@ -43,7 +43,7 @@
             "dns": "DNS aus dem Tailnet akzeptieren.",
             "subnets": "Routen aus dem Tailnet akzeptieren.",
             "wireguard": "Port, der für Wireguard-Verbindungen verwendet wird. Dies muss in der Regel nicht geändert werden.",
-            "usage": "Ermöglicht die Erfassung von Nutzungsdaten für das Tailscale-Plugin. Dadurch werden eine anonymisierte Kennung, die aktuelle Unraid-Version und die aktuelle Version des Plugins gesendet.",
+            "usage": "Ermöglicht die Erfassung von Nutzungsdaten für das Tailscale-Plugin. Dadurch werden eine anonymisierte Kennung, die aktuelle Unraid-Version, die aktuelle Version des Plugins gesendet, und den aktiviert/deaktivierten Status einiger Features. Es werden keine persönlichen oder Netzwerkinformationen gesammelt.",
             "erase": "Meldet sich von Tailscale ab und setzt alle Einstellungen auf die Standardeinstellungen zurück",
             "restart": "Starten Sie den Tailscale-Daemon neu, und wenden Sie die Einstellungen erneut an.",
             "diagnostics": "Diagnose Daten herunterladen (dies kann einige Zeit in Anspruch nehmen)",
