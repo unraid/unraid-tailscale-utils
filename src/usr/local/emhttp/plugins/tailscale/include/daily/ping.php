@@ -65,15 +65,16 @@ if ($tailscale_config['USAGE']) {
         'bool5' => $exit
     );
 
-    logmsg("Sending usage data");
     $attempts = 0;
-    $delay    = 0;
+    $delay    = rand(0, 300);
     do {
-        sleep(rand($delay, $delay + 60));
-        $delay = 300;
-
+        logmsg("Waiting for {$delay} seconds before sending usage data.");
+        sleep($delay);
+        $delay += 300;
         $attempts++;
+
         $result = send_usage($endpoint, $content);
+        logmsg("Usage data sent.");        
     } while (($result != '200') && ($attempts < 3));
 
     if ($result != '200') {
