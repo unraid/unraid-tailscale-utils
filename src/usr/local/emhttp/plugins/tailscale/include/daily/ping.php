@@ -4,7 +4,7 @@ $endpoint = "https://plugin-usage.edacerton.win/";
 
 function send_usage($url, $content)
 {
-    $body = json_encode($content);
+    $body  = json_encode($content);
     $token = file_get_contents($url . '?connect');
 
     $c = curl_init();
@@ -14,7 +14,7 @@ function send_usage($url, $content)
         'Content-Type: application/json',
         'Authorization: Bearer ' . $token
     ];
-    
+
     curl_setopt($c, CURLOPT_POST, true);
     curl_setopt($c, CURLOPT_POSTFIELDS, $body);
     curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
@@ -37,10 +37,9 @@ if ($tailscale_config['USAGE']) {
 
     $prefs = getTailscalePrefs();
 
-    $exit = false;
+    $exit   = false;
     $subnet = false;
-    foreach($prefs->AdvertiseRoutes as $net)
-    {
+    foreach ($prefs->AdvertiseRoutes as $net) {
         switch ($net) {
             case "0.0.0.0/0":
             case "::/0":
@@ -52,17 +51,17 @@ if ($tailscale_config['USAGE']) {
         }
     }
 
-    $content   = array(
-        'clientId' => hash("crc32b", $var['flashGUID']),
-        'plugin'   => 'tailscale',
-        'plugin_version'  => $version['VERSION'],
-        'plugin_branch'   => $version['BRANCH'],
-        'unraid_version'   => $var['version'],
-        'bool1' => boolval($tailscale_config['ACCEPT_DNS']),
-        'bool2' => boolval($tailscale_config['ACCEPT_ROUTES']),
-        'bool3' => boolval($tailscale_config['INCLUDE_INTERFACE']),
-        'bool4' => $subnet,
-        'bool5' => $exit
+    $content = array(
+        'clientId'       => hash("crc32b", $var['flashGUID']),
+        'plugin'         => 'tailscale',
+        'plugin_version' => $version['VERSION'],
+        'plugin_branch'  => $version['BRANCH'],
+        'unraid_version' => $var['version'],
+        'bool1'          => boolval($tailscale_config['ACCEPT_DNS']),
+        'bool2'          => boolval($tailscale_config['ACCEPT_ROUTES']),
+        'bool3'          => boolval($tailscale_config['INCLUDE_INTERFACE']),
+        'bool4'          => $subnet,
+        'bool5'          => $exit
     );
 
     $attempts = 0;
@@ -74,7 +73,7 @@ if ($tailscale_config['USAGE']) {
         $attempts++;
 
         $result = send_usage($endpoint, $content);
-        logmsg("Usage data sent.");        
+        logmsg("Usage data sent.");
     } while (($result != '200') && ($attempts < 3));
 
     if ($result != '200') {
