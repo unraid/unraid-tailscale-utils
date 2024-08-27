@@ -2,8 +2,7 @@
 
 $notify = "{$docroot}/webGui/scripts/notify";
 
-exec("tailscale status --json", $out_status);
-$status = json_decode(implode($out_status));
+$status = getTailscaleStatus();
 
 if (isset($status->Self->KeyExpiry)) {
     $expiryTime = new DateTime($status->Self->KeyExpiry);
