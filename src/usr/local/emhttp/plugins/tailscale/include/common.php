@@ -1,6 +1,8 @@
 <?php
 
 require_once "/usr/local/emhttp/plugins/tailscale/include/translate.php";
+require_once "/usr/local/emhttp/plugins/tailscale/include/tailscale-status.php";
+require_once "/usr/local/emhttp/plugins/tailscale/include/webgui-cert.php";
 
 function logmsg($message, $priority = LOG_INFO)
 {
@@ -17,6 +19,7 @@ function run_command($command, $alwaysShow = false, $show = true)
         logmsg($command);
     }
     exec("{$command} 2>&1", $output, $retval);
+
     if (($retval != 0) || $alwaysShow) {
         logmsg("Command returned {$retval}" . PHP_EOL . implode(PHP_EOL, $output));
     }
