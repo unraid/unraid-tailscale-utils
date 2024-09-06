@@ -39,6 +39,8 @@ if ($tailscale_config['USAGE']) {
 
     $exit   = false;
     $subnet = false;
+    $headscale = false;
+
     foreach (($prefs->AdvertiseRoutes ?? array()) as $net) {
         switch ($net) {
             case "0.0.0.0/0":
@@ -51,6 +53,11 @@ if ($tailscale_config['USAGE']) {
         }
     }
 
+    if($prefs->ControlURL != "https://controlplane.tailscale.com")
+    {
+        $headscale = true;
+    }
+
     $content = array(
         'clientId'       => hash("crc32b", $var['flashGUID']),
         'plugin'         => 'tailscale',
@@ -61,7 +68,8 @@ if ($tailscale_config['USAGE']) {
         'bool2'          => boolval($tailscale_config['ACCEPT_ROUTES']),
         'bool3'          => boolval($tailscale_config['INCLUDE_INTERFACE']),
         'bool4'          => $subnet,
-        'bool5'          => $exit
+        'bool5'          => $exit,
+        'num1'           => $headscale ? 0 : 1
     );
 
     $attempts = 0;
