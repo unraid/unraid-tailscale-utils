@@ -93,7 +93,7 @@
     },
     "warnings": {
         "key_expiration": "La clé Tailscale expirera dans %s jours sur %s.",
-        "netbios": "NetBIOS est activé dans les paramètres SMB - cela peut empêcher l'accès aux partages via Tailscale.",
+        "netbios": "NetBIOS est activé dans les <a href='/Settings/SMB'>paramètres SMB</a> - cela peut empêcher l'accès aux partages via Tailscale.",
         "lock": "Le verrouillage du tailnet est activé, mais ce nœud n’a pas été signé. Il ne pourra pas communiquer avec le tailnet."
     },
     "lock": {
