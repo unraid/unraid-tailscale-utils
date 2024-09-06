@@ -39,7 +39,7 @@ if ($tailscale_config['USAGE']) {
 
     $exit   = false;
     $subnet = false;
-    foreach ($prefs->AdvertiseRoutes as $net) {
+    foreach (($prefs->AdvertiseRoutes ?? array()) as $net) {
         switch ($net) {
             case "0.0.0.0/0":
             case "::/0":
