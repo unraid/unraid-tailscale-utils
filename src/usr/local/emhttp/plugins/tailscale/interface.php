@@ -8,7 +8,7 @@ $csrftoken = $var["csrf_token"];
 
 // Load the session state into the environment for the CGI calls
 foreach ($_SERVER as $key => $value) {
-    if(is_array($value)) {
+    if (is_array($value)) {
         $out = implode($value);
         putenv("{$key}={$out}");
     } else {

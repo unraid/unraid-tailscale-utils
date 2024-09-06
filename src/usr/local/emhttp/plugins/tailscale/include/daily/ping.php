@@ -37,8 +37,8 @@ if ($tailscale_config['USAGE']) {
 
     $prefs = getTailscalePrefs();
 
-    $exit   = false;
-    $subnet = false;
+    $exit      = false;
+    $subnet    = false;
     $headscale = false;
 
     foreach (($prefs->AdvertiseRoutes ?? array()) as $net) {
@@ -53,8 +53,7 @@ if ($tailscale_config['USAGE']) {
         }
     }
 
-    if($prefs->ControlURL != "https://controlplane.tailscale.com")
-    {
+    if ($prefs->ControlURL != "https://controlplane.tailscale.com") {
         $headscale = true;
     }
 
