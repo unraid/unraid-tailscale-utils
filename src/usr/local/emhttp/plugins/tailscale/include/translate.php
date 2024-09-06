@@ -6,7 +6,7 @@ function _tr($message)
 
     return $tailscale_lang[strtolower($message)];
 }
-$locale = ($_SESSION['locale'] ?? $login_locale) ?? parse_ini_file('/boot/config/plugins/dynamix/dynamix.cfg', true)['display']['locale'];
+$locale = $_SESSION['locale'] ?? ($login_locale ?? parse_ini_file('/boot/config/plugins/dynamix/dynamix.cfg', true)['display']['locale']);
 
 $tailscale_locale = json_decode(file_get_contents("/usr/local/emhttp/plugins/tailscale/locales/en_US.json"), true);
 

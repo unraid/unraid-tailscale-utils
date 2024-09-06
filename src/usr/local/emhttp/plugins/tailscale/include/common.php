@@ -13,7 +13,7 @@ function logmsg($message, $priority = LOG_INFO)
 
 function run_command($command, $alwaysShow = false, $show = true)
 {
-    $output = null;
+    $output = array();
     $retval = null;
     if ($show) {
         logmsg($command);
