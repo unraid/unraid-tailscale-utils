@@ -6,7 +6,7 @@ function refreshWebGuiCert($restartIfChanged = true)
 
     $certDomains = $status->CertDomains;
 
-    if (count($certDomains) === 0) {
+    if (count($certDomains ?? array()) === 0) {
         logmsg("Cannot generate certificate for WebGUI -- HTTPS not enabled for Tailnet.");
         return;
     }
