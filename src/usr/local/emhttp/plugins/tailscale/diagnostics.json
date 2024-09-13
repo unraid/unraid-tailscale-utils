@@ -1,4 +1,5 @@
 {
+    "title": "Tailscale",
     "commands": [
         {
             "command": "tailscale status",
