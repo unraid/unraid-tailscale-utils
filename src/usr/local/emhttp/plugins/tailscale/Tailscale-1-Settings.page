@@ -115,6 +115,7 @@ Tag="gears"
 : <input type="submit" value="<?= _tr('Restart') ?>">
 </form>
 
+<?php if(file_exists('/usr/local/emhttp/plugins/plugin-diagnostics/download.php')) { ?>
 ### <?= _tr("settings.diagnostics") ?>
 
 <form markdown="1" method="GET" action="/plugins/plugin-diagnostics/download.php" target="_blank">
@@ -122,6 +123,8 @@ Tag="gears"
 <?= _tr("settings.context.diagnostics") ?>
 : <input type="submit" value="<?= _tr('Download') ?> ">
 </form>
+
+<?php } ?>
 
 <div class="advanced" markdown="1">
 ### <?= _tr("settings.erase") ?>
