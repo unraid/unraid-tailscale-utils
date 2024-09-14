@@ -9,7 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - run: |
+      - id: build_files
+        run: |
           mkdir release
           cd src
           tar --owner=0 --group=0 -cJf ../release/unraid-tailscale-utils-${{ github.event.release.name}}-noarch-1.txz *
