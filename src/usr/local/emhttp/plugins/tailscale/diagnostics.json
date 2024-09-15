@@ -3,7 +3,12 @@
     "commands": [
         {
             "command": "tailscale status",
-            "file": "tailscale-status.txt"
+            "file": "tailscale-status.txt",
+            "filters": [
+                "s/^(\\S*[ ]*\\S*[ ]*\\S)\\S*/\\1zzz/g",
+                "s/^(\\S*[ ]*\\S)\\S*/\\1zzz/g",
+                "s/  */ /g"
+            ]
         },
         {
             "command": "tailscale debug prefs | jq 'del(.Config)'",
