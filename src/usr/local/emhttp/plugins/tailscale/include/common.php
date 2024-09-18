@@ -8,42 +8,6 @@ foreach (glob("/usr/local/emhttp/plugins/tailscale/include/common/*.php") as $fi
     }
 }
 
-function logmsg($message, $priority = LOG_INFO)
-{
-    $timestamp = date('Y/m/d H:i:s');
-    $filename  = basename($_SERVER['PHP_SELF']);
-    file_put_contents("/var/log/tailscale-utils.log", "{$timestamp} {$filename}: {$message}" . PHP_EOL, FILE_APPEND);
-}
-
-function run_command($command, $alwaysShow = false, $show = true)
-{
-    $output = array();
-    $retval = null;
-    if ($show) {
-        logmsg($command);
-    }
-    exec("{$command} 2>&1", $output, $retval);
-
-    if (($retval != 0) || $alwaysShow) {
-        logmsg("Command returned {$retval}" . PHP_EOL . implode(PHP_EOL, $output));
-    }
-
-    return $output;
-}
-
-function ip4_in_network($ip, $network)
-{
-    if (strpos($network, '/') === false) {
-        return false;
-    }
-
-    list($subnet, $mask) = explode('/', $network, 2);
-    $ip_bin_string       = sprintf("%032b", ip2long($ip));
-    $net_bin_string      = sprintf("%032b", ip2long($subnet));
-
-    return (substr_compare($ip_bin_string, $net_bin_string, 0, $mask) === 0);
-}
-
 $plugin = "tailscale";
 $ifname = 'tailscale1';
 
