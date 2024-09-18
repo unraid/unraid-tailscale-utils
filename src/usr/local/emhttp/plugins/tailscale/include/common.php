@@ -1,8 +1,12 @@
 <?php
 
-require_once "/usr/local/emhttp/plugins/tailscale/include/translate.php";
-require_once "/usr/local/emhttp/plugins/tailscale/include/tailscale-status.php";
-require_once "/usr/local/emhttp/plugins/tailscale/include/webgui-cert.php";
+foreach (glob("/usr/local/emhttp/plugins/tailscale/include/common/*.php") as $file) {
+    try {
+        require $file;
+    } catch (Throwable $e) {
+        logmsg("Caught exception in {$file} : " . $e->getMessage());
+    }
+}
 
 function logmsg($message, $priority = LOG_INFO)
 {

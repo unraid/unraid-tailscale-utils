@@ -1,7 +1,6 @@
 <?php
 
 require_once "{$docroot}/plugins/tailscale/include/common.php";
-require_once "{$docroot}/plugins/tailscale/include/tailscale-status.php";
 require_once "{$docroot}/plugins/tailscale/include/webgui-info.php";
 require_once "{$docroot}/plugins/tailscale/include/webgui-key-expiration.php";
 require_once "{$docroot}/plugins/tailscale/include/tailscale-lock.php";

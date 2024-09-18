@@ -11,7 +11,11 @@ foreach ($tailscale_config as $key => $value) {
 
 foreach (glob("{$docroot}/plugins/tailscale/include/pre-startup/*.php") as $file) {
     logmsg("Executing {$file}");
-    require_once $file;
+    try { 
+        require_once $file;
+    } catch (Throwable $e) {
+        logmsg("Caught exception in {$file} : " . $e->getMessage());
+    }
 }
 
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {

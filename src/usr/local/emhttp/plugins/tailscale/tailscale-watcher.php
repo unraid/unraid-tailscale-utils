@@ -38,7 +38,7 @@ while (true) {
             foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/on-ip/*.php") as $file) {
                 try {
                     require $file;
-                } catch (Exception $e) {
+                } catch (Throwable $e) {
                     logmsg("Caught exception in {$file} : " . $e->getMessage());
                 }
             }
@@ -47,7 +47,7 @@ while (true) {
         foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/always/*.php") as $file) {
             try {
                 require $file;
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 logmsg("Caught exception in {$file} : " . $e->getMessage());
             }
         }
@@ -64,7 +64,7 @@ while (true) {
             foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/on-name-change/*.php") as $file) {
                 try {
                     require $file;
-                } catch (Exception $e) {
+                } catch (Throwable $e) {
                     logmsg("Caught exception in {$file} : " . $e->getMessage());
                 }
             }
