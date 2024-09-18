@@ -11,7 +11,7 @@ foreach ($tailscale_config as $key => $value) {
 
 foreach (glob("{$docroot}/plugins/tailscale/include/pre-startup/*.php") as $file) {
     logmsg("Executing {$file}");
-    try { 
+    try {
         require_once $file;
     } catch (Throwable $e) {
         logmsg("Caught exception in {$file} : " . $e->getMessage());
