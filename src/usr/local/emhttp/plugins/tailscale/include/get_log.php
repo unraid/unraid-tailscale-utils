@@ -1,19 +1,32 @@
 <?php
 
-ini_set('memory_limit', '512M'); // Increase memory limit
+function getLog($log, $maxLines)
+{
+    $allowed_files = ["/var/log/tailscale.log", "/var/log/tailscale-utils.log"];
 
-$allowed_files = ["/var/log/tailscale.log", "/var/log/tailscale-utils.log"];
+    if ( ! in_array($log, $allowed_files)) {
+        return;
+    }
 
-$log = $_POST['log'];
-if ( ! in_array($log, $allowed_files)) {
-    return;
+    if ( ! file_exists($log)) {
+        echo '<span class="text">', htmlspecialchars($log), " not found.</span>";
+        return;
+    }
+
+    $max   = intval($maxLines);
+    $lines = array_reverse(array_slice(file($log), -$max));
+
+    foreach ($lines as $line) {
+        echo '<span class="text">', htmlspecialchars($line), "</span>";
+    }
 }
 
-$max   = intval($_POST['max']);
-$lines = array_reverse(array_slice(file($log), -$max));
+ini_set('memory_limit', '512M'); // Increase memory limit
 
-foreach ($lines as $line) {
-    echo '<span class="text">', htmlspecialchars($line), "</span>";
+try {
+    getLog($_POST['log'], $_POST['max']);
+} catch (Throwable $e) {
+    echo '<span class="text">', htmlspecialchars($e->getMessage()), "</span>";
 }
 
 ini_restore('memory_limit'); // Restore original memory limit
