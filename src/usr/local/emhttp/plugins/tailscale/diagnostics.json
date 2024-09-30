@@ -1,5 +1,9 @@
 {
     "title": "Tailscale",
+    "filters": [
+        "s/\\.[^\\.]*\\.myunraid\\.net/\\.hash\\.myunraid\\.net/g",
+        "s/\\.[^\\.]*\\.ts\\.net/\\.magicdns\\.ts\\.net/g"
+    ],
     "commands": [
         {
             "command": "tailscale status",
