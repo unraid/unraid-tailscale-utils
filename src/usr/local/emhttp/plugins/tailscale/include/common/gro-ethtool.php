@@ -1,6 +1,6 @@
 <?php
 
-function applyGRO()
+function applyGRO() : void
 {
     $ip_route = json_decode(implode(run_command('ip -j route get 8.8.8.8')), true);
 

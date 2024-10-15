@@ -1,11 +1,11 @@
 <?php
 
-function getTailscaleLockEnabled($lock)
+function getTailscaleLockEnabled(object $lock) : bool
 {
     return $lock->Enabled;
 }
 
-function getTailscaleLockSigned($lock)
+function getTailscaleLockSigned(object $lock) : bool
 {
     if ( ! getTailscaleLockEnabled($lock)) {
         return false;
@@ -14,25 +14,25 @@ function getTailscaleLockSigned($lock)
     return $lock->NodeKeySigned;
 }
 
-function getTailscaleLockNodekey($lock)
+function getTailscaleLockNodekey(object $lock) : string
 {
     if ( ! getTailscaleLockEnabled($lock)) {
-        return false;
+        return "";
     }
 
     return $lock->NodeKey;
 }
 
-function getTailscaleLockPubkey($lock)
+function getTailscaleLockPubkey(object $lock) : string
 {
     if ( ! getTailscaleLockEnabled($lock)) {
-        return false;
+        return "";
     }
 
     return $lock->PublicKey;
 }
 
-function getTailscaleLockSigning($lock)
+function getTailscaleLockSigning(object $lock) : bool
 {
     if ( ! getTailscaleLockSigned($lock)) {
         return false;
@@ -50,7 +50,10 @@ function getTailscaleLockSigning($lock)
     return $isTrusted;
 }
 
-function getTailscaleLockPending($lock)
+/**
+ * @return array<string, string>
+ */
+function getTailscaleLockPending(object $lock) : array
 {
     if ( ! getTailscaleLockSigning($lock)) {
         return array();
@@ -65,7 +68,7 @@ function getTailscaleLockPending($lock)
     return $pending;
 }
 
-function getTailscaleLockWarning($lock)
+function getTailscaleLockWarning(object $lock) : string
 {
     if (getTailscaleLockEnabled($lock) && ( ! getTailscaleLockSigned($lock))) {
         return "<span class='error' style='text-align: center; font-size: 1.4em; font-weight: bold;'>" . _tr("warnings.lock") . "</span>";
