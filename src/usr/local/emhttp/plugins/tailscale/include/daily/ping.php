@@ -2,10 +2,27 @@
 
 $endpoint = "https://plugin-usage.edacerton.win/";
 
+function download_url($url)
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 45);
+    curl_setopt($ch, CURLOPT_ENCODING, "");
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_REFERER, "");
+    curl_setopt($ch, CURLOPT_FAILONERROR, true);
+    $out = curl_exec($ch) ?: false;
+    curl_close($ch);
+    return $out;
+}
+
 function send_usage($url, $content)
 {
     $body  = json_encode($content);
-    $token = file_get_contents($url . '?connect');
+    $token = download_url($url . '?connect');
 
     $c = curl_init();
     curl_setopt($c, CURLOPT_URL, $url);
@@ -37,9 +54,14 @@ if ($tailscale_config['USAGE']) {
 
     $prefs = getTailscalePrefs();
 
-    $exit      = false;
-    $subnet    = false;
-    $headscale = false;
+    if (isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? true : false) : true) {
+        logmsg("Skipping usage data collection; not logged in.");
+        return;
+    }
+
+    $exit          = false;
+    $subnet        = false;
+    $customControl = false;
 
     foreach (($prefs->AdvertiseRoutes ?? array()) as $net) {
         switch ($net) {
@@ -54,7 +76,7 @@ if ($tailscale_config['USAGE']) {
     }
 
     if ($prefs->ControlURL != "https://controlplane.tailscale.com") {
-        $headscale = true;
+        $customControl = true;
     }
 
     $content = array(
@@ -68,7 +90,7 @@ if ($tailscale_config['USAGE']) {
         'bool3'          => boolval($tailscale_config['INCLUDE_INTERFACE']),
         'bool4'          => $subnet,
         'bool5'          => $exit,
-        'num1'           => $headscale ? 0 : 1
+        'num1'           => $customControl ? 0 : 1
     );
 
     $attempts = 0;
