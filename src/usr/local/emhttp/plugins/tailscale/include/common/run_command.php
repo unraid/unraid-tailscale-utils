@@ -1,6 +1,9 @@
 <?php
 
-function run_command($command, $alwaysShow = false, $show = true)
+/**
+ * @return array<string>
+ */
+function run_command(string $command, bool $alwaysShow = false, bool $show = true) : array
 {
     $output = array();
     $retval = null;

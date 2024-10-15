@@ -1,6 +1,6 @@
 <?php
 
-function getLog($log, $maxLines)
+function getLog(string $log, int $max) : void
 {
     $allowed_files = ["/var/log/tailscale.log", "/var/log/tailscale-utils.log"];
 
@@ -13,7 +13,6 @@ function getLog($log, $maxLines)
         return;
     }
 
-    $max   = intval($maxLines);
     $lines = array_reverse(array_slice(file($log), -$max));
 
     foreach ($lines as $line) {
@@ -24,7 +23,7 @@ function getLog($log, $maxLines)
 ini_set('memory_limit', '512M'); // Increase memory limit
 
 try {
-    getLog($_POST['log'], $_POST['max']);
+    getLog($_POST['log'], intval($_POST['max']));
 } catch (Throwable $e) {
     echo '<span class="text">', htmlspecialchars($e->getMessage()), "</span>";
 }
