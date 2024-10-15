@@ -35,7 +35,7 @@ if (is_resource($process)) {
     $return_value = proc_close($process);
 }
 
-$out     = explode(PHP_EOL, $output);
+$out     = explode(PHP_EOL, $output ?? array());
 $headers = true;
 foreach ($out as $line) {
     if ($headers) {

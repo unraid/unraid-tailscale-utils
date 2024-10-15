@@ -1,5 +1,7 @@
 <?php
 
+$docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+
 $notify = "{$docroot}/webGui/scripts/notify";
 
 $status = getTailscaleStatus();

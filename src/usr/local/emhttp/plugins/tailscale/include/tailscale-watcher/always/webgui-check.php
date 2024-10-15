@@ -1,5 +1,11 @@
 <?php
 
+$tailscale_config = $tailscale_config ?? getPluginConfig();
+
+if(!isset($tailscale_ipv4)) {
+    throw new Exception('Tailscale IP not defined.');
+}
+
 // Make certain that the WebGUI is listening on the Tailscale interface
 if ($tailscale_config["INCLUDE_INTERFACE"] == 1) {
     $ident_config = parse_ini_file("/boot/config/ident.cfg");

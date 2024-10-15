@@ -1,5 +1,7 @@
 <?php
 
+$tailscale_config = $tailscale_config ?? getPluginConfig();
+
 $custom_params = "";
 
 $wgport = intval($tailscale_config['WG_PORT']);

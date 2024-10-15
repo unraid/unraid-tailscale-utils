@@ -1,5 +1,7 @@
 <?php
 
+$tailscale_config = $tailscale_config ?? getPluginConfig();
+
 if ($tailscale_config['SYSCTL_IP_FORWARD'] == "1") {
     logmsg("Enabling IP forwarding");
     $sysctl = "net.ipv4.ip_forward = 1" . PHP_EOL . "net.ipv6.conf.all.forwarding = 1";

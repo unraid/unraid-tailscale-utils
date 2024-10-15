@@ -3,11 +3,18 @@
 $include_array      = array();
 $exclude_interfaces = "";
 $write_file         = true;
+$network_extra_file = '/boot/config/network-extra.cfg';
+$ifname             = 'tailscale1';
+
+$tailscale_config = $tailscale_config ?? getPluginConfig();
 
 if (file_exists($network_extra_file)) {
-    extract(parse_ini_file($network_extra_file));
-    if ($include_interfaces) {
-        $include_array = explode(' ', $include_interfaces);
+    $netExtra = parse_ini_file($network_extra_file);
+    if ($netExtra['include_interfaces'] ?? false) {
+        $include_array = explode(' ', $netExtra['include_interfaces']);
+    }
+    if ($netExtra['exclude_interfaces'] ?? false) {
+        $exclude_interfaces = $netExtra['exclude_interfaces'];
     }
     $write_file = false;
 }

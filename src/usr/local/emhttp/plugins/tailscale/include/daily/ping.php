@@ -1,5 +1,7 @@
 <?php
 
+$tailscale_config = $tailscale_config ?? getPluginConfig();
+
 $endpoint = "https://plugin-usage.edacerton.win/";
 
 function download_url($url)

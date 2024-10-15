@@ -11,6 +11,7 @@ $tsName = '';
 
 logmsg("Starting tailscale-watcher");
 
+// @phpstan-ignore while.alwaysTrue
 while (true) {
     unset($tailscale_ipv4);
 

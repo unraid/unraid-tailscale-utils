@@ -6,6 +6,11 @@
 <p>
 <?= _tr("lock.signing_instructions"); ?>
 </p>
+<?php
+    if(!isset($tailscale_output)) {
+        throw new Exception("Tailscale output not defined");
+    }
+?>
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/approve-nodes.php" />
 <table style="margin-top: 5px;">

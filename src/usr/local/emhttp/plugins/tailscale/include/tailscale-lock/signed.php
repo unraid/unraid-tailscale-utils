@@ -8,4 +8,10 @@
 <?= _tr('lock.make_signing'); ?>
 </p>
 
+<?php
+    if(!isset($tailscale_output)) {
+        throw new Exception("Tailscale output not defined");
+    }
+?>
+
 <pre><?= $tailscale_output['lock_pubkey']; ?></pre>

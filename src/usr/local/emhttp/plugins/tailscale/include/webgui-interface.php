@@ -1,5 +1,11 @@
 <?php
 
+$docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+
+if((!isset($var)) || (!isset($display))) {
+    throw new Exception("Missing required WebGUI variables");
+}
+
 require_once "{$docroot}/plugins/tailscale/include/common.php";
 require_once "{$docroot}/plugins/tailscale/include/webgui-info.php";
 require_once "{$docroot}/plugins/tailscale/include/webgui-key-expiration.php";
