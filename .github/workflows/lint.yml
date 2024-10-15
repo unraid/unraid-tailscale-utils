@@ -3,7 +3,7 @@ name: Commit Quality
 on:
   push:
     branches:
-      - "main"
+      - main
   pull_request:
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
       - uses: php-actions/phpstan@v3
 
   commitlint:
-    run: Commitlint
+    name: Commitlint
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/setup-node@v3
