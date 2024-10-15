@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - id: build_files
         run: |
@@ -22,7 +22,7 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: release/*
-  
+
       - name: Add checksum to release description
         uses: djn24/add-comment-to-release@v1
         with:
