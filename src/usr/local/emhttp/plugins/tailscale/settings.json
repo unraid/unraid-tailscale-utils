@@ -26,5 +26,9 @@
   "WG_PORT": {
     "default": "0",
     "description": "Port for Wireguard connections"
+  },
+  "TAILDROP_DIR": {
+    "default": "",
+    "description": "Destination for Taildrop files"
   }
 }
