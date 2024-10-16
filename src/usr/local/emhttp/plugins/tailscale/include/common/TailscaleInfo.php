@@ -18,19 +18,19 @@ class TailscaleInfo
     public static function getStatus(): stdClass
     {
         exec("tailscale status --json", $out_status);
-        return json_decode(implode($out_status));
+        return (object) json_decode(implode($out_status));
     }
 
     public static function getPrefs(): stdClass
     {
         exec("tailscale debug prefs", $out_prefs);
-        return json_decode(implode($out_prefs));
+        return (object) json_decode(implode($out_prefs));
     }
 
     public static function getLock(): stdClass
     {
         exec("tailscale lock status -json=true", $out_status);
-        return json_decode(implode($out_status));
+        return (object) json_decode(implode($out_status));
     }
 
     public static function printRow(string $title, string $value): string
