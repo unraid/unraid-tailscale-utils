@@ -1,10 +1,10 @@
 <?php
 
-if(!isset($tailscale_config)) {
+if ( ! isset($tailscale_config)) {
     echo('Tailscale config not defined.');
     return;
 }
-if(!isset($restart_command)) {
+if ( ! isset($restart_command)) {
     echo('Restart command not defined.');
     return;
 }

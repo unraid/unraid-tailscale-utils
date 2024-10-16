@@ -7,7 +7,7 @@
 <p><?= _tr('lock.unsigned_instructions'); ?></p>
 
 <?php
-    if(!isset($tailscale_output)) {
+    if ( ! isset($tailscale_output)) {
         echo("Tailscale output not defined");
         return;
     }

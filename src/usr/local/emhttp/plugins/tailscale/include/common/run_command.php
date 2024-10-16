@@ -3,7 +3,7 @@
 /**
  * @return array<string>
  */
-function run_command(string $command, bool $alwaysShow = false, bool $show = true) : array
+function run_command(string $command, bool $alwaysShow = false, bool $show = true): array
 {
     $output = array();
     $retval = null;

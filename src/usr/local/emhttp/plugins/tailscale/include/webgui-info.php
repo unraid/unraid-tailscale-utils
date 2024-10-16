@@ -1,16 +1,16 @@
 <?php
 
-function printRow(string $title, string $value) : string
+function printRow(string $title, string $value): string
 {
     return "<tr><td>{$title}</td><td>{$value}</td></tr>" . PHP_EOL;
 }
 
-function printDash(string $title, string $value) : string
+function printDash(string $title, string $value): string
 {
     return "<tr><td><span class='w26'>{$title}</span>{$value}</td></tr>" . PHP_EOL;
 }
 
-function getStatusInfo(object $status, object $prefs, object $lock) : string
+function getStatusInfo(object $status, object $prefs, object $lock): string
 {
     $tsVersion     = isset($status->Version) ? $status->Version : _tr("unknown");
     $keyExpiration = isset($status->Self->KeyExpiry) ? $status->Self->KeyExpiry : _tr("disabled");
@@ -48,7 +48,7 @@ function getStatusInfo(object $status, object $prefs, object $lock) : string
     return $output;
 }
 
-function getConnectionInfo(object $status, object $prefs) : string
+function getConnectionInfo(object $status, object $prefs): string
 {
     $hostName         = isset($status->Self->HostName) ? $status->Self->HostName : _tr("unknown");
     $dnsName          = isset($status->Self->DNSName) ? $status->Self->DNSName : _tr("unknown");
@@ -70,7 +70,7 @@ function getConnectionInfo(object $status, object $prefs) : string
     return $output;
 }
 
-function getDashboardInfo(object $status) : string
+function getDashboardInfo(object $status): string
 {
     $hostName     = isset($status->Self->HostName) ? $status->Self->HostName : _tr("Unknown");
     $dnsName      = isset($status->Self->DNSName) ? $status->Self->DNSName : _tr("Unknown");

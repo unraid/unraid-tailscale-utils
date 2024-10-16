@@ -1,6 +1,6 @@
 <?php
 
-function logmsg(string $message) : void
+function logmsg(string $message): void
 {
     $timestamp = date('Y/m/d H:i:s');
     $filename  = basename($_SERVER['PHP_SELF']);

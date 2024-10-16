@@ -1,6 +1,6 @@
 <?php
 
-function _tr(string $message) : string
+function _tr(string $message): string
 {
     global $tailscale_lang;
 

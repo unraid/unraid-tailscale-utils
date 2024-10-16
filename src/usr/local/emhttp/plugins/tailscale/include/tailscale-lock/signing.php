@@ -7,7 +7,7 @@
 <?= _tr("lock.signing_instructions"); ?>
 </p>
 <?php
-    if(!isset($tailscale_output)) {
+    if ( ! isset($tailscale_output)) {
         echo("Tailscale output not defined");
         return;
     }

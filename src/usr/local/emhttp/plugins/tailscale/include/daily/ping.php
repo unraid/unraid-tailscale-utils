@@ -4,7 +4,7 @@ $tailscale_config = $tailscale_config ?? getPluginConfig();
 
 $endpoint = "https://plugin-usage.edacerton.win/";
 
-function download_url(string $url) : string
+function download_url(string $url): string
 {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -24,7 +24,7 @@ function download_url(string $url) : string
 /**
  * @param array<mixed> $content
  */
-function send_usage(string $url, array $content) : int
+function send_usage(string $url, array $content): int
 {
     $body  = json_encode($content);
     $token = download_url($url . '?connect');

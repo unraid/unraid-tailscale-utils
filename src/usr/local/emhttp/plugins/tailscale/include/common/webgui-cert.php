@@ -1,6 +1,6 @@
 <?php
 
-function refreshWebGuiCert(bool $restartIfChanged = true) : void
+function refreshWebGuiCert(bool $restartIfChanged = true): void
 {
     $status = getTailscaleStatus();
 
