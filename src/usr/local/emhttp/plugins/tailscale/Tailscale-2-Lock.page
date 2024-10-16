@@ -5,10 +5,17 @@ Type="xmenu"
 Tag="lock"
 ---
 <?php
+$docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+$tailscale_config = $tailscale_config ?? getPluginConfig();
 
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
 
     $signingNode = false;
+
+    if(!isset($tailscale_output)) {
+        echo("Tailscale output not defined");
+        return;
+    }
 
     switch (true) {
         case $tailscale_output['lock_signing']:

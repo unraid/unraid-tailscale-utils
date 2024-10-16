@@ -10,7 +10,8 @@
 
 <?php
     if(!isset($tailscale_output)) {
-        throw new Exception("Tailscale output not defined");
+        echo("Tailscale output not defined");
+        return;
     }
 ?>
 
