@@ -1,3 +1,3 @@
 <?php
 
-applyGRO();
+TailscaleHelpers::applyGRO();

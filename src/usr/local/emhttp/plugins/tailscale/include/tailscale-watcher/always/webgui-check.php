@@ -1,6 +1,6 @@
 <?php
 
-$tailscale_config = $tailscale_config ?? getTailscaleConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
 
 if ( ! isset($tailscale_ipv4)) {
     TailscaleHelpers::logmsg('Tailscale IP not defined.');

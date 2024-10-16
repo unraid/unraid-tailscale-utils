@@ -1,6 +1,6 @@
 <?php
 
-$tailscale_config = $tailscale_config ?? getTailscaleConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
 
 if ($tailscale_config['SYSCTL_IP_FORWARD'] == "1") {
     TailscaleHelpers::logmsg("Enabling IP forwarding");

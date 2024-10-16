@@ -6,7 +6,7 @@ Menu="Dashboard:0"
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 require_once "{$docroot}/plugins/tailscale/include/common.php";
 
-$tailscale_config = $tailscale_config ?? getTailscaleConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
 $tr = $tr ?? new Translator();
 
 $tailscale_dashboard = "<tr><td>" . $tr->tr("tailscale_disabled") . "</td></tr>";

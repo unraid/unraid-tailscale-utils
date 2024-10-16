@@ -5,7 +5,7 @@ Type="xmenu"
 Tag="gears"
 ---
 <?php
-    $tailscale_config = $tailscale_config ?? getTailscaleConfig();
+    $tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
     $tr = $tr ?? new Translator();
 
     if(!isset($tailscale_output)) {

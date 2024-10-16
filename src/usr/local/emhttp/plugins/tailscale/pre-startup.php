@@ -4,7 +4,7 @@
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 require_once "{$docroot}/plugins/tailscale/include/common.php";
 
-$tailscale_config = $tailscale_config ?? getTailscaleConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
 
 if ( ! isset($restart_command)) {
     throw new Exception('Restart command not defined.');

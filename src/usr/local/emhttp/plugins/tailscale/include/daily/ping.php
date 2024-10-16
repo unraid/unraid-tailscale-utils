@@ -1,6 +1,6 @@
 <?php
 
-$tailscale_config = $tailscale_config ?? getTailscaleConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
 
 $endpoint = "https://plugin-usage.edacerton.win/";
 

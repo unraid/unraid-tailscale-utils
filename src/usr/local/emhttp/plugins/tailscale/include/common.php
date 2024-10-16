@@ -10,7 +10,7 @@ foreach (glob("/usr/local/emhttp/plugins/tailscale/include/common/*.php") ?: arr
 
 $plugin                     = "tailscale";
 $restart_command            = '/usr/local/emhttp/webGui/scripts/reload_services';
-$tailscale_config           = getTailscaleConfig();
+$tailscale_config           = TailscaleHelpers::getPluginConfig();
 $configure_extra_interfaces = file_exists($restart_command);
 
 $tr = $tr ?? new Translator();

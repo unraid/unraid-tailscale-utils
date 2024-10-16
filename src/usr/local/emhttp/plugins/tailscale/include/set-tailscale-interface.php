@@ -6,7 +6,7 @@ $write_file         = true;
 $network_extra_file = '/boot/config/network-extra.cfg';
 $ifname             = 'tailscale1';
 
-$tailscale_config = $tailscale_config ?? getTailscaleConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
 
 if (file_exists($network_extra_file)) {
     $netExtra = parse_ini_file($network_extra_file);

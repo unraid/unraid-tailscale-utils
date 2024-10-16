@@ -3,9 +3,9 @@
 class TailscaleInfo
 {
     private Translator $tr;
-    private object $status;
-    private object $prefs;
-    private object $lock;
+    private stdClass $status;
+    private stdClass $prefs;
+    private stdClass $lock;
 
     public function __construct(Translator $tr)
     {
@@ -15,19 +15,19 @@ class TailscaleInfo
         $this->lock   = self::getLock();
     }
 
-    public static function getStatus(): object
+    public static function getStatus(): stdClass
     {
         exec("tailscale status --json", $out_status);
         return json_decode(implode($out_status));
     }
 
-    public static function getPrefs(): object
+    public static function getPrefs(): stdClass
     {
         exec("tailscale debug prefs", $out_prefs);
         return json_decode(implode($out_prefs));
     }
 
-    public static function getLock(): object
+    public static function getLock(): stdClass
     {
         exec("tailscale lock status -json=true", $out_status);
         return json_decode(implode($out_status));
