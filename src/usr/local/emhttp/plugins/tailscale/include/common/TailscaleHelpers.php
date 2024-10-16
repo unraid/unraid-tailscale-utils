@@ -102,7 +102,8 @@ class TailscaleHelpers
 
     public static function applyGRO(): void
     {
-        $ip_route = json_decode(implode(self::run_command('ip -j route get 8.8.8.8')), true);
+        /** @var array<int, array<string>> $ip_route */
+        $ip_route = (array) json_decode(implode(self::run_command('ip -j route get 8.8.8.8')), true);
 
         // Check if a device was returned
         if ( ! isset($ip_route[0]['dev'])) {
@@ -112,7 +113,8 @@ class TailscaleHelpers
 
         $dev = $ip_route[0]['dev'];
 
-        $ethtool = json_decode(implode(self::run_command("ethtool --json -k {$dev}")), true)[0];
+        /** @var array<string, array<string>> $ethtool */
+        $ethtool = ((array) json_decode(implode(self::run_command("ethtool --json -k {$dev}")), true))[0];
 
         if (isset($ethtool['rx-udp-gro-forwarding']) && ! $ethtool['rx-udp-gro-forwarding']['active']) {
             self::run_command("ethtool -K {$dev} rx-udp-gro-forwarding on");
@@ -139,7 +141,8 @@ class TailscaleHelpers
         }
 
         // Load default settings and assign values
-        $settings_config = json_decode(file_get_contents($defaults_file) ?: "{}", true);
+        /** @var array<string, array<string>> $settings_config */
+        $settings_config = (array) json_decode(file_get_contents($defaults_file) ?: "{}", true);
         foreach ($settings_config as $key => $value) {
             if ( ! isset($tailscale_config[$key])) {
                 $tailscale_config[$key] = $value['default'];
