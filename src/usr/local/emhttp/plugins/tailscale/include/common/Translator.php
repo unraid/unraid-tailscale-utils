@@ -2,7 +2,7 @@
 
 class Translator
 {
-    /** @var array<string> $tailscale_lang */
+    /** @var array<string, string> $tailscale_lang */
     private array $tailscale_lang;
 
     public function __construct()
@@ -12,10 +12,10 @@ class Translator
         $dynamix = parse_ini_file('/boot/config/plugins/dynamix/dynamix.cfg', true) ?: array();
 
         $locale           = $_SESSION['locale'] ?? ($login_locale ?? $dynamix['display']['locale']);
-        $tailscale_locale = json_decode(file_get_contents("/usr/local/emhttp/plugins/tailscale/locales/en_US.json") ?: "{}", true);
+        $tailscale_locale = (array) json_decode(file_get_contents("/usr/local/emhttp/plugins/tailscale/locales/en_US.json") ?: "{}", true);
 
         if (file_exists("/usr/local/emhttp/plugins/tailscale/locales/{$locale}.json")) {
-            $current_locale   = json_decode(file_get_contents("/usr/local/emhttp/plugins/tailscale/locales/{$locale}.json") ?: "{}", true);
+            $current_locale   = (array) json_decode(file_get_contents("/usr/local/emhttp/plugins/tailscale/locales/{$locale}.json") ?: "{}", true);
             $tailscale_locale = array_replace_recursive($tailscale_locale, $current_locale);
         }
 
@@ -26,7 +26,9 @@ class Translator
             foreach (range(0, $ritit->getDepth()) as $depth) {
                 $keys[] = $ritit->getSubIterator($depth)->key();
             }
-            $tailscale_lang[ strtolower(join('.', $keys)) ] = $leafValue;
+            if (is_string($leafValue)) {
+                $tailscale_lang[ strtolower(join('.', $keys)) ] = $leafValue;
+            }
         }
 
         $this->tailscale_lang = $tailscale_lang;
