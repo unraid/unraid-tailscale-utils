@@ -7,7 +7,6 @@ if (( ! isset($var)) || ( ! isset($display))) {
 }
 
 require_once "{$docroot}/plugins/tailscale/include/common.php";
-require_once "{$docroot}/plugins/tailscale/include/netbios-check.php";
 $tr = $tr ?? new Translator();
 
 $tailscaleInfo = new TailscaleInfo($tr);
@@ -31,4 +30,4 @@ $tailscale_output['lock_pubkey']  = $tailscaleInfo->getTailscaleLockPubkey();
 $tailscale_output['lock_nodekey'] = $tailscaleInfo->getTailscaleLockNodekey();
 $tailscale_output['lock_warning'] = $tailscaleInfo->getTailscaleLockWarning();
 
-$tailscale_output['netbios_warning'] = getTailscaleNetbiosWarning($var, $tr);
+$tailscale_output['netbios_warning'] = $tailscaleInfo->getTailscaleNetbiosWarning($var);

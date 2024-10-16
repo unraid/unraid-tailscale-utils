@@ -237,4 +237,15 @@ class TailscaleInfo
         }
         return "";
     }
+
+    /**
+     * @param array<mixed> $var
+     */
+    public function getTailscaleNetbiosWarning(array $var): string
+    {
+        if (($var['USE_NETBIOS'] == "yes") && ($var['shareSMBEnabled'] != "no")) {
+            return "<span class='warn' style='text-align: center; font-size: 1.4em; font-weight: bold;'>" . $this->tr("warnings.netbios") . "</span>";
+        }
+        return "";
+    }
 }
