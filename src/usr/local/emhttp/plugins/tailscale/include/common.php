@@ -10,7 +10,7 @@ foreach (glob("/usr/local/emhttp/plugins/tailscale/include/common/*.php") as $fi
 
 $plugin = "tailscale";
 
-$restart_command    = '/usr/local/emhttp/webGui/scripts/reload_services';
+$restart_command = '/usr/local/emhttp/webGui/scripts/reload_services';
 
 $tailscale_config = getPluginConfig();
 

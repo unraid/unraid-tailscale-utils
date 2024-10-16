@@ -1,6 +1,6 @@
 <?php
 
-function getLog(string $log, int $max) : void
+function getLog(string $log, int $max): void
 {
     $allowed_files = ["/var/log/tailscale.log", "/var/log/tailscale-utils.log"];
 

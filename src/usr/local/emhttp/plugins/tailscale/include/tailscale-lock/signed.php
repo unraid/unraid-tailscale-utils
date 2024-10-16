@@ -9,8 +9,9 @@
 </p>
 
 <?php
-    if(!isset($tailscale_output)) {
-        throw new Exception("Tailscale output not defined");
+    if ( ! isset($tailscale_output)) {
+        echo("Tailscale output not defined");
+        return;
     }
 ?>
 

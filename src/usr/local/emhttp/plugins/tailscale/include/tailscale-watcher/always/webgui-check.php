@@ -2,8 +2,9 @@
 
 $tailscale_config = $tailscale_config ?? getPluginConfig();
 
-if(!isset($tailscale_ipv4)) {
-    throw new Exception('Tailscale IP not defined.');
+if ( ! isset($tailscale_ipv4)) {
+    logmsg('Tailscale IP not defined.');
+    return;
 }
 
 // Make certain that the WebGUI is listening on the Tailscale interface

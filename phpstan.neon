@@ -1,4 +1,7 @@
 parameters:
 	level: 6
+	fileExtensions:
+		- php
+		- page
 	paths:
 		- src

@@ -1,6 +1,6 @@
 <?php
 
-function apply_flag(string $setting, string $flag) : void
+function apply_flag(string $setting, string $flag): void
 {
     global $tailscale_config;
 

@@ -2,7 +2,7 @@
 
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 
-if((!isset($var)) || (!isset($display))) {
+if (( ! isset($var)) || ( ! isset($display))) {
     throw new Exception("Missing required WebGUI variables");
 }
 

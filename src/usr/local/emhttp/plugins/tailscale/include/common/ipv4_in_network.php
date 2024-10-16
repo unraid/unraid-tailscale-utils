@@ -1,6 +1,6 @@
 <?php
 
-function ip4_in_network(string $ip, string $network) : bool
+function ip4_in_network(string $ip, string $network): bool
 {
     if (strpos($network, '/') === false) {
         return false;

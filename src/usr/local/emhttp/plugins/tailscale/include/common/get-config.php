@@ -3,10 +3,10 @@
 /**
  * @return array<string, mixed>
  */
-function getPluginConfig() : array
+function getPluginConfig(): array
 {
-    $config_file        = '/boot/config/plugins/tailscale/tailscale.cfg';
-    $defaults_file      = '/usr/local/emhttp/plugins/tailscale/settings.json';
+    $config_file   = '/boot/config/plugins/tailscale/tailscale.cfg';
+    $defaults_file = '/usr/local/emhttp/plugins/tailscale/settings.json';
 
     // Load configuration file
     if (file_exists($config_file)) {

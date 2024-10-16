@@ -5,7 +5,13 @@ Tag="info"
 Type="xmenu"
 ---
 <?php
+$tailscale_config = $tailscale_config ?? getPluginConfig();
+
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
+    if(!isset($tailscale_output)) {
+        echo("Tailscale output not defined");
+        return;
+    }
 ?>
 <table class="share_status">
     <thead>

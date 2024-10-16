@@ -7,8 +7,9 @@
 <?= _tr("lock.signing_instructions"); ?>
 </p>
 <?php
-    if(!isset($tailscale_output)) {
-        throw new Exception("Tailscale output not defined");
+    if ( ! isset($tailscale_output)) {
+        echo("Tailscale output not defined");
+        return;
     }
 ?>
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">

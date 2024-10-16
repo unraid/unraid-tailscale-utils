@@ -5,10 +5,10 @@ Tag="question"
 Type="xmenu"
 ---
 <?php
-function help_block($section, $header="h3") {
+function help_block(string $section, string $header="h3") : string {
     $title = _tr("settings.{$section}");
     $body = _tr("help.{$section}");
-    echo <<<END
+    return <<<END
     <{$header}>{$title}</{$header}>
     <p>{$body}</p>
     END;

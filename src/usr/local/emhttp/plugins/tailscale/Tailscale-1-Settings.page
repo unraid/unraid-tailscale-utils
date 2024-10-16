@@ -4,6 +4,14 @@ Title="Settings"
 Type="xmenu"
 Tag="gears"
 ---
+<?php
+    $tailscale_config = $tailscale_config ?? getPluginConfig();
+
+    if(!isset($tailscale_output)) {
+        echo("Tailscale output not defined");
+        return;
+    }
+?>
 <style>
     .fileTree {
         background:
@@ -19,12 +27,12 @@ Tag="gears"
     }
     .advanced{display:none}
 </style>
-<link type="text/css" rel="stylesheet" href="<?autov('/webGui/styles/jquery.filetree.css')?>">
-<link type="text/css" rel="stylesheet" href="<?autov('/webGui/styles/jquery.switchbutton.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= auto_v('/webGui/styles/jquery.filetree.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= auto_v('/webGui/styles/jquery.switchbutton.css')?>">
 <span class="status vhshift"><input type="checkbox" class="advancedview"></span>
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file"
-    value="<?= $plugin; ?>/<?= $plugin; ?>.cfg" />
+    value="tailscale/tailscale.cfg" />
 <input type="hidden" name="#cleanup" value="" />
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh" />
 
@@ -33,22 +41,22 @@ Tag="gears"
 <div class="advanced" markdown="1">
 <?= _tr("settings.enable_tailscale") ?>
 : <select name='ENABLE_TAILSCALE' size='1'>
-    <?= mk_option($tailscale_config["ENABLE_TAILSCALE"], '1', _tr("yes"));?>
-    <?= mk_option($tailscale_config["ENABLE_TAILSCALE"], '0', _tr("no"));?>
+    <?= make_option($tailscale_config["ENABLE_TAILSCALE"], '1', _tr("yes"));?>
+    <?= make_option($tailscale_config["ENABLE_TAILSCALE"], '0', _tr("no"));?>
 </select>
 
 <?= _tr("settings.unraid_listen") ?>
 : <select name='INCLUDE_INTERFACE' size='1'>
-    <?= mk_option($tailscale_config["INCLUDE_INTERFACE"], '1', _tr("yes"));?>
-    <?= mk_option($tailscale_config["INCLUDE_INTERFACE"], '0', _tr("no"));?>
+    <?= make_option($tailscale_config["INCLUDE_INTERFACE"], '1', _tr("yes"));?>
+    <?= make_option($tailscale_config["INCLUDE_INTERFACE"], '0', _tr("no"));?>
 </select>
 
 > <?= _tr("settings.context.unraid_listen") ?>
 
 <?= _tr("settings.ip_forward") ?>
 : <select name='SYSCTL_IP_FORWARD' size='1'>
-    <?= mk_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', _tr("yes"));?>
-    <?= mk_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', _tr("no"));?>
+    <?= make_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', _tr("yes"));?>
+    <?= make_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', _tr("no"));?>
 </select>
 
 > <?= _tr("settings.context.ip_forward") ?>
@@ -63,8 +71,8 @@ Tag="gears"
 
 <?= _tr("settings.usage") ?>
 : <select name='USAGE' size='1'>
-    <?= mk_option($tailscale_config["USAGE"], '1', _tr("yes"));?>
-    <?= mk_option($tailscale_config["USAGE"], '0', _tr("no"));?>
+    <?= make_option($tailscale_config["USAGE"], '1', _tr("yes"));?>
+    <?= make_option($tailscale_config["USAGE"], '0', _tr("no"));?>
 </select>
 
 > <?= _tr("settings.context.usage") ?>
@@ -83,9 +91,9 @@ Tag="gears"
 
 <?= _tr("settings.subnets") ?>
 : <select name='ACCEPT_ROUTES' size='1'>
-    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '0', _tr("no"));?>
-    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '1', _tr("yes"));?>
-    <?= mk_option($tailscale_config['ACCEPT_ROUTES'], '2', _tr("ignore"));?>
+    <?= make_option($tailscale_config['ACCEPT_ROUTES'], '0', _tr("no"));?>
+    <?= make_option($tailscale_config['ACCEPT_ROUTES'], '1', _tr("yes"));?>
+    <?= make_option($tailscale_config['ACCEPT_ROUTES'], '2', _tr("ignore"));?>
 </select>
 
 > <?= _tr("settings.context.subnets") ?>
@@ -93,9 +101,9 @@ Tag="gears"
 
 <?= _tr("settings.dns") ?>
 : <select name='ACCEPT_DNS' size='1'>
-    <?= mk_option($tailscale_config['ACCEPT_DNS'], '0', _tr("no"));?>
-    <?= mk_option($tailscale_config['ACCEPT_DNS'], '1', _tr("yes"));?>
-    <?= mk_option($tailscale_config['ACCEPT_DNS'], '2', _tr("ignore"));?>
+    <?= make_option($tailscale_config['ACCEPT_DNS'], '0', _tr("no"));?>
+    <?= make_option($tailscale_config['ACCEPT_DNS'], '1', _tr("yes"));?>
+    <?= make_option($tailscale_config['ACCEPT_DNS'], '2', _tr("ignore"));?>
 </select>
 
 > <?= _tr("settings.context.dns") ?>
@@ -140,8 +148,8 @@ Tag="gears"
 <?= _tr("settings.context.donate") ?>
 : <input type="button" value="Paypal" onclick="window.open('https://paypal.me/edacerton', '_blank')"> <input type="button" value="GitHub" onclick="window.open('https://github.com/sponsors/dkaser', '_blank')">
 
-<script src="<?autov('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
-<script src="<?autov('/webGui/javascript/jquery.switchbutton.js')?>"></script>
+<script src="<?= auto_v('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
+<script src="<?= auto_v('/webGui/javascript/jquery.switchbutton.js')?>"></script>
 <script>
     function requestErase(e) {
         e.disabled = true;

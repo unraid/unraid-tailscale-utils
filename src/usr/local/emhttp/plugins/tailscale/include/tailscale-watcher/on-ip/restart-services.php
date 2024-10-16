@@ -1,10 +1,12 @@
 <?php
 
-if(!isset($tailscale_config)) {
-    throw new Exception('Tailscale config not defined.');
+if ( ! isset($tailscale_config)) {
+    echo('Tailscale config not defined.');
+    return;
 }
-if(!isset($restart_command)) {
-    throw new Exception('Restart command not defined.');
+if ( ! isset($restart_command)) {
+    echo('Restart command not defined.');
+    return;
 }
 
 if ($tailscale_config["INCLUDE_INTERFACE"] == 1) {

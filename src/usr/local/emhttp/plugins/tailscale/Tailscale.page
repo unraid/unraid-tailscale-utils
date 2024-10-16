@@ -5,7 +5,10 @@ Type="xmenu"
 Tabs="true"
 ---
 <?php
+$docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 require_once "{$docroot}/plugins/tailscale/include/common.php";
+
+$tailscale_config = $tailscale_config ?? getPluginConfig();
 
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
     require_once "{$docroot}/plugins/tailscale/include/webgui-interface.php";
@@ -18,6 +21,10 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
 </script>
 <?php
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
+    if(!isset($tailscale_output)) {
+        echo("Tailscale output not defined");
+        return;
+    }
 ?>
 <?= $tailscale_output['lock_warning']; ?>
 <?= $tailscale_output['key_expiry_warning']; ?>

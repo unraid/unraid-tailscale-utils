@@ -1,6 +1,6 @@
 <?php
 
-function getKeyExpirationWarning(object $status) : string
+function getKeyExpirationWarning(object $status): string
 {
     if (isset($status->Self->KeyExpiry)) {
         $expiryTime = new DateTime($status->Self->KeyExpiry);

@@ -6,7 +6,7 @@ require_once "{$docroot}/plugins/tailscale/include/common.php";
 
 $tailscale_config = $tailscale_config ?? getPluginConfig();
 
-if(!isset($restart_command)) {
+if ( ! isset($restart_command)) {
     throw new Exception('Restart command not defined.');
 }
 
