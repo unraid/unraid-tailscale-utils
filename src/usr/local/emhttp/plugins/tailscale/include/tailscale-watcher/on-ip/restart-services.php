@@ -12,7 +12,7 @@ if ( ! isset($restart_command)) {
 if ($tailscale_config["INCLUDE_INTERFACE"] == 1) {
     refreshWebGuiCert(false);
 
-    logmsg("Restarting Unraid services");
+    TailscaleHelpers::logmsg("Restarting Unraid services");
     exec($restart_command);
 
     // Wait to allow services to restart before continuing

@@ -7,11 +7,11 @@ $replace  = <<<'END'
         fastcgi_param PATH_INFO  $fastcgi_path_info;
     END;
 
-$nginx = file_get_contents("/etc/rc.d/rc.nginx");
+$nginx = file_get_contents("/etc/rc.d/rc.nginx") ?: "";
 
 if (strpos($nginx, $original) !== false) {
     // Patch the rc.nginx file
-    logmsg("Detected original rc.nginx, applying patch\n");
+    TailscaleHelpers::logmsg("Detected original rc.nginx, applying patch\n");
 
     if ( ! file_exists("/etc/rc.d/rc.nginx.pre-tailscale")) {
         copy("/etc/rc.d/rc.nginx", "/etc/rc.d/rc.nginx.pre-tailscale");

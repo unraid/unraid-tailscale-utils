@@ -9,7 +9,7 @@ $need_ip = true;
 
 $tsName = '';
 
-logmsg("Starting tailscale-watcher");
+TailscaleHelpers::logmsg("Starting tailscale-watcher");
 
 // @phpstan-ignore while.alwaysTrue
 while (true) {
@@ -30,48 +30,48 @@ while (true) {
 
     if (isset($tailscale_ipv4)) {
         if ($need_ip) {
-            logmsg("Tailscale IP detected, applying configuration");
+            TailscaleHelpers::logmsg("Tailscale IP detected, applying configuration");
             $need_ip = false;
 
-            $status = getTailscaleStatus();
+            $status = TailscaleInfo::getStatus();
             $tsName = $status->Self->DNSName;
 
-            foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/on-ip/*.php") as $file) {
+            foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/on-ip/*.php") ?: array() as $file) {
                 try {
                     require $file;
                 } catch (Throwable $e) {
-                    logmsg("Caught exception in {$file} : " . $e->getMessage());
+                    TailscaleHelpers::logmsg("Caught exception in {$file} : " . $e->getMessage());
                 }
             }
         }
 
-        foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/always/*.php") as $file) {
+        foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/always/*.php") ?: array() as $file) {
             try {
                 require $file;
             } catch (Throwable $e) {
-                logmsg("Caught exception in {$file} : " . $e->getMessage());
+                TailscaleHelpers::logmsg("Caught exception in {$file} : " . $e->getMessage());
             }
         }
 
         // Watch for changes to the DNS name (e.g., if someone changes the tailnet name or the Tailscale name of the server via the admin console)
         // If a change happens, refresh the Tailscale WebGUI certificate
-        $status    = getTailscaleStatus();
+        $status    = TailscaleInfo::getStatus();
         $newTsName = $status->Self->DNSName;
 
         if ($newTsName != $tsName) {
-            logmsg("Detected DNS name change");
+            TailscaleHelpers::logmsg("Detected DNS name change");
             $tsName = $newTsName;
 
-            foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/on-name-change/*.php") as $file) {
+            foreach (glob("{$docroot}/plugins/tailscale/include/tailscale-watcher/on-name-change/*.php") ?: array() as $file) {
                 try {
                     require $file;
                 } catch (Throwable $e) {
-                    logmsg("Caught exception in {$file} : " . $e->getMessage());
+                    TailscaleHelpers::logmsg("Caught exception in {$file} : " . $e->getMessage());
                 }
             }
         }
     } else {
-        logmsg("Waiting for Tailscale IP");
+        TailscaleHelpers::logmsg("Waiting for Tailscale IP");
     }
 
     sleep($timer);

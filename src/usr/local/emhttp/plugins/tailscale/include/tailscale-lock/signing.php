@@ -1,10 +1,13 @@
-<h3><?= _tr("tailscale_lock"); ?></h3>
-<h4><?= _tr("lock.sign"); ?></h4>
+<?php
+$tr = $tr ?? new Translator();
+?>
+<h3><?= $tr->tr("tailscale_lock"); ?></h3>
+<h4><?= $tr->tr("lock.sign"); ?></h4>
 <p>
-    <?= _tr("lock.signing_node"); ?>
+    <?= $tr->tr("lock.signing_node"); ?>
 </p>
 <p>
-<?= _tr("lock.signing_instructions"); ?>
+<?= $tr->tr("lock.signing_instructions"); ?>
 </p>
 <?php
     if ( ! isset($tailscale_output)) {
@@ -22,5 +25,5 @@ foreach ($tailscale_output['lock_pending'] as $lockHost => $lockKey) {
 ?>
 </table>
 
-<input type="submit" name="#apply" value="<?= _tr('Sign'); ?>">
+<input type="submit" name="#apply" value="<?= $tr->tr('Sign'); ?>">
 </form>
