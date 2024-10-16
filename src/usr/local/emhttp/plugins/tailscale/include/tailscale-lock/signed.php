@@ -1,11 +1,14 @@
-<h3><?= _tr("tailscale_lock"); ?></h3>
+<?php
+$tr = $tr ?? new Translator();
+?>
+<h3><?= $tr->tr("tailscale_lock"); ?></h3>
 
 <p>
-    <?= _tr('lock.signed_node'); ?>
+    <?= $tr->tr('lock.signed_node'); ?>
 </p>
 
 <p>
-<?= _tr('lock.make_signing'); ?>
+<?= $tr->tr('lock.make_signing'); ?>
 </p>
 
 <?php

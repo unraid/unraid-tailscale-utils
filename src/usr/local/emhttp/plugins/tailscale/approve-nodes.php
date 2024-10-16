@@ -4,6 +4,6 @@
 require_once "include/common.php";
 
 foreach (array_slice($argv, 1) as $key => $value) {
-    logmsg("Tailnet lock: signing {$value}");
+    TailscaleHelpers::logmsg("Tailnet lock: signing {$value}");
     exec("tailscale lock sign {$value}");
 }

@@ -13,7 +13,7 @@ function getLog(string $log, int $max): void
         return;
     }
 
-    $lines = array_reverse(array_slice(file($log), -$max));
+    $lines = array_reverse(array_slice(file($log) ?: array(), -$max));
 
     foreach ($lines as $line) {
         echo '<span class="text">', htmlspecialchars($line), "</span>";

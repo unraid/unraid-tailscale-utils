@@ -1,3 +1,6 @@
-<h3><?= _tr("tailscale_lock"); ?></h3>
+<?php
+$tr = $tr ?? new Translator();
+?>
+<h3><?= $tr->tr("tailscale_lock"); ?></h3>
 
-<p><?= _tr("lock.disabled"); ?></p>
+<p><?= $tr->tr("lock.disabled"); ?></p>

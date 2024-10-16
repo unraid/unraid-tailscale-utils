@@ -5,7 +5,8 @@ Tag="info"
 Type="xmenu"
 ---
 <?php
-$tailscale_config = $tailscale_config ?? getPluginConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
+$tr = $tr ?? new Translator();
 
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
     if(!isset($tailscale_output)) {
@@ -16,7 +17,7 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
 <table class="share_status">
     <thead>
         <tr>
-            <td><?= _tr('status') ?></td>
+            <td><?= $tr->tr('status') ?></td>
             <td>&nbsp;</td>
         </tr>
     </thead>
@@ -25,7 +26,7 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
     </tbody>
     <thead>
         <tr>
-            <td><?= _tr('connection') ?></td>
+            <td><?= $tr->tr('connection') ?></td>
             <td>&nbsp;</td>
         </tr>
     </thead>
@@ -35,6 +36,6 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
 </table>
 <?php 
 } else { 
-    echo(_tr("tailscale_disabled"));
+    echo($tr->tr("tailscale_disabled"));
 } 
 ?>

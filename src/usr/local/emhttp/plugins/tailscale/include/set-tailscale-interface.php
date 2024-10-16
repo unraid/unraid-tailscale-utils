@@ -6,7 +6,7 @@ $write_file         = true;
 $network_extra_file = '/boot/config/network-extra.cfg';
 $ifname             = 'tailscale1';
 
-$tailscale_config = $tailscale_config ?? getPluginConfig();
+$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
 
 if (file_exists($network_extra_file)) {
     $netExtra = parse_ini_file($network_extra_file);
@@ -24,10 +24,10 @@ $in_array = in_array($ifname, $include_array);
 if ($in_array != $tailscale_config["INCLUDE_INTERFACE"]) {
     if ($tailscale_config["INCLUDE_INTERFACE"]) {
         $include_array[] = $ifname;
-        logmsg("{$ifname} added to include_interfaces");
+        TailscaleHelpers::logmsg("{$ifname} added to include_interfaces");
     } else {
         $include_array = array_diff($include_array, [$ifname]);
-        logmsg("{$ifname} removed from include_interfaces");
+        TailscaleHelpers::logmsg("{$ifname} removed from include_interfaces");
     }
     $write_file = true;
 }
@@ -42,5 +42,5 @@ if ($write_file) {
         END;
 
     file_put_contents($network_extra_file, $file);
-    logmsg("Updated network-extra.cfg");
+    TailscaleHelpers::logmsg("Updated network-extra.cfg");
 }

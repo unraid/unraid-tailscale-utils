@@ -7,32 +7,27 @@ if (( ! isset($var)) || ( ! isset($display))) {
 }
 
 require_once "{$docroot}/plugins/tailscale/include/common.php";
-require_once "{$docroot}/plugins/tailscale/include/webgui-info.php";
-require_once "{$docroot}/plugins/tailscale/include/webgui-key-expiration.php";
-require_once "{$docroot}/plugins/tailscale/include/tailscale-lock.php";
-require_once "{$docroot}/plugins/tailscale/include/netbios-check.php";
+$tr = $tr ?? new Translator();
+
+$tailscaleInfo = new TailscaleInfo($tr);
 
 $tailscale_output = array();
 
-$tailscale_status = getTailscaleStatus();
-$tailscale_prefs  = getTailscalePrefs();
-$tailscale_lock   = getTailscaleLock();
+$tailscale_dashboard = $tailscaleInfo->getDashboardInfo();
 
-$tailscale_dashboard = getDashboardInfo($tailscale_status);
-
-$tailscale_output['key_expiry_warning'] = getKeyExpirationWarning($tailscale_status);
-$tailscale_output['status_info']        = getStatusInfo($tailscale_status, $tailscale_prefs, $tailscale_lock);
-$tailscale_output['connection_info']    = getConnectionInfo($tailscale_status, $tailscale_prefs);
+$tailscale_output['key_expiry_warning'] = $tailscaleInfo->getKeyExpirationWarning();
+$tailscale_output['status_info']        = $tailscaleInfo->getStatusInfo();
+$tailscale_output['connection_info']    = $tailscaleInfo->getConnectionInfo();
 
 $tailscale_output['attach_file_tree'] = ($var['fsState'] == 'Started') ? "$('#taildropdir').fileTreeAttach();" : "";
 $tailscale_output['background_color'] = strstr('white,azure', $display['theme']) ? '#f2f2f2' : '#1c1c1c';
 
-$tailscale_output['lock_enabled'] = getTailscaleLockEnabled($tailscale_lock);
-$tailscale_output['lock_signed']  = getTailscaleLockSigned($tailscale_lock);
-$tailscale_output['lock_signing'] = getTailscaleLockSigning($tailscale_lock);
-$tailscale_output['lock_pending'] = getTailscaleLockPending($tailscale_lock);
-$tailscale_output['lock_pubkey']  = getTailscaleLockPubkey($tailscale_lock);
-$tailscale_output['lock_nodekey'] = getTailscaleLockNodekey($tailscale_lock);
-$tailscale_output['lock_warning'] = getTailscaleLockWarning($tailscale_lock);
+$tailscale_output['lock_enabled'] = $tailscaleInfo->getTailscaleLockEnabled();
+$tailscale_output['lock_signed']  = $tailscaleInfo->getTailscaleLockSigned();
+$tailscale_output['lock_signing'] = $tailscaleInfo->getTailscaleLockSigning();
+$tailscale_output['lock_pending'] = $tailscaleInfo->getTailscaleLockPending();
+$tailscale_output['lock_pubkey']  = $tailscaleInfo->getTailscaleLockPubkey();
+$tailscale_output['lock_nodekey'] = $tailscaleInfo->getTailscaleLockNodekey();
+$tailscale_output['lock_warning'] = $tailscaleInfo->getTailscaleLockWarning();
 
-$tailscale_output['netbios_warning'] = getTailscaleNetbiosWarning($var);
+$tailscale_output['netbios_warning'] = $tailscaleInfo->getTailscaleNetbiosWarning($var);

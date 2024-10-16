@@ -21,6 +21,7 @@ Type="xmenu"
       echo ("Error: Missing WebGUI vars");
       return;
   }
+  $tr = $tr ?? new Translator();
 
 $zip    = htmlspecialchars(str_replace(' ','_',strtolower($var['NAME'])));
 $log    = '/var/log/tailscale.log';
@@ -38,7 +39,7 @@ if (count($logs)) {
   // add syslog to front of logs array
   array_unshift($logs, $log);
   $select[] = "<select onchange='showLog(this.value)'>";
-  foreach ($logs as $file) $select[] = make_option("1",$file,basename($file));
+  foreach ($logs as $file) $select[] = TailscaleHelpers::make_option("1",$file,basename($file));
   $select[] = "</select>";
 }
 $select = implode($select);
@@ -81,5 +82,5 @@ $(function() {
 </script>
 <span><span class='lite label'>_(Log size)_:&nbsp;&nbsp;<input type='number' id='max' value='' placeholder='<?=$max?>'></span><?=$select?></span>
 <input type="button" value="_(Refresh)_" onclick="showLog(logfile)">
-<?php if(file_exists('/usr/local/emhttp/plugins/plugin-diagnostics/download.php')) { ?> <input type="button" value="<?= _tr("settings.diagnostics") ?>" onclick="window.open('/plugins/plugin-diagnostics/download.php?plugin=tailscale','_blank')" /><?php } ?>
+<?php if(file_exists('/usr/local/emhttp/plugins/plugin-diagnostics/download.php')) { ?> <input type="button" value="<?= $tr->tr("settings.diagnostics") ?>" onclick="window.open('/plugins/plugin-diagnostics/download.php?plugin=tailscale','_blank')" /><?php } ?>
 <pre class='u'></pre>

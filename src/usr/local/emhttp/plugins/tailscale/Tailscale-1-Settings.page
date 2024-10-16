@@ -5,7 +5,8 @@ Type="xmenu"
 Tag="gears"
 ---
 <?php
-    $tailscale_config = $tailscale_config ?? getPluginConfig();
+    $tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
+    $tr = $tr ?? new Translator();
 
     if(!isset($tailscale_output)) {
         echo("Tailscale output not defined");
@@ -27,8 +28,8 @@ Tag="gears"
     }
     .advanced{display:none}
 </style>
-<link type="text/css" rel="stylesheet" href="<?= auto_v('/webGui/styles/jquery.filetree.css')?>">
-<link type="text/css" rel="stylesheet" href="<?= auto_v('/webGui/styles/jquery.switchbutton.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= TailscaleHelpers::auto_v('/webGui/styles/jquery.filetree.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= TailscaleHelpers::auto_v('/webGui/styles/jquery.switchbutton.css')?>">
 <span class="status vhshift"><input type="checkbox" class="advancedview"></span>
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file"
@@ -36,120 +37,120 @@ Tag="gears"
 <input type="hidden" name="#cleanup" value="" />
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh" />
 
-### <?= _tr("settings.system_settings") ?>
+### <?= $tr->tr("settings.system_settings") ?>
 
 <div class="advanced" markdown="1">
-<?= _tr("settings.enable_tailscale") ?>
+<?= $tr->tr("settings.enable_tailscale") ?>
 : <select name='ENABLE_TAILSCALE' size='1'>
-    <?= make_option($tailscale_config["ENABLE_TAILSCALE"], '1', _tr("yes"));?>
-    <?= make_option($tailscale_config["ENABLE_TAILSCALE"], '0', _tr("no"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config["ENABLE_TAILSCALE"], '1', $tr->tr("yes"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config["ENABLE_TAILSCALE"], '0', $tr->tr("no"));?>
 </select>
 
-<?= _tr("settings.unraid_listen") ?>
+<?= $tr->tr("settings.unraid_listen") ?>
 : <select name='INCLUDE_INTERFACE' size='1'>
-    <?= make_option($tailscale_config["INCLUDE_INTERFACE"], '1', _tr("yes"));?>
-    <?= make_option($tailscale_config["INCLUDE_INTERFACE"], '0', _tr("no"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config["INCLUDE_INTERFACE"], '1', $tr->tr("yes"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config["INCLUDE_INTERFACE"], '0', $tr->tr("no"));?>
 </select>
 
-> <?= _tr("settings.context.unraid_listen") ?>
+> <?= $tr->tr("settings.context.unraid_listen") ?>
 
-<?= _tr("settings.ip_forward") ?>
+<?= $tr->tr("settings.ip_forward") ?>
 : <select name='SYSCTL_IP_FORWARD' size='1'>
-    <?= make_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', _tr("yes"));?>
-    <?= make_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', _tr("no"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', $tr->tr("yes"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', $tr->tr("no"));?>
 </select>
 
-> <?= _tr("settings.context.ip_forward") ?>
+> <?= $tr->tr("settings.context.ip_forward") ?>
 </div>
 
-<?= _tr("settings.taildrop") ?>
+<?= $tr->tr("settings.taildrop") ?>
 : <input type="text" id="taildropdir" name="TAILDROP_DIR" autocomplete="off" spellcheck="false"
     data-pickfolders="true" data-pickfilter="HIDE_FILES_FILTER" data-pickroot="/mnt" pattern="^[^\\]*/$"
     value="<?= htmlspecialchars($tailscale_config['TAILDROP_DIR']);?>">
 
-> <?= _tr("settings.context.taildrop") ?>
+> <?= $tr->tr("settings.context.taildrop") ?>
 
-<?= _tr("settings.usage") ?>
+<?= $tr->tr("settings.usage") ?>
 : <select name='USAGE' size='1'>
-    <?= make_option($tailscale_config["USAGE"], '1', _tr("yes"));?>
-    <?= make_option($tailscale_config["USAGE"], '0', _tr("no"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config["USAGE"], '1', $tr->tr("yes"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config["USAGE"], '0', $tr->tr("no"));?>
 </select>
 
-> <?= _tr("settings.context.usage") ?>
+> <?= $tr->tr("settings.context.usage") ?>
 
 <div class="advanced" markdown="1">
-### <?= _tr("settings.services") ?>
+### <?= $tr->tr("settings.services") ?>
 
-<?= _tr("settings.wireguard") ?>
+<?= $tr->tr("settings.wireguard") ?>
 : <input type="number" name="WG_PORT" class="narrow" min="0" max="65535" value="<?=$tailscale_config['WG_PORT']?>" placeholder="0">
 
-> <?= _tr("settings.context.wireguard") ?>
+> <?= $tr->tr("settings.context.wireguard") ?>
 
-### <?= _tr("settings.outbound_network") ?>
+### <?= $tr->tr("settings.outbound_network") ?>
 
-#### <?= _tr("settings.context.outbound_network") ?>
+#### <?= $tr->tr("settings.context.outbound_network") ?>
 
-<?= _tr("settings.subnets") ?>
+<?= $tr->tr("settings.subnets") ?>
 : <select name='ACCEPT_ROUTES' size='1'>
-    <?= make_option($tailscale_config['ACCEPT_ROUTES'], '0', _tr("no"));?>
-    <?= make_option($tailscale_config['ACCEPT_ROUTES'], '1', _tr("yes"));?>
-    <?= make_option($tailscale_config['ACCEPT_ROUTES'], '2', _tr("ignore"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_ROUTES'], '0', $tr->tr("no"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_ROUTES'], '1', $tr->tr("yes"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_ROUTES'], '2', $tr->tr("ignore"));?>
 </select>
 
-> <?= _tr("settings.context.subnets") ?>
-> <?= _tr("settings.context.ignore") ?>
+> <?= $tr->tr("settings.context.subnets") ?>
+> <?= $tr->tr("settings.context.ignore") ?>
 
-<?= _tr("settings.dns") ?>
+<?= $tr->tr("settings.dns") ?>
 : <select name='ACCEPT_DNS' size='1'>
-    <?= make_option($tailscale_config['ACCEPT_DNS'], '0', _tr("no"));?>
-    <?= make_option($tailscale_config['ACCEPT_DNS'], '1', _tr("yes"));?>
-    <?= make_option($tailscale_config['ACCEPT_DNS'], '2', _tr("ignore"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_DNS'], '0', $tr->tr("no"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_DNS'], '1', $tr->tr("yes"));?>
+    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_DNS'], '2', $tr->tr("ignore"));?>
 </select>
 
-> <?= _tr("settings.context.dns") ?>
-> <?= _tr("settings.context.ignore") ?>
+> <?= $tr->tr("settings.context.dns") ?>
+> <?= $tr->tr("settings.context.ignore") ?>
 </div>
-### <?= _tr("settings.save") ?>
+### <?= $tr->tr("settings.save") ?>
 
-**<?= _tr("settings.context.save") ?>**
-: <input type="submit" name="#apply" value="<?= _tr('Apply') ?>"><input type="button" id="DONE" value="<?= _tr('Back') ?>" onclick="done()">
+**<?= $tr->tr("settings.context.save") ?>**
+: <input type="submit" name="#apply" value="<?= $tr->tr('Apply') ?>"><input type="button" id="DONE" value="<?= $tr->tr('Back') ?>" onclick="done()">
 </form>
 
-### <?= _tr("settings.restart") ?>
+### <?= $tr->tr("settings.restart") ?>
 
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh" />
-<?= _tr("settings.context.restart") ?>
-: <input type="submit" value="<?= _tr('Restart') ?>">
+<?= $tr->tr("settings.context.restart") ?>
+: <input type="submit" value="<?= $tr->tr('Restart') ?>">
 </form>
 
 <?php if(file_exists('/usr/local/emhttp/plugins/plugin-diagnostics/download.php')) { ?>
-### <?= _tr("settings.diagnostics") ?>
+### <?= $tr->tr("settings.diagnostics") ?>
 
 <form markdown="1" method="GET" action="/plugins/plugin-diagnostics/download.php" target="_blank">
 <input type="hidden" name="plugin" value="tailscale" />
-<?= _tr("settings.context.diagnostics") ?>
-: <input type="submit" value="<?= _tr('Download') ?> ">
+<?= $tr->tr("settings.context.diagnostics") ?>
+: <input type="submit" value="<?= $tr->tr('Download') ?> ">
 </form>
 
 <?php } ?>
 
 <div class="advanced" markdown="1">
-### <?= _tr("settings.erase") ?>
+### <?= $tr->tr("settings.erase") ?>
 
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/erase.sh" />
-<?= _tr("settings.context.erase") ?>
-: <input type="button" value="<?= _tr('Erase') ?>" onclick="requestErase(this)"><input id="tailscale_erase_confirm" type="submit" value="<?= _tr('Confirm') ?>" style="display: none;">
+<?= $tr->tr("settings.context.erase") ?>
+: <input type="button" value="<?= $tr->tr('Erase') ?>" onclick="requestErase(this)"><input id="tailscale_erase_confirm" type="submit" value="<?= $tr->tr('Confirm') ?>" style="display: none;">
 </form>
 </div>
 
-### <?= _tr("settings.donate") ?>
-<?= _tr("settings.context.donate") ?>
+### <?= $tr->tr("settings.donate") ?>
+<?= $tr->tr("settings.context.donate") ?>
 : <input type="button" value="Paypal" onclick="window.open('https://paypal.me/edacerton', '_blank')"> <input type="button" value="GitHub" onclick="window.open('https://github.com/sponsors/dkaser', '_blank')">
 
-<script src="<?= auto_v('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
-<script src="<?= auto_v('/webGui/javascript/jquery.switchbutton.js')?>"></script>
+<script src="<?= TailscaleHelpers::auto_v('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
+<script src="<?= TailscaleHelpers::auto_v('/webGui/javascript/jquery.switchbutton.js')?>"></script>
 <script>
     function requestErase(e) {
         e.disabled = true;
@@ -168,8 +169,8 @@ Tag="gears"
 
         $('.advancedview').switchButton({
             labels_placement: "left",
-            on_label: "<?= _tr("settings.advanced") ?>",
-            off_label: "<?= _tr("settings.basic") ?>",
+            on_label: "<?= $tr->tr("settings.advanced") ?>",
+            off_label: "<?= $tr->tr("settings.basic") ?>",
             checked: $.cookie('tailscale_view_mode') == 'advanced'
         });
         $('.advancedview').change(function(){

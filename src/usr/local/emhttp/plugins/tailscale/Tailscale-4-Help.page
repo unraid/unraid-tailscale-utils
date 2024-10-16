@@ -5,9 +5,11 @@ Tag="question"
 Type="xmenu"
 ---
 <?php
+$tr = $tr ?? new Translator();
 function help_block(string $section, string $header="h3") : string {
-    $title = _tr("settings.{$section}");
-    $body = _tr("help.{$section}");
+    global $tr;
+    $title = $tr->tr("settings.{$section}");
+    $body = $tr->tr("help.{$section}");
     return <<<END
     <{$header}>{$title}</{$header}>
     <p>{$body}</p>
@@ -15,24 +17,24 @@ function help_block(string $section, string $header="h3") : string {
 }
 ?>
 
-## <?= _tr("help.initial") ?>
-<?= _tr("help.key_expiration") ?>
+## <?= $tr->tr("help.initial") ?>
+<?= $tr->tr("help.key_expiration") ?>
 
-## <?= _tr("settings.system_settings") ?>
+## <?= $tr->tr("settings.system_settings") ?>
 <?= help_block('unraid_listen') ?>
 <?= help_block('ip_forward') ?>
 <?= help_block('taildrop') ?>
 
-### <?= _tr("settings.usage") ?>
-<?= _tr("settings.context.usage") ?>
+### <?= $tr->tr("settings.usage") ?>
+<?= $tr->tr("settings.context.usage") ?>
 
 <?= help_block('outbound_network', "h2") ?>
 <?= help_block('subnets') ?>
 <?= help_block('dns') ?>
 
-## <?= _tr("help.certificates") ?>
+## <?= $tr->tr("help.certificates") ?>
 
-<?= _tr("help.certificates_instructions") ?>
+<?= $tr->tr("help.certificates_instructions") ?>
 ```
 #!/bin/bash
 mkdir -p /boot/config/plugins/tailscale/certs
@@ -55,7 +57,7 @@ echo "Restarting WebGUI"
 /etc/rc.d/rc.nginx reload
 ```
 
-<?= _tr("help.certificates_docker") ?>
+<?= $tr->tr("help.certificates_docker") ?>
 ```
 # Copy the files to the Minio container
 echo "Copying certificate to Minio"
@@ -65,10 +67,10 @@ echo "Restarting Minio"
 docker restart Minio
 ```
 
-## <?= _tr("help.support") ?>
+## <?= $tr->tr("help.support") ?>
 
-<?= _tr("help.support_forums") ?>
+<?= $tr->tr("help.support_forums") ?>
 
 [https://forums.unraid.net/topic/136889-plugin-tailscale/](https://forums.unraid.net/topic/136889-plugin-tailscale/)
 
-**<?= _tr("help.support_advanced") ?>**
+**<?= $tr->tr("help.support_advanced") ?>**
