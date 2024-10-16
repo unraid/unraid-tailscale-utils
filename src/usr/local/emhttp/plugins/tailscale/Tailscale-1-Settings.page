@@ -27,8 +27,8 @@ Tag="gears"
     }
     .advanced{display:none}
 </style>
-<link type="text/css" rel="stylesheet" href="<?autov('/webGui/styles/jquery.filetree.css')?>">
-<link type="text/css" rel="stylesheet" href="<?autov('/webGui/styles/jquery.switchbutton.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= auto_v('/webGui/styles/jquery.filetree.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= auto_v('/webGui/styles/jquery.switchbutton.css')?>">
 <span class="status vhshift"><input type="checkbox" class="advancedview"></span>
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file"
@@ -148,8 +148,8 @@ Tag="gears"
 <?= _tr("settings.context.donate") ?>
 : <input type="button" value="Paypal" onclick="window.open('https://paypal.me/edacerton', '_blank')"> <input type="button" value="GitHub" onclick="window.open('https://github.com/sponsors/dkaser', '_blank')">
 
-<script src="<?autov('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
-<script src="<?autov('/webGui/javascript/jquery.switchbutton.js')?>"></script>
+<script src="<?= auto_v('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
+<script src="<?= auto_v('/webGui/javascript/jquery.switchbutton.js')?>"></script>
 <script>
     function requestErase(e) {
         e.disabled = true;
