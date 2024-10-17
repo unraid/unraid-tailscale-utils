@@ -1,6 +1,6 @@
 <?php
 
-$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
+$tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
 
 $custom_params = "";
 

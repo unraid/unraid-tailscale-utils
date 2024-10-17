@@ -1,6 +1,6 @@
 <?php
 
-$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
+$tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
 
 $endpoint = "https://plugin-usage.edacerton.win/";
 
@@ -57,10 +57,10 @@ if ($tailscale_config['USAGE']) {
 
     $version = parse_ini_file('/var/local/emhttp/plugins/tailscale/tailscale.ini') ?: array();
 
-    $prefs = TailscaleInfo::getPrefs();
+    $prefs = Tailscale\Info::getPrefs();
 
     if (isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? true : false) : true) {
-        TailscaleHelpers::logmsg("Skipping usage data collection; not logged in.");
+        Tailscale\Helpers::logmsg("Skipping usage data collection; not logged in.");
         return;
     }
 
@@ -101,18 +101,18 @@ if ($tailscale_config['USAGE']) {
     $attempts = 0;
     $delay    = rand(0, 300);
     do {
-        TailscaleHelpers::logmsg("Waiting for {$delay} seconds before sending usage data.");
+        Tailscale\Helpers::logmsg("Waiting for {$delay} seconds before sending usage data.");
         sleep($delay);
         $delay += 300;
         $attempts++;
 
         $result = send_usage($endpoint, $content);
-        TailscaleHelpers::logmsg("Usage data sent.");
+        Tailscale\Helpers::logmsg("Usage data sent.");
     } while (($result != '200') && ($attempts < 3));
 
     if ($result != '200') {
-        TailscaleHelpers::logmsg("Error occurred while transmitting usage data.");
+        Tailscale\Helpers::logmsg("Error occurred while transmitting usage data.");
     }
 } else {
-    TailscaleHelpers::logmsg("Usage collection disabled.");
+    Tailscale\Helpers::logmsg("Usage collection disabled.");
 }

@@ -1,5 +1,5 @@
 <?php
-$tr = $tr ?? new Translator();
+$tr = $tr ?? new Tailscale\Translator();
 ?>
 <h3><?= $tr->tr("tailscale_lock"); ?></h3>
 

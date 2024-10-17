@@ -1,6 +1,8 @@
 <?php
 
-class TailscaleHelpers
+namespace Tailscale;
+
+class Helpers
 {
     public static function make_option(string $select, string $value, string $text, string $extra = ""): string
     {
@@ -26,12 +28,12 @@ class TailscaleHelpers
         $output = array();
         $retval = null;
         if ($show) {
-            TailscaleHelpers::logmsg($command);
+            self::logmsg($command);
         }
         exec("{$command} 2>&1", $output, $retval);
 
         if (($retval != 0) || $alwaysShow) {
-            TailscaleHelpers::logmsg("Command returned {$retval}" . PHP_EOL . implode(PHP_EOL, $output));
+            self::logmsg("Command returned {$retval}" . PHP_EOL . implode(PHP_EOL, $output));
         }
 
         return $output;
@@ -59,7 +61,7 @@ class TailscaleHelpers
 
     public static function refreshWebGuiCert(bool $restartIfChanged = true): void
     {
-        $status = TailscaleInfo::getStatus();
+        $status = Info::getStatus();
 
         $certDomains = $status->CertDomains;
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Tailscale;
+
 class Translator
 {
     /** @var array<string, string> $tailscale_lang */
@@ -19,7 +21,7 @@ class Translator
             $tailscale_locale = array_replace_recursive($tailscale_locale, $current_locale);
         }
 
-        $ritit          = new RecursiveIteratorIterator(new RecursiveArrayIterator($tailscale_locale));
+        $ritit          = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($tailscale_locale));
         $tailscale_lang = array();
         foreach ($ritit as $leafValue) {
             $keys = array();

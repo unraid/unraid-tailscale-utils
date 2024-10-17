@@ -1,11 +1,13 @@
 <?php
 
-class TailscaleInfo
+namespace Tailscale;
+
+class Info
 {
     private Translator $tr;
-    private stdClass $status;
-    private stdClass $prefs;
-    private stdClass $lock;
+    private \stdClass $status;
+    private \stdClass $prefs;
+    private \stdClass $lock;
 
     public function __construct(Translator $tr)
     {
@@ -15,19 +17,19 @@ class TailscaleInfo
         $this->lock   = self::getLock();
     }
 
-    public static function getStatus(): stdClass
+    public static function getStatus(): \stdClass
     {
         exec("tailscale status --json", $out_status);
         return (object) json_decode(implode($out_status));
     }
 
-    public static function getPrefs(): stdClass
+    public static function getPrefs(): \stdClass
     {
         exec("tailscale debug prefs", $out_prefs);
         return (object) json_decode(implode($out_prefs));
     }
 
-    public static function getLock(): stdClass
+    public static function getLock(): \stdClass
     {
         exec("tailscale lock status -json=true", $out_status);
         return (object) json_decode(implode($out_status));
@@ -138,11 +140,11 @@ class TailscaleInfo
         $status = $this->status;
 
         if (isset($status->Self->KeyExpiry)) {
-            $expiryTime = new DateTime($status->Self->KeyExpiry);
-            $expiryTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            $expiryTime = new \DateTime($status->Self->KeyExpiry);
+            $expiryTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
-            $interval      = $expiryTime->diff(new DateTime('now'));
-            $expiryPrint   = $expiryTime->format(DateTimeInterface::RFC7231);
+            $interval      = $expiryTime->diff(new \DateTime('now'));
+            $expiryPrint   = $expiryTime->format(\DateTimeInterface::RFC7231);
             $intervalPrint = $interval->format('%a');
 
             switch (true) {

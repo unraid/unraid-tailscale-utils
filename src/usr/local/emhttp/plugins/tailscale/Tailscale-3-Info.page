@@ -5,8 +5,8 @@ Tag="info"
 Type="xmenu"
 ---
 <?php
-$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
-$tr = $tr ?? new Translator();
+$tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
+$tr = $tr ?? new Tailscale\Translator();
 
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
     if(!isset($tailscale_output)) {
