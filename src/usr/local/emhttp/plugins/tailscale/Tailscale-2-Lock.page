@@ -6,8 +6,8 @@ Tag="lock"
 ---
 <?php
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
-$tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
-$tr = $tr ?? new Translator();
+$tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
+$tr = $tr ?? new Tailscale\Translator();
 
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
 

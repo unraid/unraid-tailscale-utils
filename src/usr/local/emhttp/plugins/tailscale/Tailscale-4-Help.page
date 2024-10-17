@@ -5,7 +5,7 @@ Tag="question"
 Type="xmenu"
 ---
 <?php
-$tr = $tr ?? new Translator();
+$tr = $tr ?? new Tailscale\Translator();
 function help_block(string $section, string $header="h3") : string {
     global $tr;
     $title = $tr->tr("settings.{$section}");

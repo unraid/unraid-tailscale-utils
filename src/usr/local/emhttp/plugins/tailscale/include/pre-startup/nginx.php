@@ -11,7 +11,7 @@ $nginx = file_get_contents("/etc/rc.d/rc.nginx") ?: "";
 
 if (strpos($nginx, $original) !== false) {
     // Patch the rc.nginx file
-    TailscaleHelpers::logmsg("Detected original rc.nginx, applying patch\n");
+    Tailscale\Helpers::logmsg("Detected original rc.nginx, applying patch\n");
 
     if ( ! file_exists("/etc/rc.d/rc.nginx.pre-tailscale")) {
         copy("/etc/rc.d/rc.nginx", "/etc/rc.d/rc.nginx.pre-tailscale");

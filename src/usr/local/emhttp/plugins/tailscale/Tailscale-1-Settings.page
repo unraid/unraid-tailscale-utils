@@ -5,8 +5,8 @@ Type="xmenu"
 Tag="gears"
 ---
 <?php
-    $tailscale_config = $tailscale_config ?? TailscaleHelpers::getPluginConfig();
-    $tr = $tr ?? new Translator();
+    $tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
+    $tr = $tr ?? new Tailscale\Translator();
 
     if(!isset($tailscale_output)) {
         echo("Tailscale output not defined");
@@ -28,8 +28,8 @@ Tag="gears"
     }
     .advanced{display:none}
 </style>
-<link type="text/css" rel="stylesheet" href="<?= TailscaleHelpers::auto_v('/webGui/styles/jquery.filetree.css')?>">
-<link type="text/css" rel="stylesheet" href="<?= TailscaleHelpers::auto_v('/webGui/styles/jquery.switchbutton.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= Tailscale\Helpers::auto_v('/webGui/styles/jquery.filetree.css')?>">
+<link type="text/css" rel="stylesheet" href="<?= Tailscale\Helpers::auto_v('/webGui/styles/jquery.switchbutton.css')?>">
 <span class="status vhshift"><input type="checkbox" class="advancedview"></span>
 <form markdown="1" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file"
@@ -42,22 +42,22 @@ Tag="gears"
 <div class="advanced" markdown="1">
 <?= $tr->tr("settings.enable_tailscale") ?>
 : <select name='ENABLE_TAILSCALE' size='1'>
-    <?= TailscaleHelpers::make_option($tailscale_config["ENABLE_TAILSCALE"], '1', $tr->tr("yes"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config["ENABLE_TAILSCALE"], '0', $tr->tr("no"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config["ENABLE_TAILSCALE"], '1', $tr->tr("yes"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config["ENABLE_TAILSCALE"], '0', $tr->tr("no"));?>
 </select>
 
 <?= $tr->tr("settings.unraid_listen") ?>
 : <select name='INCLUDE_INTERFACE' size='1'>
-    <?= TailscaleHelpers::make_option($tailscale_config["INCLUDE_INTERFACE"], '1', $tr->tr("yes"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config["INCLUDE_INTERFACE"], '0', $tr->tr("no"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config["INCLUDE_INTERFACE"], '1', $tr->tr("yes"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config["INCLUDE_INTERFACE"], '0', $tr->tr("no"));?>
 </select>
 
 > <?= $tr->tr("settings.context.unraid_listen") ?>
 
 <?= $tr->tr("settings.ip_forward") ?>
 : <select name='SYSCTL_IP_FORWARD' size='1'>
-    <?= TailscaleHelpers::make_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', $tr->tr("yes"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', $tr->tr("no"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['SYSCTL_IP_FORWARD'], '1', $tr->tr("yes"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['SYSCTL_IP_FORWARD'], '0', $tr->tr("no"));?>
 </select>
 
 > <?= $tr->tr("settings.context.ip_forward") ?>
@@ -72,8 +72,8 @@ Tag="gears"
 
 <?= $tr->tr("settings.usage") ?>
 : <select name='USAGE' size='1'>
-    <?= TailscaleHelpers::make_option($tailscale_config["USAGE"], '1', $tr->tr("yes"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config["USAGE"], '0', $tr->tr("no"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config["USAGE"], '1', $tr->tr("yes"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config["USAGE"], '0', $tr->tr("no"));?>
 </select>
 
 > <?= $tr->tr("settings.context.usage") ?>
@@ -92,9 +92,9 @@ Tag="gears"
 
 <?= $tr->tr("settings.subnets") ?>
 : <select name='ACCEPT_ROUTES' size='1'>
-    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_ROUTES'], '0', $tr->tr("no"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_ROUTES'], '1', $tr->tr("yes"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_ROUTES'], '2', $tr->tr("ignore"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['ACCEPT_ROUTES'], '0', $tr->tr("no"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['ACCEPT_ROUTES'], '1', $tr->tr("yes"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['ACCEPT_ROUTES'], '2', $tr->tr("ignore"));?>
 </select>
 
 > <?= $tr->tr("settings.context.subnets") ?>
@@ -102,9 +102,9 @@ Tag="gears"
 
 <?= $tr->tr("settings.dns") ?>
 : <select name='ACCEPT_DNS' size='1'>
-    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_DNS'], '0', $tr->tr("no"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_DNS'], '1', $tr->tr("yes"));?>
-    <?= TailscaleHelpers::make_option($tailscale_config['ACCEPT_DNS'], '2', $tr->tr("ignore"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['ACCEPT_DNS'], '0', $tr->tr("no"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['ACCEPT_DNS'], '1', $tr->tr("yes"));?>
+    <?= Tailscale\Helpers::make_option($tailscale_config['ACCEPT_DNS'], '2', $tr->tr("ignore"));?>
 </select>
 
 > <?= $tr->tr("settings.context.dns") ?>
@@ -149,8 +149,8 @@ Tag="gears"
 <?= $tr->tr("settings.context.donate") ?>
 : <input type="button" value="Paypal" onclick="window.open('https://paypal.me/edacerton', '_blank')"> <input type="button" value="GitHub" onclick="window.open('https://github.com/sponsors/dkaser', '_blank')">
 
-<script src="<?= TailscaleHelpers::auto_v('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
-<script src="<?= TailscaleHelpers::auto_v('/webGui/javascript/jquery.switchbutton.js')?>"></script>
+<script src="<?= Tailscale\Helpers::auto_v('/webGui/javascript/jquery.filetree.js')?>" charset="utf-8"></script>
+<script src="<?= Tailscale\Helpers::auto_v('/webGui/javascript/jquery.switchbutton.js')?>"></script>
 <script>
     function requestErase(e) {
         e.disabled = true;

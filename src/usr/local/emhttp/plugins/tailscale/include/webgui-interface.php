@@ -7,9 +7,9 @@ if (( ! isset($var)) || ( ! isset($display))) {
 }
 
 require_once "{$docroot}/plugins/tailscale/include/common.php";
-$tr = $tr ?? new Translator();
+$tr = $tr ?? new Tailscale\Translator();
 
-$tailscaleInfo = new TailscaleInfo($tr);
+$tailscaleInfo = new Tailscale\Info($tr);
 
 $tailscale_output = array();
 

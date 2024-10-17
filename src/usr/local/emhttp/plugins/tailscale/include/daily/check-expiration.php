@@ -4,7 +4,7 @@ $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 
 $notify = "{$docroot}/webGui/scripts/notify";
 
-$status = TailscaleInfo::getStatus();
+$status = Tailscale\Info::getStatus();
 
 if (isset($status->Self->KeyExpiry)) {
     $expiryTime = new DateTime($status->Self->KeyExpiry);
@@ -15,7 +15,7 @@ if (isset($status->Self->KeyExpiry)) {
     $intervalPrint = $interval->format('%a');
 
     $message = "The Tailscale key will expire in {$intervalPrint} days on {$expiryPrint}.";
-    TailscaleHelpers::logmsg($message);
+    Tailscale\Helpers::logmsg($message);
 
     switch (true) {
         case $interval->days <= 7:
@@ -29,10 +29,10 @@ if (isset($status->Self->KeyExpiry)) {
     }
 
     $event = "Tailscale Key Expiration - {$priority} - {$expiryTime->format('Ymd')}";
-    TailscaleHelpers::logmsg("Sending notification for key expiration: {$event}");
+    Tailscale\Helpers::logmsg("Sending notification for key expiration: {$event}");
 
     $command = "{$notify} -l '/Settings/Tailscale' -e " . escapeshellarg($event) . " -s " . escapeshellarg("Tailscale key is expiring") . " -d " . escapeshellarg("{$message}") . " -i \"{$priority}\" -x 2>/dev/null";
     exec($command);
 } else {
-    TailscaleHelpers::logmsg("Tailscale key expiration is not set.");
+    Tailscale\Helpers::logmsg("Tailscale key expiration is not set.");
 }

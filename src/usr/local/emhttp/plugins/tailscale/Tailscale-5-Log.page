@@ -21,7 +21,7 @@ Type="xmenu"
       echo ("Error: Missing WebGUI vars");
       return;
   }
-  $tr = $tr ?? new Translator();
+  $tr = $tr ?? new Tailscale\Translator();
 
 $zip    = htmlspecialchars(str_replace(' ','_',strtolower($var['NAME'])));
 $log    = '/var/log/tailscale.log';
@@ -39,7 +39,7 @@ if (count($logs)) {
   // add syslog to front of logs array
   array_unshift($logs, $log);
   $select[] = "<select onchange='showLog(this.value)'>";
-  foreach ($logs as $file) $select[] = TailscaleHelpers::make_option("1",$file,basename($file));
+  foreach ($logs as $file) $select[] = Tailscale\Helpers::make_option("1",$file,basename($file));
   $select[] = "</select>";
 }
 $select = implode($select);
