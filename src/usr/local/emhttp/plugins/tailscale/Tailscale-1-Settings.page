@@ -8,15 +8,15 @@ Tag="gears"
     $tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
     $tr = $tr ?? new Tailscale\Translator();
 
-    if(!isset($tailscale_output)) {
-        echo("Tailscale output not defined");
+    if (( ! isset($var)) || ( ! isset($display))) {
+        echo("Missing required WebGUI variables");
         return;
     }
 ?>
 <style>
     .fileTree {
         background:
-            <?= $tailscale_output['background_color']; ?>
+            <?= strstr('white,azure', $display['theme']) ? '#f2f2f2' : '#1c1c1c' ?>
         ;
         width: 300px;
         max-height: 150px;
@@ -160,7 +160,7 @@ Tag="gears"
 </script>
 <script>
     $(function() {
-        <?= $tailscale_output['attach_file_tree']; ?>
+        <?= ($var['fsState'] == 'Started') ? "$('#taildropdir').fileTreeAttach();" : "" ?>
 
         if ($.cookie('tailscale_view_mode') == 'advanced') {
             $('.advanced').show();
