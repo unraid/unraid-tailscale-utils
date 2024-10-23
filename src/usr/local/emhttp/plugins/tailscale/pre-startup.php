@@ -25,7 +25,7 @@ foreach (glob("{$docroot}/plugins/tailscale/include/pre-startup/*.php") ?: array
 }
 
 if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
-    Tailscale\Helpers::run_command('/etc/rc.d/rc.tailscale restart');
+    Tailscale\Helpers::run_command('/etc/rc.d/rc.tailscale restart > /dev/null &');
 } else {
     Tailscale\Helpers::run_command('/etc/rc.d/rc.tailscale stop');
     Tailscale\Helpers::run_command($restart_command);
