@@ -8,11 +8,12 @@ Type="xmenu"
 $tailscaleConfig = $tailscaleConfig ?? new Tailscale\Config();
 $tr = $tr ?? new Tailscale\Translator();
 
-if ($tailscaleConfig->Enable) {
-    if(!isset($tailscaleInfo)) {
-        echo("Tailscale output not defined");
-        return;
-    }
+if (!$tailscaleConfig->Enable) {
+    echo($tr->tr("tailscale_disabled"));
+    return;
+}
+
+$tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
 ?>
 <table class="share_status">
     <thead>
@@ -34,8 +35,3 @@ if ($tailscaleConfig->Enable) {
         <?= $tailscaleInfo->getConnectionInfo(); ?>
     </tbody>
 </table>
-<?php 
-} else { 
-    echo($tr->tr("tailscale_disabled"));
-} 
-?>

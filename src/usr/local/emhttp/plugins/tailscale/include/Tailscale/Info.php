@@ -11,11 +11,14 @@ class Info
     private \stdClass $prefs;
     private \stdClass $lock;
 
-    public function __construct(Translator $tr, string $useNetbios, string $smbEnabled)
+    public function __construct(Translator $tr)
     {
+        $share_config = parse_ini_file("/boot/config/share.cfg") ?: array();
+        $ident_config = parse_ini_file("/boot/config/ident.cfg") ?: array();
+
         $this->tr         = $tr;
-        $this->smbEnabled = $smbEnabled;
-        $this->useNetbios = $useNetbios;
+        $this->smbEnabled = $share_config['shareSMBEnabled'] ?? "";
+        $this->useNetbios = $ident_config['USE_NETBIOS']     ?? "";
         $this->status     = self::getStatus();
         $this->prefs      = self::getPrefs();
         $this->lock       = self::getLock();
