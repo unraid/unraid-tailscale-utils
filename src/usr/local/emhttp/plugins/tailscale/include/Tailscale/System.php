@@ -54,12 +54,14 @@ class System
             $connection = @fsockopen($tailscale_ipv4, $ident_config['PORT']);
 
             if (is_resource($connection)) {
-                Utils::logmsg("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}");
+                if ((intval(date("i")) % 10 == 0)) {
+                    Utils::logmsg("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}");
+                }
             } else {
                 Utils::logmsg("WebGUI not listening on {$tailscale_ipv4}:{$ident_config['PORT']}, terminating and restarting");
-                Utils::run_command("/etc/rc.d/rc.nginx term", true);
+                Utils::run_command("/etc/rc.d/rc.nginx term");
                 sleep(5);
-                Utils::run_command("/etc/rc.d/rc.nginx start", true);
+                Utils::run_command("/etc/rc.d/rc.nginx start");
             }
         }
     }
@@ -69,7 +71,6 @@ class System
         if ($config->IncludeInterface) {
             self::refreshWebGuiCert(false);
 
-            Utils::logmsg("Restarting Unraid services");
             Utils::run_command(self::RESTART_COMMAND);
         }
     }
