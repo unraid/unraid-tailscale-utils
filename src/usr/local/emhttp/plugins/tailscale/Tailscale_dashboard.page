@@ -12,7 +12,8 @@ $tr = $tr ?? new Tailscale\Translator();
 $tailscale_dashboard = "<tr><td>" . $tr->tr("tailscale_disabled") . "</td></tr>";
 
 if ($tailscaleConfig->Enable) {
-    require_once "{$docroot}/plugins/tailscale/include/webgui-interface.php";
+    $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
+    $tailscale_dashboard = $tailscaleInfo->getDashboardInfo();
 }
 
 $mytiles['tailscale']['column2'] =
