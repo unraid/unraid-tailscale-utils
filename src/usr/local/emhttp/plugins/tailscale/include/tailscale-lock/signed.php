@@ -12,10 +12,10 @@ $tr = $tr ?? new Tailscale\Translator();
 </p>
 
 <?php
-    if ( ! isset($tailscale_output)) {
-        echo("Tailscale output not defined");
+    if ( ! isset($tailscaleInfo)) {
+        echo("Tailscale info not defined");
         return;
     }
 ?>
 
-<pre><?= $tailscale_output['lock_pubkey']; ?></pre>
+<pre><?= $tailscaleInfo->getTailscaleLockPubkey(); ?></pre>

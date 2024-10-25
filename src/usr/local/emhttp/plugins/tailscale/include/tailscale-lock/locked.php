@@ -10,10 +10,10 @@ $tr = $tr ?? new Tailscale\Translator();
 <p><?= $tr->tr('lock.unsigned_instructions'); ?></p>
 
 <?php
-    if ( ! isset($tailscale_output)) {
-        echo("Tailscale output not defined");
+    if ( ! isset($tailscaleInfo)) {
+        echo("Tailscale info not defined");
         return;
     }
 ?>
 
-<pre><?= $tailscale_output['lock_nodekey']; ?></pre>
+<pre><?= $tailscaleInfo->getTailscaleLockNodekey(); ?></pre>
