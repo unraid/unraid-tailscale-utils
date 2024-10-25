@@ -6,26 +6,28 @@ Tag="lock"
 ---
 <?php
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
-$tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
+$tailscaleConfig = $tailscaleConfig ?? new Tailscale\Config();
 $tr = $tr ?? new Tailscale\Translator();
 
-if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
+if ($tailscaleConfig->Enable) {
 
     $signingNode = false;
 
-    if(!isset($tailscale_output)) {
-        echo("Tailscale output not defined");
+    if (( ! isset($var))) {
+        echo("Missing required WebGUI variables");
         return;
     }
 
+    $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr, $var['USE_NETBIOS'], $var['shareSMBEnabled']);
+
     switch (true) {
-        case $tailscale_output['lock_signing']:
+        case $tailscaleInfo->getTailscaleLockSigning():
             require "{$docroot}/plugins/tailscale/include/tailscale-lock/signing.php";
             break;
-        case $tailscale_output['lock_signed']:
+        case $tailscaleInfo->getTailscaleLockSigned():
             require "{$docroot}/plugins/tailscale/include/tailscale-lock/signed.php";
             break;
-        case $tailscale_output['lock_enabled']:
+        case $tailscaleInfo->getTailscaleLockEnabled():
             require "{$docroot}/plugins/tailscale/include/tailscale-lock/locked.php";
             break;
         default:

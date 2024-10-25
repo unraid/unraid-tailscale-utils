@@ -39,7 +39,7 @@ if (count($logs)) {
   // add syslog to front of logs array
   array_unshift($logs, $log);
   $select[] = "<select onchange='showLog(this.value)'>";
-  foreach ($logs as $file) $select[] = Tailscale\Helpers::make_option("1",$file,basename($file));
+  foreach ($logs as $file) $select[] = Tailscale\Utils::make_option(false,$file,basename($file));
   $select[] = "</select>";
 }
 $select = implode($select);

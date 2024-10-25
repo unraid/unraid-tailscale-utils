@@ -1,10 +1,13 @@
 #!/usr/bin/php -q
 <?php
 
+namespace Tailscale;
+
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 
 require_once "{$docroot}/plugins/tailscale/include/common.php";
+$tailscaleConfig = $tailscaleConfig ?? new Config();
 
-foreach ((glob("{$docroot}/plugins/tailscale/include/daily/*.php") ?: array()) as $file) {
-    require_once $file;
-}
+Utils::run_task('Tailscale\System::notifyOnKeyExpiration');
+Utils::run_task('Tailscale\Utils::sendUsageData', array($tailscaleConfig));
+Utils::run_task('Tailscale\System::refreshWebGuiCert');

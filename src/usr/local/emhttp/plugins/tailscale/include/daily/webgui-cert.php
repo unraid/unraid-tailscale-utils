@@ -1,3 +1,0 @@
-<?php
-
-Tailscale\Helpers::refreshWebGuiCert();

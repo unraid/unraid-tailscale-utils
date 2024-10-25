@@ -10,8 +10,8 @@ $tr = $tr ?? new Tailscale\Translator();
 <?= $tr->tr("lock.signing_instructions"); ?>
 </p>
 <?php
-    if ( ! isset($tailscale_output)) {
-        echo("Tailscale output not defined");
+    if ( ! isset($tailscaleInfo)) {
+        echo("Tailscale info not defined");
         return;
     }
 ?>
@@ -19,7 +19,7 @@ $tr = $tr ?? new Tailscale\Translator();
 <input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/approve-nodes.php" />
 <table style="margin-top: 5px;">
 <?php
-foreach ($tailscale_output['lock_pending'] as $lockHost => $lockKey) {
+foreach ($tailscaleInfo->getTailscaleLockPending() as $lockHost => $lockKey) {
     echo "<tr><td><input type='checkbox' name='#arg[]' value='{$lockKey}' /></td><td>{$lockHost}<br />{$lockKey}</td></tr>";
 }
 ?>

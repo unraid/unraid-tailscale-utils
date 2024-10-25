@@ -5,11 +5,11 @@ Tag="info"
 Type="xmenu"
 ---
 <?php
-$tailscale_config = $tailscale_config ?? Tailscale\Helpers::getPluginConfig();
+$tailscaleConfig = $tailscaleConfig ?? new Tailscale\Config();
 $tr = $tr ?? new Tailscale\Translator();
 
-if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
-    if(!isset($tailscale_output)) {
+if ($tailscaleConfig->Enable) {
+    if(!isset($tailscaleInfo)) {
         echo("Tailscale output not defined");
         return;
     }
@@ -22,7 +22,7 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
         </tr>
     </thead>
     <tbody>
-        <?= $tailscale_output['status_info']; ?>
+        <?= $tailscaleInfo->getStatusInfo(); ?>
     </tbody>
     <thead>
         <tr>
@@ -31,7 +31,7 @@ if ($tailscale_config['ENABLE_TAILSCALE'] == "1") {
         </tr>
     </thead>
     <tbody>
-        <?= $tailscale_output['connection_info']; ?>
+        <?= $tailscaleInfo->getConnectionInfo(); ?>
     </tbody>
 </table>
 <?php 

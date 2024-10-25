@@ -4,17 +4,21 @@ namespace Tailscale;
 
 class Info
 {
+    private string $useNetbios;
+    private string $smbEnabled;
     private Translator $tr;
     private \stdClass $status;
     private \stdClass $prefs;
     private \stdClass $lock;
 
-    public function __construct(Translator $tr)
+    public function __construct(Translator $tr, string $useNetbios, string $smbEnabled)
     {
-        $this->tr     = $tr;
-        $this->status = self::getStatus();
-        $this->prefs  = self::getPrefs();
-        $this->lock   = self::getLock();
+        $this->tr         = $tr;
+        $this->smbEnabled = $smbEnabled;
+        $this->useNetbios = $useNetbios;
+        $this->status     = self::getStatus();
+        $this->prefs      = self::getPrefs();
+        $this->lock       = self::getLock();
     }
 
     public static function getStatus(): \stdClass
@@ -240,12 +244,9 @@ class Info
         return "";
     }
 
-    /**
-     * @param array<mixed> $var
-     */
-    public function getTailscaleNetbiosWarning(array $var): string
+    public function getTailscaleNetbiosWarning(): string
     {
-        if (($var['USE_NETBIOS'] == "yes") && ($var['shareSMBEnabled'] != "no")) {
+        if (($this->useNetbios == "yes") && ($this->smbEnabled != "no")) {
             return "<span class='warn' style='text-align: center; font-size: 1.4em; font-weight: bold;'>" . $this->tr("warnings.netbios") . "</span>";
         }
         return "";
