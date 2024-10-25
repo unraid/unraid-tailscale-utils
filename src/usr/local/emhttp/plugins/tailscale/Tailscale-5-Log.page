@@ -17,13 +17,9 @@ Type="xmenu"
  */
 ?>
 <?php
-  if(!isset($var)) {
-      echo ("Error: Missing WebGUI vars");
-      return;
-  }
-  $tr = $tr ?? new Tailscale\Translator();
 
-$zip    = htmlspecialchars(str_replace(' ','_',strtolower($var['NAME'])));
+$tr = $tr ?? new Tailscale\Translator();
+
 $log    = '/var/log/tailscale.log';
 $prev   = '/var/log/tailscale-utils.log';
 
