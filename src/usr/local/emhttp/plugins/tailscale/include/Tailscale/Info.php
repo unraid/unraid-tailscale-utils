@@ -42,107 +42,75 @@ class Info
         return (object) json_decode(implode($out_status));
     }
 
-    public static function printRow(string $title, string $value): string
-    {
-        return "<tr><td>{$title}</td><td>{$value}</td></tr>" . PHP_EOL;
-    }
-
-    public static function printDash(string $title, string $value): string
-    {
-        return "<tr><td><span class='w26'>{$title}</span>{$value}</td></tr>" . PHP_EOL;
-    }
-
     private function tr(string $message): string
     {
         return $this->tr->tr($message);
     }
 
-    public function getStatusInfo(): string
+    public function getStatusInfo(): StatusInfo
     {
         $status = $this->status;
         $prefs  = $this->prefs;
         $lock   = $this->lock;
 
-        $tsVersion     = isset($status->Version) ? $status->Version : $this->tr("unknown");
-        $keyExpiration = isset($status->Self->KeyExpiry) ? $status->Self->KeyExpiry : $this->tr("disabled");
-        $online        = isset($status->Self->Online) ? ($status->Self->Online ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
-        $inNetMap      = isset($status->Self->InNetworkMap) ? ($status->Self->InNetworkMap ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
-        $tags          = isset($status->Self->Tags) ? implode("<br />", $status->Self->Tags) : "";
-        $loggedIn      = isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? $this->tr("no") : $this->tr("yes")) : $this->tr("unknown");
-        $tsHealth      = isset($status->Health) ? implode("<br />", $status->Health) : "";
-        $lockEnabled   = $this->getTailscaleLockEnabled() ? $this->tr("yes") : $this->tr("no");
+        $statusInfo = new StatusInfo();
 
-        $lockTranslate = $this->tr("tailscale_lock");
-
-        $output = "";
-        $output .= self::printRow($this->tr("info.version"), $tsVersion);
-        $output .= self::printRow($this->tr("info.health"), $tsHealth);
-        $output .= self::printRow($this->tr("info.login"), $loggedIn);
-        $output .= self::printRow($this->tr("info.netmap"), $inNetMap);
-        $output .= self::printRow($this->tr("info.online"), $online);
-        $output .= self::printRow($this->tr("info.key_expire"), $keyExpiration);
-        $output .= self::printRow($this->tr("info.tags"), $tags);
-        $output .= self::printRow("{$lockTranslate}: " . $this->tr("enabled"), $lockEnabled);
+        $statusInfo->TsVersion     = isset($status->Version) ? $status->Version : $this->tr("unknown");
+        $statusInfo->KeyExpiration = isset($status->Self->KeyExpiry) ? $status->Self->KeyExpiry : $this->tr("disabled");
+        $statusInfo->Online        = isset($status->Self->Online) ? ($status->Self->Online ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $statusInfo->InNetMap      = isset($status->Self->InNetworkMap) ? ($status->Self->InNetworkMap ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $statusInfo->Tags          = isset($status->Self->Tags) ? implode("<br />", $status->Self->Tags) : "";
+        $statusInfo->LoggedIn      = isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? $this->tr("no") : $this->tr("yes")) : $this->tr("unknown");
+        $statusInfo->TsHealth      = isset($status->Health) ? implode("<br />", $status->Health) : "";
+        $statusInfo->LockEnabled   = $this->getTailscaleLockEnabled() ? $this->tr("yes") : $this->tr("no");
 
         if ($this->getTailscaleLockEnabled()) {
-            $lockSigned  = $this->getTailscaleLockSigned() ? $this->tr("yes") : $this->tr("no");
-            $lockSigning = $this->getTailscaleLockSigning() ? $this->tr("yes") : $this->tr("no");
-            $pubKey      = $this->getTailscaleLockPubkey();
-            $nodeKey     = $this->getTailscaleLockNodekey();
+            $lockInfo = new LockInfo();
 
-            $output .= self::printRow("{$lockTranslate}: " . $this->tr("info.lock.signed"), $lockSigned);
-            $output .= self::printRow("{$lockTranslate}: " . $this->tr("info.lock.signing"), $lockSigning);
-            $output .= self::printRow("{$lockTranslate}: " . $this->tr("info.lock.node_key"), $nodeKey);
-            $output .= self::printRow("{$lockTranslate}: " . $this->tr("info.lock.public_key"), $pubKey);
+            $lockInfo->LockSigned  = $this->getTailscaleLockSigned() ? $this->tr("yes") : $this->tr("no");
+            $lockInfo->LockSigning = $this->getTailscaleLockSigning() ? $this->tr("yes") : $this->tr("no");
+            $lockInfo->PubKey      = $this->getTailscaleLockPubkey();
+            $lockInfo->NodeKey     = $this->getTailscaleLockNodekey();
+
+            $statusInfo->LockInfo = $lockInfo;
         }
 
-        return $output;
+        return $statusInfo;
     }
 
-    public function getConnectionInfo(): string
+    public function getConnectionInfo(): ConnectionInfo
     {
         $status = $this->status;
         $prefs  = $this->prefs;
 
-        $hostName         = isset($status->Self->HostName) ? $status->Self->HostName : $this->tr("unknown");
-        $dnsName          = isset($status->Self->DNSName) ? $status->Self->DNSName : $this->tr("unknown");
-        $tailscaleIPs     = isset($status->TailscaleIPs) ? implode("<br />", $status->TailscaleIPs) : $this->tr("unknown");
-        $magicDNSSuffix   = isset($status->MagicDNSSuffix) ? $status->MagicDNSSuffix : $this->tr("unknown");
-        $advertisedRoutes = isset($prefs->AdvertiseRoutes) ? implode("<br />", $prefs->AdvertiseRoutes) : $this->tr("none");
-        $acceptRoutes     = isset($prefs->RouteAll) ? ($prefs->RouteAll ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
-        $acceptDNS        = isset($prefs->CorpDNS) ? ($prefs->CorpDNS ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $info = new ConnectionInfo();
 
-        $output = "";
-        $output .= self::printRow($this->tr("info.hostname"), $hostName);
-        $output .= self::printRow($this->tr("info.dns"), $dnsName);
-        $output .= self::printRow($this->tr("info.ip"), $tailscaleIPs);
-        $output .= self::printRow($this->tr("info.magicdns"), $magicDNSSuffix);
-        $output .= self::printRow($this->tr("info.routes"), $advertisedRoutes);
-        $output .= self::printRow($this->tr("info.accept_routes"), $acceptRoutes);
-        $output .= self::printRow($this->tr("info.accept_dns"), $acceptDNS);
+        $info->HostName         = isset($status->Self->HostName) ? $status->Self->HostName : $this->tr("unknown");
+        $info->DNSName          = isset($status->Self->DNSName) ? $status->Self->DNSName : $this->tr("unknown");
+        $info->TailscaleIPs     = isset($status->TailscaleIPs) ? implode("<br />", $status->TailscaleIPs) : $this->tr("unknown");
+        $info->MagicDNSSuffix   = isset($status->MagicDNSSuffix) ? $status->MagicDNSSuffix : $this->tr("unknown");
+        $info->AdvertisedRoutes = isset($prefs->AdvertiseRoutes) ? implode("<br />", $prefs->AdvertiseRoutes) : $this->tr("none");
+        $info->AcceptRoutes     = isset($prefs->RouteAll) ? ($prefs->RouteAll ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $info->AcceptDNS        = isset($prefs->CorpDNS) ? ($prefs->CorpDNS ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
 
-        return $output;
+        return $info;
     }
 
-    public function getDashboardInfo(): string
+    public function getDashboardInfo(): DashboardInfo
     {
         $status = $this->status;
 
-        $hostName     = isset($status->Self->HostName) ? $status->Self->HostName : $this->tr("Unknown");
-        $dnsName      = isset($status->Self->DNSName) ? $status->Self->DNSName : $this->tr("Unknown");
-        $tailscaleIPs = isset($status->TailscaleIPs) ? implode("<br /><span class='w26'>&nbsp;</span>", $status->TailscaleIPs) : $this->tr("unknown");
-        $online       = isset($status->Self->Online) ? ($status->Self->Online ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $info = new DashboardInfo();
 
-        $output = "";
-        $output .= self::printDash($this->tr("info.online"), $online);
-        $output .= self::printDash($this->tr("info.hostname"), $hostName);
-        $output .= self::printDash($this->tr("info.dns"), $dnsName);
-        $output .= self::printDash($this->tr("info.ip"), $tailscaleIPs);
+        $info->HostName     = isset($status->Self->HostName) ? $status->Self->HostName : $this->tr("Unknown");
+        $info->DNSName      = isset($status->Self->DNSName) ? $status->Self->DNSName : $this->tr("Unknown");
+        $info->TailscaleIPs = isset($status->TailscaleIPs) ? $status->TailscaleIPs : array();
+        $info->Online       = isset($status->Self->Online) ? ($status->Self->Online ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
 
-        return $output;
+        return $info;
     }
 
-    public function getKeyExpirationWarning(): string
+    public function getKeyExpirationWarning(): ?Warning
     {
         $status = $this->status;
 
@@ -154,21 +122,23 @@ class Info
             $expiryPrint   = $expiryTime->format(\DateTimeInterface::RFC7231);
             $intervalPrint = $interval->format('%a');
 
+            $warning = new Warning(sprintf($this->tr("warnings.key_expiration"), $intervalPrint, $expiryPrint));
+
             switch (true) {
                 case $interval->days <= 7:
-                    $priority = 'error';
+                    $warning->Priority = 'error';
                     break;
                 case $interval->days <= 30:
-                    $priority = 'warn';
+                    $warning->Priority = 'warn';
                     break;
                 default:
-                    $priority = 'system';
+                    $warning->Priority = 'system';
                     break;
             }
 
-            return "<span class='{$priority}' style='text-align: center; font-size: 1.4em; font-weight: bold;'>" . sprintf($this->tr("warnings.key_expiration"), $intervalPrint, $expiryPrint) . "</span>";
+            return $warning;
         }
-        return "";
+        return null;
     }
 
     public function getTailscaleLockEnabled(): bool
@@ -239,20 +209,20 @@ class Info
         return $pending;
     }
 
-    public function getTailscaleLockWarning(): string
+    public function getTailscaleLockWarning(): ?Warning
     {
         if ($this->getTailscaleLockEnabled() && ( ! $this->getTailscaleLockSigned())) {
-            return "<span class='error' style='text-align: center; font-size: 1.4em; font-weight: bold;'>" . $this->tr("warnings.lock") . "</span>";
+            return new Warning($this->tr("warnings.lock"), "error");
         }
-        return "";
+        return null;
     }
 
-    public function getTailscaleNetbiosWarning(): string
+    public function getTailscaleNetbiosWarning(): ?Warning
     {
         if (($this->useNetbios == "yes") && ($this->smbEnabled != "no")) {
-            return "<span class='warn' style='text-align: center; font-size: 1.4em; font-weight: bold;'>" . $this->tr("warnings.netbios") . "</span>";
+            return new Warning($this->tr("warnings.netbios"), "warn");
         }
-        return "";
+        return null;
     }
 
     /**
@@ -306,24 +276,4 @@ class Info
 
         return $result;
     }
-}
-
-class PeerStatus
-{
-    public string $Name      = "";
-    public string $IP        = "";
-    public string $LoginName = "";
-
-    public string $Address = "";
-
-    public bool $Online  = false;
-    public bool $Active  = false;
-    public bool $Relayed = false;
-
-    public bool $Traffic = false;
-    public int $TxBytes  = 0;
-    public int $RxBytes  = 0;
-
-    public bool $ExitNodeActive    = false;
-    public bool $ExitNodeAvailable = false;
 }

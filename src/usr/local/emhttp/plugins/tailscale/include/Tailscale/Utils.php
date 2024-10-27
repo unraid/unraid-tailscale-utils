@@ -137,6 +137,25 @@ class Utils
         return strval($out);
     }
 
+    public static function printRow(string $title, string $value): string
+    {
+        return "<tr><td>{$title}</td><td>{$value}</td></tr>" . PHP_EOL;
+    }
+
+    public static function printDash(string $title, string $value): string
+    {
+        return "<tr><td><span class='w26'>{$title}</span>{$value}</td></tr>" . PHP_EOL;
+    }
+
+    public static function formatWarning(?Warning $warning): string
+    {
+        if ($warning == null) {
+            return "";
+        }
+
+        return "<span class='{$warning->Priority}' style='text-align: center; font-size: 1.4em; font-weight: bold;'>" . $warning->Message . "</span>";
+    }
+
     public static function make_option(bool $selected, string $value, string $text, string $extra = ""): string
     {
         return "<option value='{$value}'" . ($selected ? " selected" : "") . (strlen($extra) ? " {$extra}" : "") . ">{$text}</option>";
