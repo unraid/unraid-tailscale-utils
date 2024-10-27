@@ -23,9 +23,9 @@ if (!$tailscaleConfig->Enable) {
 }
 
 $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
-
-echo($tailscaleInfo->getTailscaleLockWarning());
-echo($tailscaleInfo->getKeyExpirationWarning());
-echo($tailscaleInfo->getTailscaleNetbiosWarning());
 ?>
+<?= Tailscale\Utils::formatWarning($tailscaleInfo->getTailscaleLockWarning()) ?>
+<?= Tailscale\Utils::formatWarning($tailscaleInfo->getTailscaleNetbiosWarning()) ?>
+<?= Tailscale\Utils::formatWarning($tailscaleInfo->getKeyExpirationWarning()) ?>
+
 <iframe src="/plugins/tailscale/interface.php" style="width:100%; height:600px; border: none;"></iframe>

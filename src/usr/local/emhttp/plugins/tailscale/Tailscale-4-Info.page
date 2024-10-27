@@ -14,6 +14,8 @@ if (!$tailscaleConfig->Enable) {
 }
 
 $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
+$tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
+$tailscaleConInfo = $tailscaleInfo->getConnectionInfo();
 ?>
 <table class="unraid t1">
     <thead>
@@ -23,7 +25,25 @@ $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
         </tr>
     </thead>
     <tbody>
-        <?= $tailscaleInfo->getStatusInfo(); ?>
+        <?php
+            $lockTranslate = $tr->tr("tailscale_lock");
+
+            echo Tailscale\Utils::printRow($tr->tr("info.version"), $tailscaleStatusInfo->TsVersion);
+            echo Tailscale\Utils::printRow($tr->tr("info.health"), $tailscaleStatusInfo->TsHealth);
+            echo Tailscale\Utils::printRow($tr->tr("info.login"), $tailscaleStatusInfo->LoggedIn);
+            echo Tailscale\Utils::printRow($tr->tr("info.netmap"), $tailscaleStatusInfo->InNetMap);
+            echo Tailscale\Utils::printRow($tr->tr("info.online"), $tailscaleStatusInfo->Online);
+            echo Tailscale\Utils::printRow($tr->tr("info.key_expire"), $tailscaleStatusInfo->KeyExpiration);
+            echo Tailscale\Utils::printRow($tr->tr("info.tags"), $tailscaleStatusInfo->Tags);
+            echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("enabled"), $tailscaleStatusInfo->LockEnabled);
+
+            if($tailscaleStatusInfo->LockInfo != null) {
+                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.signed"), $tailscaleStatusInfo->LockInfo->LockSigned);
+                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.signing"), $tailscaleStatusInfo->LockInfo->LockSigning);
+                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.node_key"), $tailscaleStatusInfo->LockInfo->NodeKey);
+                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.public_key"), $tailscaleStatusInfo->LockInfo->PubKey);
+            }
+        ?>
     </tbody>
     <tbody>
         <tr>
@@ -38,6 +58,14 @@ $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
         </tr>
     </thead>
     <tbody>
-        <?= $tailscaleInfo->getConnectionInfo(); ?>
+        <?php
+            echo Tailscale\Utils::printRow($tr->tr("info.hostname"), $tailscaleConInfo->HostName);
+            echo Tailscale\Utils::printRow($tr->tr("info.dns"), $tailscaleConInfo->DNSName);
+            echo Tailscale\Utils::printRow($tr->tr("info.ip"), $tailscaleConInfo->TailscaleIPs);
+            echo Tailscale\Utils::printRow($tr->tr("info.magicdns"), $tailscaleConInfo->MagicDNSSuffix);
+            echo Tailscale\Utils::printRow($tr->tr("info.routes"), $tailscaleConInfo->AdvertisedRoutes);
+            echo Tailscale\Utils::printRow($tr->tr("info.accept_routes"), $tailscaleConInfo->AcceptRoutes);
+            echo Tailscale\Utils::printRow($tr->tr("info.accept_dns"), $tailscaleConInfo->AcceptDNS);
+        ?>
     </tbody>
 </table>

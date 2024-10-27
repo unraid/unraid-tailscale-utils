@@ -13,7 +13,12 @@ $tailscale_dashboard = "<tr><td>" . $tr->tr("tailscale_disabled") . "</td></tr>"
 
 if ($tailscaleConfig->Enable) {
     $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
-    $tailscale_dashboard = $tailscaleInfo->getDashboardInfo();
+    $tailscaleDashInfo = $tailscaleInfo->getDashboardInfo();
+
+    $tailscale_dashboard = Tailscale\Utils::printDash($tr->tr("info.online"), $tailscaleDashInfo->Online);
+    $tailscale_dashboard .= Tailscale\Utils::printDash($tr->tr("info.hostname"), $tailscaleDashInfo->HostName);
+    $tailscale_dashboard .= Tailscale\Utils::printDash($tr->tr("info.dns"), $tailscaleDashInfo->DNSName);
+    $tailscale_dashboard .= Tailscale\Utils::printDash($tr->tr("info.ip"), implode("<br /><span class='w26'>&nbsp;</span>", $tailscaleDashInfo->TailscaleIPs));
 }
 
 $mytiles['tailscale']['column2'] =
