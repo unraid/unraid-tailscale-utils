@@ -33,7 +33,7 @@ $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
     <tbody>
         <?php foreach($tailscaleInfo->getPeerStatus() as $peer) { ?>
             <tr>
-                <td><?= $peer->Name ?></td>
+                <td><?= $peer->SharedUser ? $tr->tr('status_page.shared') : $peer->Name ?></td>
                 <td><?= $peer->IP ?></td>
                 <td><?= $peer->LoginName ?></td>
                 <td><?= $peer->Online ? ($peer->Active ? $tr->tr('status_page.active') : $tr->tr('status_page.idle')) : $tr->tr('status_page.offline') ?></td>

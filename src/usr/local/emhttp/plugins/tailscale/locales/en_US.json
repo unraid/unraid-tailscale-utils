@@ -119,6 +119,7 @@
         "idle": "Idle",
         "offline": "Offline",
         "active": "Active",
-        "login_name": "Login Name"
+        "login_name": "Login Name",
+        "shared": "Shared-In User"
     }
 }

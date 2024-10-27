@@ -238,7 +238,8 @@ class Info
             $peer->Name = trim($status->DNSName, ".");
             $peer->IP   = implode("<br />", $status->TailscaleIPs);
 
-            $peer->LoginName = $this->status->User->{$status->UserID}->LoginName;
+            $peer->LoginName  = $this->status->User->{$status->UserID}->LoginName;
+            $peer->SharedUser = isset($status->ShareeNode);
 
             if ($status->ExitNode) {
                 $peer->ExitNodeActive = true;
