@@ -7,6 +7,7 @@ class PeerStatus
     public string $Name      = "";
     public string $IP        = "";
     public string $LoginName = "";
+    public bool $SharedUser  = false;
 
     public string $Address = "";
 

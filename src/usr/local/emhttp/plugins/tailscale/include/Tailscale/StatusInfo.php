@@ -4,7 +4,7 @@ namespace Tailscale;
 
 class StatusInfo
 {
-    public LockInfo $LockInfo;
+    public ?LockInfo $LockInfo   = null;
     public string $TsVersion     = "";
     public string $KeyExpiration = "";
     public string $Online        = "";
