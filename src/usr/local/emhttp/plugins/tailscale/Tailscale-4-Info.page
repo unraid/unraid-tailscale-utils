@@ -15,7 +15,7 @@ if (!$tailscaleConfig->Enable) {
 
 $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
 ?>
-<table class="share_status">
+<table class="unraid t1">
     <thead>
         <tr>
             <td><?= $tr->tr('status') ?></td>
@@ -24,6 +24,12 @@ $tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
     </thead>
     <tbody>
         <?= $tailscaleInfo->getStatusInfo(); ?>
+    </tbody>
+    <tbody>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
     </tbody>
     <thead>
         <tr>
