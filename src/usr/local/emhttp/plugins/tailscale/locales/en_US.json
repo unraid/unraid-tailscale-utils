@@ -105,5 +105,20 @@
         "unsigned": "Your tailnet has lock enabled and the current node is not signed. This node cannot communicate with the tailnet.",
         "unsigned_instructions": "To allow this node to communicate, you will need to trust the following key from a signing node",
         "disabled": "Your tailnet does not have lock enabled."
+    },
+    "status_page": {
+        "exit_node": "Exit Node",
+        "connection_type": "Connection Type",
+        "connection_addr": "Connection",
+        "tx_bytes": "Tx Bytes",
+        "rx_bytes": "Rx Bytes",
+        "relay": "Relay",
+        "direct": "Direct",
+        "exit_active": "Active",
+        "exit_available": "Available",
+        "idle": "Idle",
+        "offline": "Offline",
+        "active": "Active",
+        "login_name": "Login Name"
     }
 }

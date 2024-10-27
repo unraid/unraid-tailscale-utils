@@ -254,4 +254,76 @@ class Info
         }
         return "";
     }
+
+    /**
+     * @return array<int, PeerStatus>
+     */
+    public function getPeerStatus(): array
+    {
+        $result = array();
+
+        foreach ($this->status->Peer as $node => $status) {
+            $peer = new PeerStatus();
+
+            $peer->Name = trim($status->DNSName, ".");
+            $peer->IP   = implode("<br />", $status->TailscaleIPs);
+
+            $peer->LoginName = $this->status->User->{$status->UserID}->LoginName;
+
+            if ($status->ExitNode) {
+                $peer->ExitNodeActive = true;
+            } elseif ($status->ExitNodeOption) {
+                $peer->ExitNodeAvailable = true;
+            }
+
+            if ($status->TxBytes > 0 || $status->RxBytes > 0) {
+                $peer->Traffic = true;
+                $peer->TxBytes = $status->TxBytes;
+                $peer->RxBytes = $status->RxBytes;
+            }
+
+            if ( ! $status->Online) {
+                $peer->Online = false;
+                $peer->Active = false;
+            } elseif ( ! $status->Active) {
+                $peer->Online = true;
+                $peer->Active = false;
+            } else {
+                $peer->Online = true;
+                $peer->Active = true;
+
+                if (($status->Relay != "") && ($status->CurAddr == "")) {
+                    $peer->Relayed = true;
+                    $peer->Address = $status->Relay;
+                } elseif ($status->CurAddr != "") {
+                    $peer->Relayed = false;
+                    $peer->Address = $status->CurAddr;
+                }
+            }
+
+            $result[] = $peer;
+        }
+
+        return $result;
+    }
+}
+
+class PeerStatus
+{
+    public string $Name      = "";
+    public string $IP        = "";
+    public string $LoginName = "";
+
+    public string $Address = "";
+
+    public bool $Online  = false;
+    public bool $Active  = false;
+    public bool $Relayed = false;
+
+    public bool $Traffic = false;
+    public int $TxBytes  = 0;
+    public int $RxBytes  = 0;
+
+    public bool $ExitNodeActive    = false;
+    public bool $ExitNodeAvailable = false;
 }
