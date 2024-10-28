@@ -3,6 +3,8 @@
 $finder = PhpCsFixer\Finder::create()
     ->files()
     ->in(__DIR__)
+    ->name('*.php')
+    ->name('*.page')
 ;
 
 $config = new PhpCsFixer\Config();
