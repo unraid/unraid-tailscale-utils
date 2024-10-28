@@ -3,69 +3,16 @@ Icon="tailscale.png"
 Title="Info"
 Tag="info"
 Type="xmenu"
+Markdown="false"
 ---
 <?php
-$tailscaleConfig = $tailscaleConfig ?? new Tailscale\Config();
-$tr = $tr ?? new Tailscale\Translator();
 
-if (!$tailscaleConfig->Enable) {
-    echo($tr->tr("tailscale_disabled"));
-    return;
+try {
+    $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+    require_once "{$docroot}/plugins/tailscale/include/page.php";
+    echo Tailscale\getPage("Info");
+} catch (Throwable $e) {
+    echo "An error occurred: <pre>" . print_r($e, true) . "</pre>";
 }
 
-$tailscaleInfo = $tailscaleInfo ?? new Tailscale\Info($tr);
-$tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
-$tailscaleConInfo = $tailscaleInfo->getConnectionInfo();
 ?>
-<table class="unraid t1">
-    <thead>
-        <tr>
-            <td><?= $tr->tr('status') ?></td>
-            <td>&nbsp;</td>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-            $lockTranslate = $tr->tr("tailscale_lock");
-
-            echo Tailscale\Utils::printRow($tr->tr("info.version"), $tailscaleStatusInfo->TsVersion);
-            echo Tailscale\Utils::printRow($tr->tr("info.health"), $tailscaleStatusInfo->TsHealth);
-            echo Tailscale\Utils::printRow($tr->tr("info.login"), $tailscaleStatusInfo->LoggedIn);
-            echo Tailscale\Utils::printRow($tr->tr("info.netmap"), $tailscaleStatusInfo->InNetMap);
-            echo Tailscale\Utils::printRow($tr->tr("info.online"), $tailscaleStatusInfo->Online);
-            echo Tailscale\Utils::printRow($tr->tr("info.key_expire"), $tailscaleStatusInfo->KeyExpiration);
-            echo Tailscale\Utils::printRow($tr->tr("info.tags"), $tailscaleStatusInfo->Tags);
-            echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("enabled"), $tailscaleStatusInfo->LockEnabled);
-
-            if($tailscaleStatusInfo->LockInfo != null) {
-                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.signed"), $tailscaleStatusInfo->LockInfo->LockSigned);
-                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.signing"), $tailscaleStatusInfo->LockInfo->LockSigning);
-                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.node_key"), $tailscaleStatusInfo->LockInfo->NodeKey);
-                echo Tailscale\Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.public_key"), $tailscaleStatusInfo->LockInfo->PubKey);
-            }
-        ?>
-    </tbody>
-    <tbody>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </tbody>
-    <thead>
-        <tr>
-            <td><?= $tr->tr('connection') ?></td>
-            <td>&nbsp;</td>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-            echo Tailscale\Utils::printRow($tr->tr("info.hostname"), $tailscaleConInfo->HostName);
-            echo Tailscale\Utils::printRow($tr->tr("info.dns"), $tailscaleConInfo->DNSName);
-            echo Tailscale\Utils::printRow($tr->tr("info.ip"), $tailscaleConInfo->TailscaleIPs);
-            echo Tailscale\Utils::printRow($tr->tr("info.magicdns"), $tailscaleConInfo->MagicDNSSuffix);
-            echo Tailscale\Utils::printRow($tr->tr("info.routes"), $tailscaleConInfo->AdvertisedRoutes);
-            echo Tailscale\Utils::printRow($tr->tr("info.accept_routes"), $tailscaleConInfo->AcceptRoutes);
-            echo Tailscale\Utils::printRow($tr->tr("info.accept_dns"), $tailscaleConInfo->AcceptDNS);
-        ?>
-    </tbody>
-</table>

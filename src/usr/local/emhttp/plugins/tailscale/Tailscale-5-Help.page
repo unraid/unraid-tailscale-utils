@@ -3,39 +3,16 @@ Icon="tailscale.png"
 Title="Help"
 Tag="question"
 Type="xmenu"
+Markdown="false"
 ---
 <?php
-$tr = $tr ?? new Tailscale\Translator();
-function help_block(string $section, string $header="h3") : string {
-    global $tr;
-    $title = $tr->tr("settings.{$section}");
-    $body = $tr->tr("help.{$section}");
-    return <<<END
-    <{$header}>{$title}</{$header}>
-    <p>{$body}</p>
-    END;
+
+try {
+    $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+    require_once "{$docroot}/plugins/tailscale/include/page.php";
+    echo Tailscale\getPage("Help");
+} catch (Throwable $e) {
+    echo "An error occurred: <pre>" . print_r($e, true) . "</pre>";
 }
+
 ?>
-
-## <?= $tr->tr("help.initial") ?>
-<?= $tr->tr("help.key_expiration") ?>
-
-## <?= $tr->tr("settings.system_settings") ?>
-<?= help_block('unraid_listen') ?>
-<?= help_block('ip_forward') ?>
-<?= help_block('taildrop') ?>
-
-### <?= $tr->tr("settings.usage") ?>
-<?= $tr->tr("settings.context.usage") ?>
-
-<?= help_block('outbound_network', "h2") ?>
-<?= help_block('subnets') ?>
-<?= help_block('dns') ?>
-
-## <?= $tr->tr("help.support") ?>
-
-<?= $tr->tr("help.support_forums") ?>
-
-[https://forums.unraid.net/topic/136889-plugin-tailscale/](https://forums.unraid.net/topic/136889-plugin-tailscale/)
-
-**<?= $tr->tr("help.support_advanced") ?>**
