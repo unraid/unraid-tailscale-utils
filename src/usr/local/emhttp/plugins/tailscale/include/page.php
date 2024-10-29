@@ -5,7 +5,7 @@ namespace Tailscale;
 /**
 * @param array<string, mixed> $params
 */
-function getPage(string $filename, bool $niceError = true, array $params = array()): string|false
+function getPage(string $filename, bool $niceError = true, array $params = array()): string
 {
     try {
         return includePage(dirname(__FILE__) . "/Pages/{$filename}.php", $params);
@@ -22,14 +22,14 @@ function getPage(string $filename, bool $niceError = true, array $params = array
 /**
 * @param array<string, mixed> $params
 */
-function includePage(string $filename, array $params = array()): string|false
+function includePage(string $filename, array $params = array()): string
 {
     extract($params);
 
     if (is_file($filename)) {
         ob_start();
         include $filename;
-        return ob_get_clean();
+        return ob_get_clean() ?: "";
     }
-    return false;
+    return "";
 }
