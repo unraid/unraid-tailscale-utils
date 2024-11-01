@@ -46,6 +46,22 @@ class Utils
         return -1;
     }
 
+    public static function setPHPDebug(): void
+    {
+        $version = parse_ini_file('/var/local/emhttp/plugins/tailscale/tailscale.ini');
+
+        if ( ! $version) {
+            Utils::logmsg("Could not retrieve system data, skipping debug check.");
+            return;
+        }
+
+        if ((($version['BRANCH'] ?? "") == "trunk") && ! defined("TAILSCALE_TRUNK")) {
+            error_reporting(E_ALL);
+            define("TAILSCALE_TRUNK", true);
+            self::logmsg("Trunk plugin installed, enabling debug mode", true);
+        }
+    }
+
     public static function sendUsageData(Config $config): void
     {
         $endpoint = "https://plugin-usage.edacerton.win/";
@@ -191,8 +207,15 @@ class Utils
         return $output;
     }
 
-    public static function logmsg(string $message): void
+    public static function logmsg(string $message, bool $debug = false): void
     {
+        if ($debug) {
+            if (defined("TAILSCALE_TRUNK")) {
+                $message = "DEBUG: " . $message;
+            } else {
+                return;
+            }
+        }
         $timestamp = date('Y/m/d H:i:s');
         $filename  = basename($_SERVER['PHP_SELF']);
         file_put_contents("/var/log/tailscale-utils.log", "{$timestamp} {$filename}: {$message}" . PHP_EOL, FILE_APPEND);
