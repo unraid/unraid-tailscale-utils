@@ -9,3 +9,5 @@ foreach (glob("/usr/local/emhttp/plugins/tailscale/include/Tailscale/*.php") ?: 
         Utils::logmsg("Caught exception in {$file} : " . $e->getMessage());
     }
 }
+
+Utils::setPHPDebug();
