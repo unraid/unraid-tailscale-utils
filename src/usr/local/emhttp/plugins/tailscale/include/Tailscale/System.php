@@ -15,7 +15,7 @@ class System
 
             $ipaddr = is_array($ips['IPADDR']) ? $ips['IPADDR'] : array($ips['IPADDR']);
 
-            foreach ($ips['IPADDR'] as $ip) {
+            foreach ($ipaddr as $ip) {
                 foreach ($route_table as $route) {
                     $net = explode(' ', $route)[0];
                     if (Utils::ip4_in_network($ip, $net)) {
