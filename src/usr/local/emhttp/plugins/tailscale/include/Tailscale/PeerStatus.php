@@ -5,9 +5,11 @@ namespace Tailscale;
 class PeerStatus
 {
     public string $Name      = "";
-    public string $IP        = "";
     public string $LoginName = "";
     public bool $SharedUser  = false;
+
+    /** @var string[] */
+    public array $IP = array();
 
     public string $Address = "";
 

@@ -13,7 +13,7 @@ class Translator
 
         $dynamix = parse_ini_file('/boot/config/plugins/dynamix/dynamix.cfg', true) ?: array();
 
-        $locale           = $_SESSION['locale'] ?? ($login_locale ?? $dynamix['display']['locale']);
+        $locale           = $_SESSION['locale'] ?? ($login_locale ?? ($dynamix['display']['locale'] ?? "none"));
         $tailscale_locale = (array) json_decode(file_get_contents("/usr/local/emhttp/plugins/tailscale/locales/en_US.json") ?: "{}", true);
 
         if (file_exists("/usr/local/emhttp/plugins/tailscale/locales/{$locale}.json")) {
