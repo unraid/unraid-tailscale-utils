@@ -87,7 +87,7 @@ switch ($_POST['action']) {
         foreach ($tailscaleInfo->getPeerStatus() as $peer) {
             if ($peer->Name == $_POST['host']) {
                 $peerIP = escapeshellarg($peer->IP[0]);
-                $out = implode("<br>", Utils::run_command("tailscale ping {$peerIP}"));
+                $out    = implode("<br>", Utils::run_command("tailscale ping {$peerIP}"));
                 break;
             }
         }
