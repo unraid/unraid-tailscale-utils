@@ -9,37 +9,52 @@ if ( ! $tailscaleConfig->Enable) {
     echo($tr->tr("tailscale_disabled"));
     return;
 }
-
-$tailscaleInfo = $tailscaleInfo ?? new Info($tr);
 ?>
 
-<table id="t1" class="unraid t1">
-    <thead>
-        <tr>
-            <td><?= $tr->tr('info.dns'); ?></td>
-            <td><?= $tr->tr('info.ip'); ?></td>
-            <td><?= $tr->tr('status_page.login_name'); ?></td>
-            <td><?= $tr->tr('status'); ?></td>
-            <td><?= $tr->tr('status_page.exit_node'); ?></td>
-            <td><?= $tr->tr('status_page.connection_type'); ?></td>
-            <td><?= $tr->tr('status_page.connection_addr'); ?></td>
-            <td><?= $tr->tr('status_page.tx_bytes'); ?></td>
-            <td><?= $tr->tr('status_page.rx_bytes'); ?></td>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($tailscaleInfo->getPeerStatus() as $peer) { ?>
-            <tr>
-                <td><?= $peer->SharedUser ? $tr->tr('status_page.shared') : $peer->Name; ?></td>
-                <td><?= $peer->IP; ?></td>
-                <td><?= $peer->LoginName; ?></td>
-                <td><?= $peer->Online ? ($peer->Active ? $tr->tr('status_page.active') : $tr->tr('status_page.idle')) : $tr->tr('status_page.offline'); ?></td>
-                <td><?= $peer->ExitNodeActive ? $tr->tr('status_page.exit_active') : ($peer->ExitNodeAvailable ? $tr->tr('status_page.exit_available') : ""); ?></td>
-                <td><?= $peer->Active ? ($peer->Relayed ? $tr->tr('status_page.relay') : $tr->tr('status_page.direct')) : ""; ?></td>
-                <td><?= $peer->Active ? $peer->Address : ""; ?></td>
-                <td><?= $peer->Traffic ? $peer->TxBytes : ""; ?></td>
-                <td><?= $peer->Traffic ? $peer->RxBytes : ""; ?></td>
-            </tr>
-        <?php } ?>
-    </tbody>
+<script src="/webGui/javascript/jquery.tablesorter.widgets.js"></script>
+
+<script>
+
+function controlsDisabled(val) {
+    $('#refresh').prop('disabled', val);
+    $('input.ping').prop('disabled', val);
+}
+function showStatus() {
+  controlsDisabled(true);
+  $.post('/plugins/tailscale/include/data/Status.php',{action: 'get'},function(data){
+    clearTimeout(timers.refresh);
+    $("#t1").trigger("destroy");
+    $('#t1').html(data.html);
+    $('#t1').tablesorter({
+      sortList: [[0,0]],
+      sortAppend: [[0,0]],
+      widgets: ['stickyHeaders','filter','zebra'],
+      widgetOptions: {
+        // on black and white, offset is height of #menu
+        // on azure and gray, offset is height of #header
+        stickyHeaders_offset: ($('#menu').height() < 50) ? $('#menu').height() : $('#header').height(),
+        filter_columnFilters: false,
+        zebra: ["normal-row","alt-row"]
+      }
+    });
+    $('div.spinner.fixed').hide('fast');
+    controlsDisabled(false);
+  },"json");
+}
+async function pingHost(host) {
+    $('div.spinner.fixed').show('fast');
+    controlsDisabled(true);
+    var res = await $.post('/plugins/tailscale/include/data/Status.php',{action: 'ping', host: host});
+    $("#pingout").html("<strong>Ping response:</strong><br>" + res);
+    showStatus();
+}
+showStatus();
+</script>
+
+<table id='t1' class="unraid t1 tablesorter"><tr><td><div class="spinner"></div></td></tr></table><br>
+<table>
+    <tr>
+        <td style="vertical-align: top"><input type="button" id="refresh" value="Refresh" onclick="showStatus()"></td>
+        <td><div id="pingout" style="float: right;"></div></td>
+    </tr>
 </table>

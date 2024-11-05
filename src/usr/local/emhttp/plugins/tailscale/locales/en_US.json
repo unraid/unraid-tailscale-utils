@@ -120,6 +120,7 @@
         "offline": "Offline",
         "active": "Active",
         "login_name": "Login Name",
-        "shared": "Shared-In User"
+        "shared": "Shared-In User",
+        "action": "Action"
     }
 }
