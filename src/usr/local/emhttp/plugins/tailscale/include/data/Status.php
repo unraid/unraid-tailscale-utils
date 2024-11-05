@@ -17,15 +17,25 @@ switch ($_POST['action']) {
         $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
         $rows          = "";
 
+        $mullvad = filter_var($_POST['mullvad'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $shared  = filter_var($_POST['shared'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
         foreach ($tailscaleInfo->getPeerStatus() as $peer) {
+            if ($peer->Mullvad && ! $mullvad && ! $peer->Active) {
+                continue;
+            }
+            if ($peer->SharedUser && ! $shared && ! $peer->Active) {
+                continue;
+            }
+
             $user       = $peer->SharedUser ? $tr->tr('status_page.shared') : $peer->Name;
             $online     = $peer->Online ? ($peer->Active ? $tr->tr('status_page.active') : $tr->tr('status_page.idle')) : $tr->tr('status_page.offline');
-            $exitNode   = $peer->ExitNodeActive ? $tr->tr('status_page.exit_active') : ($peer->ExitNodeAvailable ? $tr->tr('status_page.exit_available') : "");
+            $exitNode   = $peer->ExitNodeActive ? $tr->tr('status_page.exit_active') : ($peer->ExitNodeAvailable ? ($peer->Mullvad ? "Mullvad" : $tr->tr('status_page.exit_available')) : "");
             $connection = $peer->Active ? ($peer->Relayed ? $tr->tr('status_page.relay') : $tr->tr('status_page.direct')) : "";
             $active     = $peer->Active ? $peer->Address : "";
             $txBytes    = $peer->Traffic ? $peer->TxBytes : "";
             $rxBytes    = $peer->Traffic ? $peer->RxBytes : "";
-            $pingHost   = ($peer->SharedUser || $peer->Active || ! $peer->Online) ? "" : "<input type='button' class='ping' value='Ping' onclick='pingHost(\"{$peer->Name}\")'>";
+            $pingHost   = ($peer->SharedUser || $peer->Active || ! $peer->Online || $peer->Mullvad) ? "" : "<input type='button' class='ping' value='Ping' onclick='pingHost(\"{$peer->Name}\")'>";
             $ips        = implode("<br />", $peer->IP);
 
             $rows .= <<<EOT
@@ -48,16 +58,16 @@ switch ($_POST['action']) {
             <table id="t1" class="unraid t1">
                 <thead>
                     <tr>
-                        <td>{$tr->tr('info.dns')}</td>
-                        <td>{$tr->tr('info.ip')}</td>
-                        <td>{$tr->tr('status_page.login_name')}</td>
-                        <td>{$tr->tr('status')}</td>
-                        <td>{$tr->tr('status_page.exit_node')}</td>
-                        <td>{$tr->tr('status_page.connection_type')}</td>
-                        <td>{$tr->tr('status_page.connection_addr')}</td>
-                        <td>{$tr->tr('status_page.tx_bytes')}</td>
-                        <td>{$tr->tr('status_page.rx_bytes')}</td>
-                        <td>{$tr->tr('status_page.action')}</td>
+                        <th>{$tr->tr('info.dns')}</th>
+                        <th>{$tr->tr('info.ip')}</th>
+                        <th>{$tr->tr('status_page.login_name')}</th>
+                        <th class="filter-select filter-match" id="status">{$tr->tr('status')}</th>
+                        <th class="filter-select filter-match" id="exitnode">{$tr->tr('status_page.exit_node')}</th>
+                        <th class="filter-select filter-match" id="conntype">{$tr->tr('status_page.connection_type')}</th>
+                        <th class="filter-false">{$tr->tr('status_page.connection_addr')}</th>
+                        <th class="filter-false">{$tr->tr('status_page.tx_bytes')}</th>
+                        <th class="filter-false">{$tr->tr('status_page.rx_bytes')}</th>
+                        <th class="filter-false">{$tr->tr('status_page.action')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,7 +86,8 @@ switch ($_POST['action']) {
 
         foreach ($tailscaleInfo->getPeerStatus() as $peer) {
             if ($peer->Name == $_POST['host']) {
-                $out = implode("<br>", Utils::run_command("tailscale ping --c 3 {$peer->IP[0]}"));
+                $peerIP = escapeshellarg($peer->IP[0]);
+                $out    = implode("<br>", Utils::run_command("tailscale ping {$peerIP}"));
                 break;
             }
         }

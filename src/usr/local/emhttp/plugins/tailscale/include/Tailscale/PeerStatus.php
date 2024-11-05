@@ -23,4 +23,5 @@ class PeerStatus
 
     public bool $ExitNodeActive    = false;
     public bool $ExitNodeAvailable = false;
+    public bool $Mullvad           = false;
 }
