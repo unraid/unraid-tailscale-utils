@@ -236,7 +236,7 @@ class Info
             $peer = new PeerStatus();
 
             $peer->Name = trim($status->DNSName, ".");
-            $peer->IP   = implode("<br />", $status->TailscaleIPs);
+            $peer->IP   = $status->TailscaleIPs;
 
             $peer->LoginName  = $this->status->User->{$status->UserID}->LoginName;
             $peer->SharedUser = isset($status->ShareeNode);

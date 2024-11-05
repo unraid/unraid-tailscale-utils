@@ -7,13 +7,13 @@ require_once "/usr/local/emhttp/plugins/tailscale/include/common.php";
 $tailscaleConfig = $tailscaleConfig ?? new Config();
 $tr              = $tr              ?? new Translator();
 
+if ( ! $tailscaleConfig->Enable) {
+    echo("{}");
+    return;
+}
+
 switch ($_POST['action']) {
     case 'get':
-        if ( ! $tailscaleConfig->Enable) {
-            echo("{}");
-            return;
-        }
-
         $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
         $rows          = "";
 
@@ -26,11 +26,12 @@ switch ($_POST['action']) {
             $txBytes    = $peer->Traffic ? $peer->TxBytes : "";
             $rxBytes    = $peer->Traffic ? $peer->RxBytes : "";
             $pingHost   = ($peer->SharedUser || $peer->Active || ! $peer->Online) ? "" : "<input type='button' class='ping' value='Ping' onclick='pingHost(\"{$peer->Name}\")'>";
+            $ips        = implode("<br />", $peer->IP);
 
             $rows .= <<<EOT
                 <tr>
                     <td>{$user}</td>
-                    <td>{$peer->IP}</td>
+                    <td>{$ips}</td>
                     <td>{$peer->LoginName}</td>
                     <td>{$online}</td>
                     <td>{$exitNode}</td>
@@ -70,10 +71,16 @@ switch ($_POST['action']) {
         echo json_encode($rtn);
         break;
     case 'ping':
-        $pingHost = escapeshellarg($_POST['host']);
+        $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
+        $out           = "Could not find host.";
 
-        $out = Utils::run_command("tailscale ping --c 3 {$pingHost}");
-        echo implode("<br>", $out);
+        foreach ($tailscaleInfo->getPeerStatus() as $peer) {
+            if ($peer->Name == $_POST['host']) {
+                $out = implode("<br>", Utils::run_command("tailscale ping --c 3 {$peer->IP[0]}"));
+                break;
+            }
+        }
 
+        echo $out;
         break;
 }
