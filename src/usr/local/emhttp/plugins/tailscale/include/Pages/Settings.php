@@ -10,29 +10,14 @@ if (( ! isset($var)) || ( ! isset($display))) {
     return;
 }
 ?>
-<style>
-    .fileTree {
-        background:
-            <?= strstr('white,azure', $display['theme']) ? '#f2f2f2' : '#1c1c1c'; ?>
-        ;
-        width: 300px;
-        max-height: 150px;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        position: absolute;
-        z-index: 100;
-        display: none
-    }
-    .advanced{display:none}
-</style>
 <link type="text/css" rel="stylesheet" href="<?= Utils::auto_v('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?= Utils::auto_v('/webGui/styles/jquery.switchbutton.css');?>">
 <span class="status vhshift"><input type="checkbox" class="advancedview"></span>
 <form method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file"
-    value="tailscale/tailscale.cfg" />
-<input type="hidden" name="#cleanup" value="" />
-<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh" />
+    value="tailscale/tailscale.cfg">
+<input type="hidden" name="#cleanup" value="">
+<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh">
 
 <h3><?= $tr->tr("settings.system_settings"); ?></h3>
 
@@ -149,7 +134,7 @@ if (( ! isset($var)) || ( ! isset($display))) {
 <h3><?= $tr->tr("settings.restart"); ?></h3>
 
 <form method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh" />
+<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/restart.sh">
 <dl>
     <dt><?= $tr->tr("settings.context.restart"); ?></dt>
     <dd>
@@ -162,7 +147,7 @@ if (( ! isset($var)) || ( ! isset($display))) {
 <h3><?= $tr->tr("settings.diagnostics"); ?></h3>
 
 <form method="GET" action="/plugins/plugin-diagnostics/download.php" target="_blank">
-<input type="hidden" name="plugin" value="tailscale" />
+<input type="hidden" name="plugin" value="tailscale">
 <dl>
     <dt><?= $tr->tr("settings.context.diagnostics"); ?></dt>
     <dd>
@@ -177,7 +162,7 @@ if (( ! isset($var)) || ( ! isset($display))) {
 <h3><?= $tr->tr("settings.erase"); ?></h3>
 
 <form method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/erase.sh" />
+<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/erase.sh">
 <dl>
     <dt><?= $tr->tr("settings.context.erase"); ?></dt>
     <dd>
@@ -195,7 +180,7 @@ if (( ! isset($var)) || ( ! isset($display))) {
     </dd>
 </dl>
 
-<script src="<?= Utils::auto_v('/webGui/javascript/jquery.filetree.js');?>" charset="utf-8"></script>
+<script src="<?= Utils::auto_v('/webGui/javascript/jquery.filetree.js');?>"></script>
 <script src="<?= Utils::auto_v('/webGui/javascript/jquery.switchbutton.js');?>"></script>
 <script>
     function requestErase(e) {

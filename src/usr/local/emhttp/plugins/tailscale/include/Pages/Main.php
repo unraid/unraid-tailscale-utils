@@ -13,6 +13,7 @@ $tr              = $tr              ?? new Translator();
         showStatus('tailscaled');
     });
 </script>
+<link type="text/css" rel="stylesheet" href="/plugins/tailscale/style.css">
 <?php
 if ( ! $tailscaleConfig->Enable) {
     echo($tr->tr("tailscale_disabled"));

@@ -74,5 +74,5 @@ $(function() {
 </script>
 <span><span class='lite label'>Log size:&nbsp;&nbsp;<input type='number' id='max' value='' placeholder='<?= $max;?>'></span><?= $select;?></span>
 <input type="button" value="Refresh" onclick="showLog(logfile)">
-<?php if (file_exists('/usr/local/emhttp/plugins/plugin-diagnostics/download.php')) { ?> <input type="button" value="<?= $tr->tr("settings.diagnostics"); ?>" onclick="window.open('/plugins/plugin-diagnostics/download.php?plugin=tailscale','_blank')" /><?php } ?>
+<?php if (file_exists('/usr/local/emhttp/plugins/plugin-diagnostics/download.php')) { ?> <input type="button" value="<?= $tr->tr("settings.diagnostics"); ?>" onclick="window.open('/plugins/plugin-diagnostics/download.php?plugin=tailscale','_blank')"><?php } ?>
 <pre class='u'></pre>

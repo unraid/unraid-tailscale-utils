@@ -46,7 +46,7 @@ loadFilteredPeers();
 </script>
 
 <form method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/approve-nodes.php" />
+<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/approve-nodes.php">
 <table id='lockTable' class="unraid lockTable tablesorter"><tr><td>&nbsp;</td></tr></table><br>
 
 <input type="submit" id="lockTable_signnode" name="#apply" value="<?= $tr->tr('Sign'); ?>">
