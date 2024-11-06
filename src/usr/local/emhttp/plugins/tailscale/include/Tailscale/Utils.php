@@ -58,7 +58,6 @@ class Utils
         if ((($version['BRANCH'] ?? "") == "trunk") && ! defined("TAILSCALE_TRUNK")) {
             error_reporting(E_ALL);
             define("TAILSCALE_TRUNK", true);
-            self::logmsg("Trunk plugin installed, enabling debug mode", true);
         }
     }
 
