@@ -16,30 +16,17 @@ $tr = $tr ?? new Tailscale\Translator();
     }
 ?>
 
-<form markdown="1" method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/approve-nodes.php" />
-<table class="unraid t2 tablesorter" id="t2">
-    <thead>
-        <tr>
-            <th class="filter-false">&nbsp;</th>
-            <th>Name</th>
-            <th class="filter-false">Key</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        foreach ($tailscaleInfo->getTailscaleLockPending() as $lockHost => $lockKey) {
-            echo "<tr><td><input type='checkbox' name='#arg[]' value='{$lockKey}' /></td><td>{$lockHost}</td><td>{$lockKey}</td></tr>";
-        }
-?>
-    </tbody>
-</table>
-
-<input type="submit" name="#apply" value="<?= $tr->tr('Sign'); ?>">
-</form>
 <script>
-    function showLocks() {
-    $('#t2').tablesorter({
+function controlsDisabled(val) {
+    $('#lockTable_signnode').prop('disabled', val);
+}
+function loadFilteredPeers() {
+  controlsDisabled(true);
+  $.post('/plugins/tailscale/include/data/Lock.php',{action: 'get',mullvad: $("#lockTable_mullvad").prop('checked')},function(data){
+    clearTimeout(timers.refresh);
+    $("#lockTable").trigger("destroy");
+    $('#lockTable').html(data.html);
+    $('#lockTable').tablesorter({
       widthFixed : true,
       sortList: [[0,0]],
       sortAppend: [[0,0]],
@@ -49,11 +36,19 @@ $tr = $tr ?? new Tailscale\Translator();
         // on azure and gray, offset is height of #header
         stickyHeaders_offset: ($('#menu').height() < 50) ? $('#menu').height() : $('#header').height(),
         filter_columnFilters: true,
-        filter_liveSearch: true,
-
         zebra: ["normal-row","alt-row"]
       }
     });
+    controlsDisabled(false);
+  },"json");
 }
-showLocks();
+loadFilteredPeers();
 </script>
+
+<form method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/tailscale/approve-nodes.php" />
+<table id='lockTable' class="unraid lockTable tablesorter"><tr><td>&nbsp;</td></tr></table><br>
+
+<input type="submit" id="lockTable_signnode" name="#apply" value="<?= $tr->tr('Sign'); ?>">
+<input type="checkbox" id="lockTable_mullvad" onChange="loadFilteredPeers()">Display unsigned Mullvad nodes
+</form>
