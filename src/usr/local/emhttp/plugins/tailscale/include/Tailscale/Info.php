@@ -59,9 +59,9 @@ class Info
         $statusInfo->KeyExpiration = isset($status->Self->KeyExpiry) ? $status->Self->KeyExpiry : $this->tr("disabled");
         $statusInfo->Online        = isset($status->Self->Online) ? ($status->Self->Online ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
         $statusInfo->InNetMap      = isset($status->Self->InNetworkMap) ? ($status->Self->InNetworkMap ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
-        $statusInfo->Tags          = isset($status->Self->Tags) ? implode("<br />", $status->Self->Tags) : "";
+        $statusInfo->Tags          = isset($status->Self->Tags) ? implode("<br>", $status->Self->Tags) : "";
         $statusInfo->LoggedIn      = isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? $this->tr("no") : $this->tr("yes")) : $this->tr("unknown");
-        $statusInfo->TsHealth      = isset($status->Health) ? implode("<br />", $status->Health) : "";
+        $statusInfo->TsHealth      = isset($status->Health) ? implode("<br>", $status->Health) : "";
         $statusInfo->LockEnabled   = $this->getTailscaleLockEnabled() ? $this->tr("yes") : $this->tr("no");
 
         if ($this->getTailscaleLockEnabled()) {
@@ -87,9 +87,9 @@ class Info
 
         $info->HostName         = isset($status->Self->HostName) ? $status->Self->HostName : $this->tr("unknown");
         $info->DNSName          = isset($status->Self->DNSName) ? $status->Self->DNSName : $this->tr("unknown");
-        $info->TailscaleIPs     = isset($status->TailscaleIPs) ? implode("<br />", $status->TailscaleIPs) : $this->tr("unknown");
+        $info->TailscaleIPs     = isset($status->TailscaleIPs) ? implode("<br>", $status->TailscaleIPs) : $this->tr("unknown");
         $info->MagicDNSSuffix   = isset($status->MagicDNSSuffix) ? $status->MagicDNSSuffix : $this->tr("unknown");
-        $info->AdvertisedRoutes = isset($prefs->AdvertiseRoutes) ? implode("<br />", $prefs->AdvertiseRoutes) : $this->tr("none");
+        $info->AdvertisedRoutes = isset($prefs->AdvertiseRoutes) ? implode("<br>", $prefs->AdvertiseRoutes) : $this->tr("none");
         $info->AcceptRoutes     = isset($prefs->RouteAll) ? ($prefs->RouteAll ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
         $info->AcceptDNS        = isset($prefs->CorpDNS) ? ($prefs->CorpDNS ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
 

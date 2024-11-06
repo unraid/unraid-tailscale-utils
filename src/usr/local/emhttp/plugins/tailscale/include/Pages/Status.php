@@ -54,15 +54,6 @@ async function pingHost(host) {
 }
 showStatus();
 </script>
-<style type="text/css">
-  /* rows hidden by filtering (needed for child rows) */
-.tablesorter .filtered {
-    display: none;
-}
-.tablesorter-filter.disabled {
-  display: none;
-}
-</style>
 
 <table id='statusTable' class="unraid statusTable tablesorter"><tr><td><div class="spinner"></div></td></tr></table><br>
 <table>

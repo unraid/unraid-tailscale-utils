@@ -37,7 +37,7 @@ try {
                 $txBytes    = $peer->Traffic ? $peer->TxBytes : "";
                 $rxBytes    = $peer->Traffic ? $peer->RxBytes : "";
                 $pingHost   = ($peer->SharedUser || $peer->Active || ! $peer->Online || $peer->Mullvad) ? "" : "<input type='button' class='ping' value='Ping' onclick='pingHost(\"{$peer->Name}\")'>";
-                $ips        = implode("<br />", $peer->IP);
+                $ips        = implode("<br>", $peer->IP);
 
                 $rows .= <<<EOT
                     <tr>

@@ -25,7 +25,7 @@ try {
                     continue;
                 }
 
-                $rows .= "<tr><td><input type='checkbox' name='#arg[]' value='{$lockKey}' /></td><td>{$lockHost}</td><td>{$lockKey}</td></tr>";
+                $rows .= "<tr><td><input type='checkbox' name='#arg[]' value='{$lockKey}'></td><td>{$lockHost}</td><td>{$lockKey}</td></tr>";
             }
 
             $output = <<<EOT
