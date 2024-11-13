@@ -147,6 +147,7 @@ class Utils
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_REFERER, "");
         curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'plugin-metrics/1.0.0');
         $out = curl_exec($ch) ?: false;
         curl_close($ch);
         return strval($out);

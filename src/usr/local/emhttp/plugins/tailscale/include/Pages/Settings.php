@@ -195,7 +195,6 @@ if (( ! isset($var)) || ( ! isset($display))) {
 
         if ($.cookie('tailscale_view_mode') == 'advanced') {
             $('.advanced').show();
-            $('.basic').hide();
         }
 
         $('.advancedview').switchButton({
@@ -205,8 +204,11 @@ if (( ! isset($var)) || ( ! isset($display))) {
             checked: $.cookie('tailscale_view_mode') == 'advanced'
         });
         $('.advancedview').change(function(){
-            $('.advanced').toggle('slow');
-            $('.basic').toggle('slow');
+            if($('.advancedview').is(':checked')) {
+                $('.advanced').show('slow');
+            } else {
+                $('.advanced').hide('slow');
+            }
             $.cookie('tailscale_view_mode', $('.advancedview').is(':checked') ? 'advanced' : 'basic', {expires:3650});
         });
     });
