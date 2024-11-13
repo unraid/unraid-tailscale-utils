@@ -195,6 +195,8 @@ if (( ! isset($var)) || ( ! isset($display))) {
 
         if ($.cookie('tailscale_view_mode') == 'advanced') {
             $('.advanced').show();
+        } else {
+            $('.advanced').hide();
         }
 
         $('.advancedview').switchButton({
