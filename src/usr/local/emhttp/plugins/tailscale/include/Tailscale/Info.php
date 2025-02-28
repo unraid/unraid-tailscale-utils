@@ -143,7 +143,7 @@ class Info
 
     public function getTailscaleLockEnabled(): bool
     {
-        return $this->lock->Enabled;
+        return $this->lock->Enabled ?? false;
     }
 
     public function getTailscaleLockSigned(): bool

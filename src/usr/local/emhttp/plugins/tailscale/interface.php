@@ -26,7 +26,7 @@ $process = proc_open($cmd, $descriptorspec, $pipes);
 
 if (is_resource($process)) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        fwrite($pipes[0], $_POST['ts_data']);
+        fwrite($pipes[0], $_POST['ts_data'] ?? "");
         fclose($pipes[0]);
     }
 
