@@ -92,6 +92,19 @@ class Info
         $info->AdvertisedRoutes = isset($prefs->AdvertiseRoutes) ? implode("<br>", $prefs->AdvertiseRoutes) : $this->tr("none");
         $info->AcceptRoutes     = isset($prefs->RouteAll) ? ($prefs->RouteAll ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
         $info->AcceptDNS        = isset($prefs->CorpDNS) ? ($prefs->CorpDNS ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $info->RunSSH           = isset($prefs->RunSSH) ? ($prefs->RunSSH ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $info->ExitNodeLocal    = isset($prefs->ExitNodeAllowLANAccess) ? ($prefs->ExitNodeAllowLANAccess ? $this->tr("yes") : $this->tr("no")) : $this->tr("unknown");
+        $info->UseExitNode      = $this->usesExitNode() ? $this->tr("yes") : $this->tr("no");
+
+        if ($this->advertisesExitNode()) {
+            if ($this->status->Self->ExitNodeOption) {
+                $info->AdvertiseExitNode = $this->tr("yes");
+            } else {
+                $info->AdvertiseExitNode = $this->tr("info.unapproved");
+            }
+        } else {
+            $info->AdvertiseExitNode = $this->tr("no");
+        }
 
         return $info;
     }
@@ -277,5 +290,46 @@ class Info
         }
 
         return $result;
+    }
+
+    public function advertisesExitNode(): bool
+    {
+        foreach (($this->prefs->AdvertiseRoutes ?? array()) as $net) {
+            switch ($net) {
+                case "0.0.0.0/0":
+                case "::/0":
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function usesExitNode(): bool
+    {
+        if (($this->prefs->ExitNodeID ?? "") || ($this->prefs->ExitNodeIP ?? "")) {
+            return true;
+        }
+        return false;
+    }
+
+    public function exitNodeLocalAccess(): bool
+    {
+        return $this->prefs->ExitNodeAllowLANAccess ?? false;
+    }
+
+    public function acceptsDNS(): bool
+    {
+        return $this->prefs->CorpDNS ?? false;
+    }
+
+    public function acceptsRoutes(): bool
+    {
+        return $this->prefs->RouteAll ?? false;
+    }
+
+    public function runsSSH(): bool
+    {
+        return $this->prefs->RunSSH ?? false;
     }
 }
