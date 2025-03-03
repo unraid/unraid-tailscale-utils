@@ -337,4 +337,14 @@ class Info
     {
         return $this->status->Self->Online ?? false;
     }
+
+    public function getAuthURL(): string
+    {
+        return $this->status->AuthURL ?? "";
+    }
+
+    public function needsLogin(): bool
+    {
+        return ($this->status->BackendState ?? "") == "NeedsLogin";
+    }
 }

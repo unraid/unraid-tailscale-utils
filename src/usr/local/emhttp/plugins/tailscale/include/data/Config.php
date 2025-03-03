@@ -18,7 +18,9 @@ try {
             $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
             $rows          = "";
 
-            if ($tailscaleInfo->isOnline()) {
+            if ($tailscaleInfo->needsLogin()) {
+                $rows = "<tr><td>{$tr->tr("login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
+            } else {
                 $tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
                 $tailscaleConInfo    = $tailscaleInfo->getConnectionInfo();
 
@@ -63,8 +65,6 @@ try {
                     <tr><td>{$tr->tr("info.advertise_exit_node")}</td><td>{$tailscaleConInfo->AdvertiseExitNode}</td><td>{$advertiseExitButton}</td></tr>
                     <tr><td>{$tr->tr("info.exit_node_local")}</td><td>{$tailscaleConInfo->ExitNodeLocal}</td><td>{$exitLocalButton}</td></tr>
                     EOT;
-            } else {
-                $rows = "<tr><td>{$tr->tr("login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
             }
 
             $output = <<<EOT
@@ -107,8 +107,8 @@ try {
             Utils::run_command("tailscale set --{$features[$_POST['feature']]}=" . ($enable ? "true" : "false"));
             break;
         case 'up':
-            $loginURL = System::getTailscaleLoginURL();
-            echo $loginURL;
+            $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
+            echo $tailscaleInfo->getAuthURL();
             break;
     }
 } catch (\Throwable $e) {

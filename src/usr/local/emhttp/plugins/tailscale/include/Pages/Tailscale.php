@@ -39,6 +39,7 @@ async function tailscaleUp() {
   tailscaleControlsDisabled(true);
   var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'up'});
   window.open(res);
+  $('div.spinner.fixed').hide('fast');
   tailscaleControlsDisabled(false);
 }
 showTailscaleConfig();
