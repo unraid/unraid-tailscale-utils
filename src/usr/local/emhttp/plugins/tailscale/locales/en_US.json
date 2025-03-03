@@ -17,6 +17,7 @@
     "disable": "Disable",
     "enable": "Enable",
     "sign": "Sign",
+    "login": "Login",
     "tailscale_disabled": "Tailscale is currently disabled. It can be enabled via the Settings tab.",
     "tailscale_lock": "Tailscale Lock",
     "settings": {

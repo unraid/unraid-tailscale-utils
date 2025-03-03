@@ -332,4 +332,9 @@ class Info
     {
         return $this->prefs->RunSSH ?? false;
     }
+
+    public function isOnline(): bool
+    {
+        return $this->status->Self->Online ?? false;
+    }
 }

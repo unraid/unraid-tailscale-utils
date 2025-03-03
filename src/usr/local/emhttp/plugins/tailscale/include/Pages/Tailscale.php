@@ -34,6 +34,13 @@ async function setFeature(feature, enable) {
     var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'set-feature', feature: feature, enable: enable});
     showTailscaleConfig();
 }
+async function tailscaleUp() {
+  $('div.spinner.fixed').show('fast');
+  tailscaleControlsDisabled(true);
+  var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'up'});
+  window.open(res);
+  tailscaleControlsDisabled(false);
+}
 showTailscaleConfig();
 </script>
 

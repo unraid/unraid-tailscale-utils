@@ -289,4 +289,16 @@ class System
 
         file_put_contents('/usr/local/emhttp/plugins/tailscale/custom-params.sh', 'TAILSCALE_CUSTOM_PARAMS="' . $custom_params . '"');
     }
+
+    public static function getTailscaleLoginURL(): string
+    {
+        $tsUp   = Utils::run_command("tailscale up --timeout=5s --json --reset", false, false);
+        $tsData = (object) json_decode(implode($tsUp));
+
+        if ( ! isset($tsData->AuthURL)) {
+            throw new \Exception("Failed to retrieve Tailscale AuthURL");
+        }
+
+        return $tsData->AuthURL;
+    }
 }
