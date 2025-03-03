@@ -262,26 +262,21 @@ class System
         }
     }
 
-    private static function apply_flag(int $setting, string $flag): void
+    private static function disableTailscaleFeature(bool $allow, string $flag): void
     {
-        switch ($setting) {
-            case 0:
-                Utils::run_command("/usr/local/sbin/tailscale set {$flag}=false");
-                break;
-            case 1:
-                Utils::run_command("/usr/local/sbin/tailscale set {$flag}=true");
-                break;
-            default:
-                Utils::logmsg("Ignoring {$flag}");
+        if ($allow) {
+            Utils::logmsg("Ignoring {$flag}");
+        } else {
+            Utils::run_command("/usr/local/sbin/tailscale set {$flag}=false");
         }
     }
 
     public static function applyTailscaleConfig(Config $config): void
     {
-        self::apply_flag($config->AcceptRoutes, '--accept-routes');
-        self::apply_flag($config->AcceptDNS, '--accept-dns');
+        self::disableTailscaleFeature($config->AllowRoutes, '--accept-routes');
+        self::disableTailscaleFeature($config->AllowDNS, '--accept-dns');
 
-        self::apply_flag(0, '--stateful-filtering');
+        self::disableTailscaleFeature(false, '--stateful-filtering');
     }
 
     public static function createTailscaledParamsFile(Config $config): void

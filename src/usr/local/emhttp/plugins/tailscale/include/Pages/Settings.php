@@ -94,9 +94,8 @@ if (( ! isset($var)) || ( ! isset($display))) {
         <dt><?= $tr->tr("settings.subnets"); ?></dt>
         <dd>
             <select name='ACCEPT_ROUTES' size='1'>
-                <?= Utils::make_option($tailscaleConfig->AcceptRoutes == 0, '0', $tr->tr("no"));?>
-                <?= Utils::make_option($tailscaleConfig->AcceptRoutes == 1, '1', $tr->tr("yes"));?>
-                <?= Utils::make_option($tailscaleConfig->AcceptRoutes == 2, '2', $tr->tr("ignore"));?>
+                <?= Utils::make_option( ! $tailscaleConfig->AllowRoutes, '0', $tr->tr("no"));?>
+                <?= Utils::make_option($tailscaleConfig->AllowRoutes, '1', $tr->tr("yes"));?>
             </select>
         </dd>
     </dl>
@@ -109,9 +108,8 @@ if (( ! isset($var)) || ( ! isset($display))) {
         <dt><?= $tr->tr("settings.dns"); ?></dt>
         <dd>
             <select name='ACCEPT_DNS' size='1'>
-                <?= Utils::make_option($tailscaleConfig->AcceptDNS == 0, '0', $tr->tr("no"));?>
-                <?= Utils::make_option($tailscaleConfig->AcceptDNS == 1, '1', $tr->tr("yes"));?>
-                <?= Utils::make_option($tailscaleConfig->AcceptDNS == 2, '2', $tr->tr("ignore"));?>
+                <?= Utils::make_option( ! $tailscaleConfig->AllowDNS, '0', $tr->tr("no"));?>
+                <?= Utils::make_option($tailscaleConfig->AllowDNS, '1', $tr->tr("yes"));?>
             </select>
         </dd>
     </dl>
