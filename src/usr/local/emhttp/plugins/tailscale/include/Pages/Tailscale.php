@@ -12,6 +12,8 @@ if ( ! $tailscaleConfig->Enable) {
     echo($tr->tr("tailscale_disabled"));
     return;
 }
+
+$tailscaleInfo = $tailscaleInfo ?? new Info($tr);
 ?>
 
 <script src="/webGui/javascript/jquery.tablesorter.widgets.js"></script>
@@ -47,6 +49,11 @@ async function tailscaleUp() {
 }
 showTailscaleConfig();
 </script>
+
+<!-- TODO: Get these warnings with the table -->
+<?= Utils::formatWarning($tailscaleInfo->getTailscaleLockWarning()); ?>
+<?= Utils::formatWarning($tailscaleInfo->getTailscaleNetbiosWarning()); ?>
+<?= Utils::formatWarning($tailscaleInfo->getKeyExpirationWarning()); ?>
 
 <table id='configTable' class="unraid statusTable tablesorter"><tr><td><div class="spinner"></div></td></tr></table><br>
 <table>
