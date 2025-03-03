@@ -19,7 +19,7 @@ try {
             $rows          = "";
 
             if ($tailscaleInfo->needsLogin()) {
-                $rows = "<tr><td>{$tr->tr("login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
+                $rows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
             } else {
                 $tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
                 $tailscaleConInfo    = $tailscaleInfo->getConnectionInfo();
