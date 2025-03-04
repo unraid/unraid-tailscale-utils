@@ -12,7 +12,6 @@ if ( ! $tailscaleConfig->Enable) {
 
 $tailscaleInfo       = $tailscaleInfo ?? new Info($tr);
 $tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
-$tailscaleConInfo    = $tailscaleInfo->getConnectionInfo();
 ?>
 <table class="unraid t1">
     <thead>
