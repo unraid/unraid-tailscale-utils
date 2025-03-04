@@ -9,9 +9,10 @@ class Config
     public bool $IPForward;
     public bool $Enable;
     public bool $SSH;
+    public bool $AllowDNS;
+    public bool $AllowRoutes;
+
     public int $WgPort;
-    public int $AcceptDNS;
-    public int $AcceptRoutes;
     public string $TaildropDir;
 
     public function __construct()
@@ -30,10 +31,10 @@ class Config
         $this->IPForward        = boolval($saved_config["SYSCTL_IP_FORWARD"] ?? "1");
         $this->Enable           = boolval($saved_config["ENABLE_TAILSCALE"] ?? "1");
         $this->SSH              = boolval($saved_config["SSH"] ?? "0");
+        $this->AllowDNS         = boolval($saved_config["ACCEPT_DNS"] ?? "0");
+        $this->AllowRoutes      = boolval($saved_config["ACCEPT_ROUTES"] ?? "0");
 
-        $this->WgPort       = intval($saved_config["WG_PORT"] ?? "0");
-        $this->AcceptDNS    = intval($saved_config["ACCEPT_DNS"] ?? "0");
-        $this->AcceptRoutes = intval($saved_config["ACCEPT_ROUTES"] ?? "0");
+        $this->WgPort = intval($saved_config["WG_PORT"] ?? "0");
 
         $this->TaildropDir = $saved_config["TAILDROP_DIR"] ?? "";
     }

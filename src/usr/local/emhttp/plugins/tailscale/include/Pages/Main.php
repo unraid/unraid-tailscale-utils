@@ -22,8 +22,4 @@ if ( ! $tailscaleConfig->Enable) {
 
 $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
 ?>
-<?= Utils::formatWarning($tailscaleInfo->getTailscaleLockWarning()); ?>
-<?= Utils::formatWarning($tailscaleInfo->getTailscaleNetbiosWarning()); ?>
-<?= Utils::formatWarning($tailscaleInfo->getKeyExpirationWarning()); ?>
-
 <iframe src="/plugins/tailscale/interface.php" style="width:100%; height:600px; border: none;"></iframe>

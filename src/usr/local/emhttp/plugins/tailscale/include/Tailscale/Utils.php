@@ -107,8 +107,8 @@ class Utils
                 'plugin_version' => $version['VERSION'],
                 'plugin_branch'  => $version['BRANCH'],
                 'unraid_version' => $var['version'],
-                'bool1'          => $config->AcceptDNS,
-                'bool2'          => $config->AcceptRoutes,
+                'bool1'          => $config->AllowDNS,
+                'bool2'          => $config->AllowRoutes,
                 'bool3'          => $config->IncludeInterface,
                 'bool4'          => $subnet,
                 'bool5'          => $exit,
@@ -232,5 +232,36 @@ class Utils
         $net_bin_string      = sprintf("%032b", ip2long($subnet));
 
         return (substr_compare($ip_bin_string, $net_bin_string, 0, intval($mask)) === 0);
+    }
+
+    public static function validateCidr(string $cidr): bool
+    {
+        $parts = explode('/', $cidr);
+        if (count($parts) != 2) {
+            return false;
+        }
+
+        $ip      = $parts[0];
+        $netmask = $parts[1];
+
+        if ( ! preg_match("/^\d+$/", $netmask)) {
+            return false;
+        }
+
+        $netmask = intval($parts[1]);
+
+        if ($netmask < 0) {
+            return false;
+        }
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            return $netmask <= 32;
+        }
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            return $netmask <= 128;
+        }
+
+        return false;
     }
 }
