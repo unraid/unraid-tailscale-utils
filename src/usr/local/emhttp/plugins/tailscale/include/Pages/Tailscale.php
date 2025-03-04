@@ -65,7 +65,7 @@ async function addTailscaleRoute() {
     showTailscaleConfig();
 }
 function isValidCIDR(ip) {
-    if ip === undefined {
+    if (ip === undefined) {
         return false;
     }
 
