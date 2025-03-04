@@ -19,8 +19,8 @@ try {
         case 'get':
             $connectionRows = "";
             $configRows     = "";
-            $routes         = "<table id='routesTable' class='unraid statusTable '><tr><td><div class='spinner'></div></td></tr></table>";
-            $config         = "<table id='configTable' class='unraid statusTable '><tr><td><div class='spinner'></div></td></tr></table>";
+            $routes         = "<table id='routesTable' class='unraid statusTable'></table>";
+            $config         = "<table id='configTable' class='unraid statusTable'></table>";
 
             if ($tailscaleInfo->needsLogin()) {
                 $connectionRows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";

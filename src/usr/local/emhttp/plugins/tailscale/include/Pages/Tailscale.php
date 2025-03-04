@@ -100,6 +100,10 @@ function isValidCIDR(ip) {
 }
 
 function validateTailscaleRoute() {
+    if (! $('#tailscaleRoute').length) {
+        return;
+    }
+
     if (isValidCIDR($('#tailscaleRoute').val())) {
         $('#addTailscaleRoute').prop('disabled', false);
     } else {
