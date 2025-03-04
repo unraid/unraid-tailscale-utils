@@ -156,6 +156,20 @@ try {
             break;
         case 'up':
             Utils::logmsg("Getting Auth URL");
+            $authURL = $tailscaleInfo->getAuthURL();
+            if ($authURL == "") {
+                Utils::run_command("tailscale up --reset --timeout=5s --json");
+                $retries = 0;
+                while ($retries < 30) {
+                    $tailscaleInfo = new Info($tr);
+                    $authURL       = $tailscaleInfo->getAuthURL();
+                    if ($authURL != "") {
+                        break;
+                    }
+                    sleep(2);
+                    $retries++;
+                }
+            }
             echo $tailscaleInfo->getAuthURL();
             break;
         case 'remove-route':
