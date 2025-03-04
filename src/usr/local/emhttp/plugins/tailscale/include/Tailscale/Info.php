@@ -347,4 +347,19 @@ class Info
     {
         return ($this->status->BackendState ?? "") == "NeedsLogin";
     }
+
+    /**
+     * @return array<string>
+     */
+    public function getAdvertisedRoutes(): array
+    {
+        $advertisedRoutes = $this->prefs->AdvertiseRoutes ?? array();
+        $exitNodeRoutes   = ["0.0.0.0/0", "::/0"];
+        return array_diff($advertisedRoutes, $exitNodeRoutes);
+    }
+
+    public function isApprovedRoute(string $route): bool
+    {
+        return in_array($route, $this->status->Self->AllowedIPs ?? array());
+    }
 }

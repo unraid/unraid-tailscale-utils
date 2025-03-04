@@ -13,13 +13,16 @@ try {
         return;
     }
 
+    $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
+
     switch ($_POST['action']) {
         case 'get':
-            $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
-            $rows          = "";
+            $connectionRows = "";
+            $configRows     = "<table id='routesTable' class='unraid statusTable '><tr><td><div class='spinner'></div></td></tr></table>";
+            $routes         = "<table id='routesTable' class='unraid statusTable '><tr><td><div class='spinner'></div></td></tr></table>";
 
             if ($tailscaleInfo->needsLogin()) {
-                $rows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
+                $connectionRows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
             } else {
                 $tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
                 $tailscaleConInfo    = $tailscaleInfo->getConnectionInfo();
@@ -53,37 +56,80 @@ try {
                     "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"exit-allow-local\", false)'>" :
                     "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"exit-allow-local\", true)'>";
 
-                $rows = <<<EOT
+                $connectionRows = <<<EOT
                     <tr><td>{$tr->tr("info.hostname")}</td><td>{$tailscaleConInfo->HostName}</td><td></td></tr>
                     <tr><td>{$tr->tr("info.dns")}</td><td>{$tailscaleConInfo->DNSName}</td><td></td></tr>
                     <tr><td>{$tr->tr("info.ip")}</td><td>{$tailscaleConInfo->TailscaleIPs}</td><td></td></tr>
                     <tr><td>{$tr->tr("info.magicdns")}</td><td>{$tailscaleConInfo->MagicDNSSuffix}</td><td></td></tr>
-                    <tr><td>{$tr->tr("info.routes")}</td><td>{$tailscaleConInfo->AdvertisedRoutes}</td><td></td></tr>
-                    <tr><td>{$tr->tr("info.accept_routes")}</td><td>{$tailscaleConInfo->AcceptRoutes}</td><td>{$acceptRoutesButton}</td></tr>
-                    <tr><td>{$tr->tr("info.accept_dns")}</td><td>{$tailscaleConInfo->AcceptDNS}</td><td>{$acceptDNSButton}</td></tr>
-                    <tr><td>{$tr->tr("info.run_ssh")}</td><td>{$tailscaleConInfo->RunSSH}</td><td>{$sshButton}</td></tr>
-                    <tr><td>{$tr->tr("info.advertise_exit_node")}</td><td>{$tailscaleConInfo->AdvertiseExitNode}</td><td>{$advertiseExitButton}</td></tr>
-                    <tr><td>{$tr->tr("info.exit_node_local")}</td><td>{$tailscaleConInfo->ExitNodeLocal}</td><td>{$exitLocalButton}</td></tr>
+                    EOT;
+
+                $configRows = <<<EOT
+                    <tr><td>{$tr->tr("info.accept_routes")}</td><td>{$tailscaleConInfo->AcceptRoutes}</td><td style="text-align: right;">{$acceptRoutesButton}</td></tr>
+                    <tr><td>{$tr->tr("info.accept_dns")}</td><td>{$tailscaleConInfo->AcceptDNS}</td><td style="text-align: right;">{$acceptDNSButton}</td></tr>
+                    <tr><td>{$tr->tr("info.run_ssh")}</td><td>{$tailscaleConInfo->RunSSH}</td><td style="text-align: right;">{$sshButton}</td></tr>
+                    <tr><td>{$tr->tr("info.advertise_exit_node")}</td><td>{$tailscaleConInfo->AdvertiseExitNode}</td><td style="text-align: right;">{$advertiseExitButton}</td></tr>
+                    <tr><td>{$tr->tr("info.exit_node_local")}</td><td>{$tailscaleConInfo->ExitNodeLocal}</td><td style="text-align: right;">{$exitLocalButton}</td></tr>
+                    EOT;
+
+                $routesRows = "";
+
+                foreach ($tailscaleInfo->getAdvertisedRoutes() as $route) {
+                    $approved = $tailscaleInfo->isApprovedRoute($route) ? "" : $tr->tr("info.unapproved");
+                    $routesRows .= "<tr><td>{$route}</td><td>{$approved}</td><td style='text-align: right;'><input type='button' value='{$tr->tr("remove")}' onclick='removeTailscaleRoute(\"{$route}\")'></td></tr>";
+                }
+
+                $routes = <<<EOT
+                    <table id="configTable" class="unraid statusTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%" class="filter-false">{$tr->tr('info.routes')}</th>
+                                <th style="width: 40%" class="filter-false">&nbsp;</th>
+                                <th class="filter-false">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$routesRows}
+                            <tr><td><input type="text" id="tailscaleRoute" name="tailscaleRoute" oninput='validateTailscaleRoute()'></td><td>&nbsp;</td><td style="text-align: right;"><input type='button' id="addTailscaleRoute" value='{$tr->tr("add")}' onclick='addTailscaleRoute()'></td></tr>
+                        </tbody>
+                    </table>
                     EOT;
             }
 
-            $output = <<<EOT
-                <table id="statusTable" class="unraid statusTable">
+            $config = <<<EOT
+                <table id="configTable" class="unraid statusTable">
                     <thead>
                         <tr>
-                            <th class="filter-false">{$tr->tr('connection')}</th>
-                            <th class="filter-false">&nbsp;</th>
+                            <th style="width: 40%" class="filter-false">{$tr->tr('configuration')}</th>
+                            <th style="width: 40%" class="filter-false">&nbsp;</th>
                             <th class="filter-false">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {$rows}
+                        {$configRows}
                     </tbody>
                 </table>
                 EOT;
 
-            $rtn         = array();
-            $rtn['html'] = $output;
+            $connection = <<<EOT
+                <table id="configTable" class="unraid statusTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%" class="filter-false">{$tr->tr('connection')}</th>
+                            <th style="width: 40%" class="filter-false">&nbsp;</th>
+                            <th class="filter-false">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {$connectionRows}
+                    </tbody>
+                </table>
+                EOT;
+
+            $rtn               = array();
+            $rtn['config']     = $config;
+            $rtn['routes']     = $routes;
+            $rtn['connection'] = $connection;
+
             echo json_encode($rtn);
             break;
         case 'set-feature':
@@ -104,11 +150,40 @@ try {
             }
 
             $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
+            Utils::logmsg("Setting feature: {$features[$_POST['feature']]} to " . ($enable ? "true" : "false"));
             Utils::run_command("tailscale set --{$features[$_POST['feature']]}=" . ($enable ? "true" : "false"));
             break;
         case 'up':
-            $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
+            Utils::logmsg("Getting Auth URL");
             echo $tailscaleInfo->getAuthURL();
+            break;
+        case 'remove-route':
+            if ( ! isset($_POST['route'])) {
+                throw new \Exception("Missing route parameter");
+            }
+
+            Utils::logmsg("Removing route: {$_POST['route']}");
+
+            $advertisedRoutes = $tailscaleInfo->getAdvertisedRoutes();
+            $advertisedRoutes = array_diff($advertisedRoutes, [$_POST['route']]);
+
+            Utils::run_command("tailscale set --advertise-routes='" . implode(",", $advertisedRoutes) . "'");
+            break;
+        case 'add-route':
+            if ( ! isset($_POST['route'])) {
+                throw new \Exception("Missing route parameter");
+            }
+
+            if ( ! Utils::validateCidr($_POST['route'])) {
+                throw new \Exception("Invalid route: {$_POST['route']}");
+            }
+
+            Utils::logmsg("Adding route: {$_POST['route']}");
+
+            $advertisedRoutes   = $tailscaleInfo->getAdvertisedRoutes();
+            $advertisedRoutes[] = $_POST['route'];
+
+            Utils::run_command("tailscale set --advertise-routes='" . implode(",", $advertisedRoutes) . "'");
             break;
     }
 } catch (\Throwable $e) {
