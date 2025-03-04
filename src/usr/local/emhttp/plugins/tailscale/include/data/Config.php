@@ -23,37 +23,37 @@ try {
             $config         = "<table id='configTable' class='unraid statusTable'></table>";
 
             if ($tailscaleInfo->needsLogin()) {
-                $connectionRows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td><a id='tailscaleUpLink' href='#'></a></td></tr>";
+                $connectionRows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td><a id='tailscaleUpLink' href='#'></a></td></tr>";
             } else {
                 $tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
                 $tailscaleConInfo    = $tailscaleInfo->getConnectionInfo();
 
-                $acceptDNSButton = $tailscaleInfo->acceptsDNS() ? "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"dns\", false)'>" :
+                $acceptDNSButton = $tailscaleInfo->acceptsDNS() ? "<input type='button' value='{$tr->tr("disable")}' onclick='setFeature(\"dns\", false)'>" :
                     (
-                        $tailscaleConfig->AllowDNS ? "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"dns\", true)'>" :
-                        "<input type='button' class='ping' value='{$tr->tr("enable")}' disabled>"
+                        $tailscaleConfig->AllowDNS ? "<input type='button' value='{$tr->tr("enable")}' onclick='setFeature(\"dns\", true)'>" :
+                        "<input type='button' value='{$tr->tr("enable")}' disabled>"
                     );
 
-                $acceptRoutesButton = $tailscaleInfo->acceptsRoutes() ? "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"routes\", false)'>" :
+                $acceptRoutesButton = $tailscaleInfo->acceptsRoutes() ? "<input type='button' value='{$tr->tr("disable")}' onclick='setFeature(\"routes\", false)'>" :
                     (
-                        $tailscaleConfig->AllowRoutes ? "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"routes\", true)'>" :
-                        "<input type='button' class='ping' value='{$tr->tr("enable")}' disabled>"
+                        $tailscaleConfig->AllowRoutes ? "<input type='button' value='{$tr->tr("enable")}' onclick='setFeature(\"routes\", true)'>" :
+                        "<input type='button' value='{$tr->tr("enable")}' disabled>"
                     );
 
                 $sshButton = $tailscaleInfo->runsSSH() ?
-                    "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"ssh\", false)'>" :
-                    "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"ssh\", true)'>";
+                    "<input type='button' value='{$tr->tr("disable")}' onclick='setFeature(\"ssh\", false)'>" :
+                    "<input type='button' value='{$tr->tr("enable")}' onclick='setFeature(\"ssh\", true)'>";
 
                 $advertiseExitButton = $tailscaleInfo->usesExitNode() ? "" :
                     (
                         $tailscaleInfo->advertisesExitNode() ?
-                        "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"advertise-exit\", false)'>" :
-                        "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"advertise-exit\", true)'>"
+                        "<input type='button' value='{$tr->tr("disable")}' onclick='setFeature(\"advertise-exit\", false)'>" :
+                        "<input type='button' value='{$tr->tr("enable")}' onclick='setFeature(\"advertise-exit\", true)'>"
                     );
 
                 $exitLocalButton = $tailscaleInfo->exitNodeLocalAccess() ?
-                    "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"exit-allow-local\", false)'>" :
-                    "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"exit-allow-local\", true)'>";
+                    "<input type='button' value='{$tr->tr("disable")}' onclick='setFeature(\"exit-allow-local\", false)'>" :
+                    "<input type='button' value='{$tr->tr("enable")}' onclick='setFeature(\"exit-allow-local\", true)'>";
 
                 $connectionRows = <<<EOT
                     <tr><td>{$tr->tr("info.hostname")}</td><td>{$tailscaleConInfo->HostName}</td><td></td></tr>
