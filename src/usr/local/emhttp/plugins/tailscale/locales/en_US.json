@@ -20,6 +20,7 @@
     "login": "Login",
     "add": "Add",
     "remove": "Remove",
+    "tailnet": "Tailnet",
     "configuration": "Configuration",
     "needs_login": "This device needs to be logged in to Tailscale. Refresh this page after logging in to view the status.",
     "tailscale_disabled": "Tailscale is currently disabled. It can be enabled via the Settings tab.",

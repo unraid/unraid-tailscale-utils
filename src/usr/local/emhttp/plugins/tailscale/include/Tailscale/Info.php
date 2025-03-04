@@ -362,4 +362,9 @@ class Info
     {
         return in_array($route, $this->status->Self->AllowedIPs ?? array());
     }
+
+    public function getTailnetName(): string
+    {
+        return $this->status->CurrentTailnet->Name ?? "";
+    }
 }

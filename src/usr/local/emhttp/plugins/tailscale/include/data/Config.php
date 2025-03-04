@@ -28,19 +28,17 @@ try {
                 $tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
                 $tailscaleConInfo    = $tailscaleInfo->getConnectionInfo();
 
-                $acceptDNSButton = $tailscaleConfig->AllowDNS ?
+                $acceptDNSButton = $tailscaleInfo->acceptsDNS() ? "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"dns\", false)'>" :
                     (
-                        $tailscaleInfo->acceptsDNS() ?
-                        "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"dns\", false)'>" :
-                        "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"dns\", true)'>"
-                    ) : "";
+                        $tailscaleConfig->AllowDNS ? "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"dns\", true)'>" :
+                        "<input type='button' class='ping' value='{$tr->tr("enable")}' disabled>"
+                    );
 
-                $acceptRoutesButton = $tailscaleConfig->AllowRoutes ?
+                $acceptRoutesButton = $tailscaleInfo->acceptsRoutes() ? "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"routes\", false)'>" :
                     (
-                        $tailscaleInfo->acceptsRoutes() ?
-                        "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"routes\", false)'>" :
-                        "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"routes\", true)'>"
-                    ) : "";
+                        $tailscaleConfig->AllowRoutes ? "<input type='button' class='ping' value='{$tr->tr("enable")}' onclick='setFeature(\"routes\", true)'>" :
+                        "<input type='button' class='ping' value='{$tr->tr("enable")}' disabled>"
+                    );
 
                 $sshButton = $tailscaleInfo->runsSSH() ?
                     "<input type='button' class='ping' value='{$tr->tr("disable")}' onclick='setFeature(\"ssh\", false)'>" :
@@ -62,6 +60,7 @@ try {
                     <tr><td>{$tr->tr("info.dns")}</td><td>{$tailscaleConInfo->DNSName}</td><td></td></tr>
                     <tr><td>{$tr->tr("info.ip")}</td><td>{$tailscaleConInfo->TailscaleIPs}</td><td></td></tr>
                     <tr><td>{$tr->tr("info.magicdns")}</td><td>{$tailscaleConInfo->MagicDNSSuffix}</td><td></td></tr>
+                    <tr><td>{$tr->tr("tailnet")}</td><td>{$tailscaleInfo->getTailnetName()}</td><td></td></tr>
                     EOT;
 
                 $configRows = <<<EOT
