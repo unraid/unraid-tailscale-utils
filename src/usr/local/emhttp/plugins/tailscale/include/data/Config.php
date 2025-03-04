@@ -23,7 +23,7 @@ try {
             $config         = "<table id='configTable' class='unraid statusTable'></table>";
 
             if ($tailscaleInfo->needsLogin()) {
-                $connectionRows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
+                $connectionRows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td><a id='tailscaleUpLink' href='#'></a></td></tr>";
             } else {
                 $tailscaleStatusInfo = $tailscaleInfo->getStatusInfo();
                 $tailscaleConInfo    = $tailscaleInfo->getConnectionInfo();

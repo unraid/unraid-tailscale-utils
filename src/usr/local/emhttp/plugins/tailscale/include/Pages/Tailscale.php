@@ -48,6 +48,8 @@ async function tailscaleUp() {
   $('div.spinner.fixed').show('fast');
   tailscaleControlsDisabled(true);
   var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'up'});
+  $('#tailscaleUpLink').attr('href', res);
+  $('#tailscaleUpLink').text(res);
   window.open(res);
   $('div.spinner.fixed').hide('fast');
   tailscaleControlsDisabled(false);
