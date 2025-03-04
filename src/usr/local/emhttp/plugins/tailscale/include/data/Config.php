@@ -63,12 +63,24 @@ try {
                     <tr><td>{$tr->tr("tailnet")}</td><td>{$tailscaleInfo->getTailnetName()}</td><td></td></tr>
                     EOT;
 
+                $exitDisabled = $tailscaleInfo->advertisesExitNode() ? "disabled" : "";
+                $currentExit  = $tailscaleInfo->getCurrentExitNode();
+
+                $exitSelect = "<select id='exitNodeSelect' onchange='setTailscaleExitNode()' {$exitDisabled}><option value=''>{$tr->tr("none")}</option>";
+                foreach ($tailscaleInfo->getExitNodes() as $node) {
+                    $selected = $node == $currentExit ? "selected" : "";
+                    $exitSelect .= "<option value='{$node}' {$selected}>{$node}</option>";
+                }
+                $exitSelect .= "</select>";
+
                 $configRows = <<<EOT
                     <tr><td>{$tr->tr("info.accept_routes")}</td><td>{$tailscaleConInfo->AcceptRoutes}</td><td style="text-align: right;">{$acceptRoutesButton}</td></tr>
                     <tr><td>{$tr->tr("info.accept_dns")}</td><td>{$tailscaleConInfo->AcceptDNS}</td><td style="text-align: right;">{$acceptDNSButton}</td></tr>
                     <tr><td>{$tr->tr("info.run_ssh")}</td><td>{$tailscaleConInfo->RunSSH}</td><td style="text-align: right;">{$sshButton}</td></tr>
                     <tr><td>{$tr->tr("info.advertise_exit_node")}</td><td>{$tailscaleConInfo->AdvertiseExitNode}</td><td style="text-align: right;">{$advertiseExitButton}</td></tr>
+                    <tr><td>{$tr->tr("info.use_exit_node")}</td><td>&nbsp;</td><td style="text-align: right;">{$exitSelect}</td></tr>
                     <tr><td>{$tr->tr("info.exit_node_local")}</td><td>{$tailscaleConInfo->ExitNodeLocal}</td><td style="text-align: right;">{$exitLocalButton}</td></tr>
+
                     EOT;
 
                 $routesRows = "";
@@ -198,6 +210,20 @@ try {
             $advertisedRoutes[] = $_POST['route'];
 
             Utils::run_command("tailscale set --advertise-routes='" . implode(",", $advertisedRoutes) . "'");
+            break;
+        case 'exit-node':
+            if ( ! isset($_POST['node'])) {
+                throw new \Exception("Missing node parameter");
+            }
+
+            $exitNodes = $tailscaleInfo->getExitNodes();
+            if (( ! in_array($_POST['node'], $exitNodes)) && ($_POST['node'] != '')) {
+                throw new \Exception("Invalid node parameter");
+            }
+
+            Utils::logmsg("Setting exit node: {$_POST['node']}");
+
+            Utils::run_command("tailscale set --exit-node='{$_POST['node']}'");
             break;
     }
 } catch (\Throwable $e) {

@@ -367,4 +367,31 @@ class Info
     {
         return $this->status->CurrentTailnet->Name ?? "";
     }
+
+    /**
+     * @return array<string>
+     */
+    public function getExitNodes(): array
+    {
+        $exitNodes = array();
+
+        foreach ($this->status->Peer as $node => $status) {
+            if ($status->ExitNodeOption ?? false) {
+                $exitNodes[] = $status->DNSName;
+            }
+        }
+
+        return $exitNodes;
+    }
+
+    public function getCurrentExitNode(): string
+    {
+        foreach ($this->status->Peer as $node => $status) {
+            if ($status->ExitNode ?? false) {
+                return $status->DNSName;
+            }
+        }
+
+        return "";
+    }
 }

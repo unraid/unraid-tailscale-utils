@@ -54,6 +54,13 @@ async function tailscaleUp() {
   $('div.spinner.fixed').hide('fast');
   tailscaleControlsDisabled(false);
 }
+async function setTailscaleExitNode() {
+    $('div.spinner.fixed').show('fast');
+    tailscaleControlsDisabled(true);
+    var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'exit-node', node: $('#exitNodeSelect').val()});
+    showTailscaleConfig();
+}
+
 async function removeTailscaleRoute(route) {
     $('div.spinner.fixed').show('fast');
     tailscaleControlsDisabled(true);
