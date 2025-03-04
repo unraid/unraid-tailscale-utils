@@ -42,31 +42,4 @@ if ($tailscaleStatusInfo->LockInfo != null) {
 }
 ?>
     </tbody>
-    <tbody>
-        <tr>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </tbody>
-    <thead>
-        <tr>
-            <td><?= $tr->tr('connection'); ?></td>
-            <td>&nbsp;</td>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-    echo Utils::printRow($tr->tr("info.hostname"), $tailscaleConInfo->HostName);
-echo Utils::printRow($tr->tr("info.dns"), $tailscaleConInfo->DNSName);
-echo Utils::printRow($tr->tr("info.ip"), $tailscaleConInfo->TailscaleIPs);
-echo Utils::printRow($tr->tr("info.magicdns"), $tailscaleConInfo->MagicDNSSuffix);
-echo Utils::printRow($tr->tr("info.routes"), $tailscaleConInfo->AdvertisedRoutes);
-echo Utils::printRow($tr->tr("info.accept_routes"), $tailscaleConInfo->AcceptRoutes);
-echo Utils::printRow($tr->tr("info.accept_dns"), $tailscaleConInfo->AcceptDNS);
-echo Utils::printRow($tr->tr("info.run_ssh"), $tailscaleConInfo->RunSSH);
-echo Utils::printRow($tr->tr("info.advertise_exit_node"), $tailscaleConInfo->AdvertiseExitNode);
-echo Utils::printRow($tr->tr("info.use_exit_node"), $tailscaleConInfo->UseExitNode);
-echo Utils::printRow($tr->tr("info.exit_node_local"), $tailscaleConInfo->ExitNodeLocal);
-?>
-    </tbody>
 </table>
