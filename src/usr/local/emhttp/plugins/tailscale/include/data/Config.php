@@ -18,8 +18,9 @@ try {
     switch ($_POST['action']) {
         case 'get':
             $connectionRows = "";
-            $configRows     = "<table id='routesTable' class='unraid statusTable '><tr><td><div class='spinner'></div></td></tr></table>";
+            $configRows     = "";
             $routes         = "<table id='routesTable' class='unraid statusTable '><tr><td><div class='spinner'></div></td></tr></table>";
+            $config         = "<table id='configTable' class='unraid statusTable '><tr><td><div class='spinner'></div></td></tr></table>";
 
             if ($tailscaleInfo->needsLogin()) {
                 $connectionRows = "<tr><td>{$tr->tr("needs_login")}</td><td><input type='button' class='ping' value='{$tr->tr("login")}' onclick='tailscaleUp()'></td><td></td></tr>";
@@ -79,7 +80,7 @@ try {
                 }
 
                 $routes = <<<EOT
-                    <table id="configTable" class="unraid statusTable">
+                    <table id="routesTable" class="unraid statusTable">
                         <thead>
                             <tr>
                                 <th style="width: 40%" class="filter-false">{$tr->tr('info.routes')}</th>
@@ -93,25 +94,25 @@ try {
                         </tbody>
                     </table>
                     EOT;
+
+                $config = <<<EOT
+                    <table id="configTable" class="unraid statusTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%" class="filter-false">{$tr->tr('configuration')}</th>
+                                <th style="width: 40%" class="filter-false">&nbsp;</th>
+                                <th class="filter-false">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {$configRows}
+                        </tbody>
+                    </table>
+                    EOT;
             }
 
-            $config = <<<EOT
-                <table id="configTable" class="unraid statusTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 40%" class="filter-false">{$tr->tr('configuration')}</th>
-                            <th style="width: 40%" class="filter-false">&nbsp;</th>
-                            <th class="filter-false">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {$configRows}
-                    </tbody>
-                </table>
-                EOT;
-
             $connection = <<<EOT
-                <table id="configTable" class="unraid statusTable">
+                <table id="connectionTable" class="unraid statusTable">
                     <thead>
                         <tr>
                             <th style="width: 40%" class="filter-false">{$tr->tr('connection')}</th>
