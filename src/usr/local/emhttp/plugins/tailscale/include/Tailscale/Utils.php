@@ -82,21 +82,7 @@ class Utils
                 return;
             }
 
-            $exit          = false;
-            $subnet        = false;
             $customControl = false;
-
-            foreach (($prefs->AdvertiseRoutes ?? array()) as $net) {
-                switch ($net) {
-                    case "0.0.0.0/0":
-                    case "::/0":
-                        $exit = true;
-                        break;
-                    default:
-                        $subnet = true;
-                        break;
-                }
-            }
 
             if ($prefs->ControlURL != "https://controlplane.tailscale.com") {
                 $customControl = true;
