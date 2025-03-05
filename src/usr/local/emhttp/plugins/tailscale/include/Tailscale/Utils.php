@@ -74,8 +74,9 @@ class Utils
                 return;
             }
 
-            $prefs = Info::getPrefs();
+            $tailscaleInfo = new Info(new Translator());
 
+            $prefs = Info::getPrefs();
             if (isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? true : false) : true) {
                 Utils::logmsg("Skipping usage data collection; not logged in.");
                 return;
@@ -107,11 +108,11 @@ class Utils
                 'plugin_version' => $version['VERSION'],
                 'plugin_branch'  => $version['BRANCH'],
                 'unraid_version' => $var['version'],
-                'bool1'          => $config->AllowDNS,
-                'bool2'          => $config->AllowRoutes,
+                'bool1'          => $tailscaleInfo->acceptsDNS(),
+                'bool2'          => $tailscaleInfo->acceptsRoutes(),
                 'bool3'          => $config->IncludeInterface,
-                'bool4'          => $subnet,
-                'bool5'          => $exit,
+                'bool4'          => (bool) $tailscaleInfo->getAdvertisedRoutes(),
+                'bool5'          => $tailscaleInfo->advertisesExitNode(),
                 'num1'           => $customControl ? 0 : 1
             );
 
