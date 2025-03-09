@@ -13,6 +13,7 @@ try {
         return;
     }
 
+    $localAPI      = new LocalAPI();
     $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
 
     switch ($_POST['action']) {
@@ -169,19 +170,19 @@ try {
             Utils::logmsg("Getting Auth URL");
             $authURL = $tailscaleInfo->getAuthURL();
             if ($authURL == "") {
-                Utils::run_command("tailscale up --reset --timeout=5s --json");
+                $localAPI->requestAuthURL();
                 $retries = 0;
-                while ($retries < 30) {
+                while ($retries < 60) {
                     $tailscaleInfo = new Info($tr);
                     $authURL       = $tailscaleInfo->getAuthURL();
                     if ($authURL != "") {
                         break;
                     }
-                    sleep(2);
+                    usleep(500000);
                     $retries++;
                 }
             }
-            echo $tailscaleInfo->getAuthURL();
+            echo $authURL;
             break;
         case 'remove-route':
             if ( ! isset($_POST['route'])) {

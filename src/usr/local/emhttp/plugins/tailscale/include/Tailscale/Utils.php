@@ -76,7 +76,7 @@ class Utils
 
             $tailscaleInfo = new Info(new Translator());
 
-            $prefs = Info::getPrefs();
+            $prefs = $tailscaleInfo->getPrefs();
             if (isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? true : false) : true) {
                 Utils::logmsg("Skipping usage data collection; not logged in.");
                 return;
