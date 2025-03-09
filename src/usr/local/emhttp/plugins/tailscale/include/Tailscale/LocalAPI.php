@@ -42,6 +42,6 @@ class LocalAPI
 
     public function requestAuthURL(): void
     {
-        $this->tailscaleLocalAPI('v0/login-interactive');
+        $this->tailscaleLocalAPI('v0/login-interactive', true);
     }
 }
