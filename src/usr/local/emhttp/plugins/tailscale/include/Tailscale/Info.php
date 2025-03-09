@@ -369,7 +369,7 @@ class Info
     }
 
     /**
-     * @return array<string>
+     * @return array<string, string>
      */
     public function getExitNodes(): array
     {
@@ -377,7 +377,11 @@ class Info
 
         foreach ($this->status->Peer as $node => $status) {
             if ($status->ExitNodeOption ?? false) {
-                $exitNodes[] = $status->DNSName;
+                $nodeName = $status->DNSName;
+                if (isset($status->Location->City)) {
+                    $nodeName .= " (" . $status->Location->City . ")";
+                }
+                $exitNodes[$status->DNSName] = $nodeName;
             }
         }
 
