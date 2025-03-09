@@ -66,10 +66,10 @@ try {
                 $exitDisabled = $tailscaleInfo->advertisesExitNode() ? "disabled" : "";
                 $currentExit  = $tailscaleInfo->getCurrentExitNode();
 
-                $exitSelect = "<select id='exitNodeSelect' onchange='setTailscaleExitNode()' {$exitDisabled}><option value=''>{$tr->tr("none")}</option>";
-                foreach ($tailscaleInfo->getExitNodes() as $node) {
+                $exitSelect = "<select id='exitNodeSelect' onchange='setTailscaleExitNode()' style='width: 100%' {$exitDisabled}><option value=''>{$tr->tr("none")}</option>";
+                foreach ($tailscaleInfo->getExitNodes() as $node => $name) {
                     $selected = $node == $currentExit ? "selected" : "";
-                    $exitSelect .= "<option value='{$node}' {$selected}>{$node}</option>";
+                    $exitSelect .= "<option value='{$node}' {$selected}>{$name}</option>";
                 }
                 $exitSelect .= "</select>";
 
@@ -217,7 +217,7 @@ try {
             }
 
             $exitNodes = $tailscaleInfo->getExitNodes();
-            if (( ! in_array($_POST['node'], $exitNodes)) && ($_POST['node'] != '')) {
+            if (( ! isset($exitNodes[$_POST['node']])) && ($_POST['node'] != '')) {
                 throw new \Exception("Invalid node parameter");
             }
 

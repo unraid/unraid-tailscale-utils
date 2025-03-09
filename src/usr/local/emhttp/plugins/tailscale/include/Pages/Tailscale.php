@@ -18,6 +18,15 @@ $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
 
 <script src="/webGui/javascript/jquery.tablesorter.widgets.js"></script>
 
+<script src="/plugins/tailscale/vendor/select2/select2.min.js"></script>
+<link href="/plugins/tailscale/vendor/select2/select2.min.css" rel="stylesheet" />
+
+<style>
+.select2-container{
+    margin: 10px 12px 10px 0;
+}
+</style>
+
 <script>
 
 function tailscaleControlsDisabled(val) {
@@ -34,6 +43,7 @@ function showTailscaleConfig() {
     $("#connectionTable").trigger("destroy");
     $('#connectionTable').html(data.connection);
     $('div.spinner.fixed').hide('fast');
+    $("#exitNodeSelect").select2();
     tailscaleControlsDisabled(false);
     validateTailscaleRoute();
   },"json");
