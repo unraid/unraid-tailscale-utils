@@ -264,21 +264,23 @@ class System
         }
     }
 
-    private static function disableTailscaleFeature(bool $allow, string $flag): void
+    private static function disableTailscaleFeature(LocalAPI $localAPI, bool $allow, string $flag): void
     {
         if ($allow) {
             Utils::logmsg("Ignoring {$flag}");
         } else {
-            Utils::run_command("/usr/local/sbin/tailscale set {$flag}=false");
+            $localAPI->patchPref($flag, false);
         }
     }
 
     public static function applyTailscaleConfig(Config $config): void
     {
-        self::disableTailscaleFeature($config->AllowRoutes, '--accept-routes');
-        self::disableTailscaleFeature($config->AllowDNS, '--accept-dns');
+        $localAPI = new LocalAPI();
 
-        self::disableTailscaleFeature(false, '--stateful-filtering');
+        self::disableTailscaleFeature($localAPI, $config->AllowRoutes, 'RouteAll');
+        self::disableTailscaleFeature($localAPI, $config->AllowDNS, 'CorpDNS');
+
+        $localAPI->patchPref('NoStatefulFiltering', true);
     }
 
     public static function createTailscaledParamsFile(Config $config): void
