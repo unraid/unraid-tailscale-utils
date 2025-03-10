@@ -73,4 +73,10 @@ class LocalAPI
 
         $this->tailscaleLocalAPI('v0/prefs', APIMethods::PATCH, (object) $body);
     }
+
+    public function postTkaSign(string $key): void
+    {
+        $body = ["NodeKey" => $key];
+        $this->tailscaleLocalAPI("v0/tka/sign", APIMethods::POST, (object) $body);
+    }
 }
