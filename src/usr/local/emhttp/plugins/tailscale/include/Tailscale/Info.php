@@ -22,9 +22,9 @@ class Info
         $this->tr         = $tr;
         $this->smbEnabled = $share_config['shareSMBEnabled'] ?? "";
         $this->useNetbios = $ident_config['USE_NETBIOS']     ?? "";
-        $this->status     = $this->localAPI->getTailscaleStatus();
-        $this->prefs      = $this->localAPI->getTailscalePrefs();
-        $this->lock       = $this->localAPI->getTailscaleLockStatus();
+        $this->status     = $this->localAPI->getStatus();
+        $this->prefs      = $this->localAPI->getPrefs();
+        $this->lock       = $this->localAPI->getTkaStatus();
     }
 
     public function getStatus(): \stdClass
@@ -381,7 +381,7 @@ class Info
                 if (isset($status->Location->City)) {
                     $nodeName .= " (" . $status->Location->City . ")";
                 }
-                $exitNodes[$status->DNSName] = $nodeName;
+                $exitNodes[$status->ID] = $nodeName;
             }
         }
 
@@ -392,7 +392,7 @@ class Info
     {
         foreach ($this->status->Peer as $node => $status) {
             if ($status->ExitNode ?? false) {
-                return $status->DNSName;
+                return $status->ID;
             }
         }
 

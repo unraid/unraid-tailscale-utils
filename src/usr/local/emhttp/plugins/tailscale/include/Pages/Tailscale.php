@@ -54,6 +54,12 @@ async function setFeature(feature, enable) {
     var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'set-feature', feature: feature, enable: enable});
     showTailscaleConfig();
 }
+async function setAdvertiseExitNode(enable) {
+    $('div.spinner.fixed').show('fast');
+    tailscaleControlsDisabled(true);
+    var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'set-advertise-exit-node', enable: enable});
+    showTailscaleConfig();
+}
 async function tailscaleUp() {
   $('div.spinner.fixed').show('fast');
   tailscaleControlsDisabled(true);
@@ -70,7 +76,6 @@ async function setTailscaleExitNode() {
     var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'exit-node', node: $('#exitNodeSelect').val()});
     showTailscaleConfig();
 }
-
 async function removeTailscaleRoute(route) {
     $('div.spinner.fixed').show('fast');
     tailscaleControlsDisabled(true);

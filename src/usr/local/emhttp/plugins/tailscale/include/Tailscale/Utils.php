@@ -251,4 +251,12 @@ class Utils
 
         return false;
     }
+
+    /**
+     * @return array<string>
+     */
+    public static function getExitRoutes(): array
+    {
+        return ["0.0.0.0/0", "::/0"];
+    }
 }

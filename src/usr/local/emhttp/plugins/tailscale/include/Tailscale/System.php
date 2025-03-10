@@ -138,7 +138,7 @@ class System
     public static function notifyOnKeyExpiration(): void
     {
         $localAPI = new LocalAPI();
-        $status   = $localAPI->getTailscaleStatus();
+        $status   = $localAPI->getStatus();
 
         if (isset($status->Self->KeyExpiry)) {
             $expiryTime = new \DateTime($status->Self->KeyExpiry);
@@ -175,7 +175,7 @@ class System
     public static function refreshWebGuiCert(bool $restartIfChanged = true): void
     {
         $localAPI = new LocalAPI();
-        $status   = $localAPI->getTailscaleStatus();
+        $status   = $localAPI->getStatus();
 
         $certDomains = $status->CertDomains;
 

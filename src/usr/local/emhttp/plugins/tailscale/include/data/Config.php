@@ -45,11 +45,11 @@ try {
                     "<input type='button' value='{$tr->tr("disable")}' onclick='setFeature(\"ssh\", false)'>" :
                     "<input type='button' value='{$tr->tr("enable")}' onclick='setFeature(\"ssh\", true)'>";
 
-                $advertiseExitButton = $tailscaleInfo->usesExitNode() ? "" :
+                $advertiseExitButton = $tailscaleInfo->usesExitNode() ? "<input type='button' value='{$tr->tr("enable")}' disabled>" :
                     (
                         $tailscaleInfo->advertisesExitNode() ?
-                        "<input type='button' value='{$tr->tr("disable")}' onclick='setFeature(\"advertise-exit\", false)'>" :
-                        "<input type='button' value='{$tr->tr("enable")}' onclick='setFeature(\"advertise-exit\", true)'>"
+                        "<input type='button' value='{$tr->tr("disable")}' onclick='setAdvertiseExitNode(false)'>" :
+                        "<input type='button' value='{$tr->tr("enable")}' onclick='setAdvertiseExitNode(true)'>"
                     );
 
                 $exitLocalButton = $tailscaleInfo->exitNodeLocalAccess() ?
@@ -147,14 +147,13 @@ try {
             break;
         case 'set-feature':
             $features = [
-                'dns'              => 'accept-dns',
-                'routes'           => 'accept-routes',
-                'ssh'              => 'ssh',
-                'exit-allow-local' => 'exit-node-allow-lan-access',
-                'advertise-exit'   => 'advertise-exit-node'
+                'dns'              => 'CorpDNS',
+                'routes'           => 'RouteAll',
+                'ssh'              => 'RunSSH',
+                'exit-allow-local' => 'ExitNodeAllowLANAccess'
             ];
 
-            if ( ! isset($features[$_POST['feature']])) {
+            if ( ! (isset($features[$_POST['feature']]))) {
                 throw new \Exception("Invalid feature: {$_POST['feature']}");
             }
 
@@ -164,13 +163,34 @@ try {
 
             $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
             Utils::logmsg("Setting feature: {$features[$_POST['feature']]} to " . ($enable ? "true" : "false"));
-            Utils::run_command("tailscale set --{$features[$_POST['feature']]}=" . ($enable ? "true" : "false"));
+
+            $localAPI->patchPref($features[$_POST['feature']], $enable);
+            break;
+        case 'set-advertise-exit-node':
+            if ( ! isset($_POST['enable'])) {
+                throw new \Exception("Missing enable parameter");
+            }
+
+            $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
+            Utils::logmsg("Setting advertise exit node to " . ($enable ? "true" : "false"));
+
+            $prefs      = $localAPI->getPrefs();
+            $routes     = $prefs->AdvertiseRoutes;
+            $exitRoutes = Utils::getExitRoutes();
+
+            if ($enable) {
+                $routes = array_unique(array_merge($routes, $exitRoutes));
+            } else {
+                $routes = array_diff($routes, $exitRoutes);
+            }
+
+            $localAPI->patchPref("AdvertiseRoutes", array_values($routes));
             break;
         case 'up':
             Utils::logmsg("Getting Auth URL");
             $authURL = $tailscaleInfo->getAuthURL();
             if ($authURL == "") {
-                $localAPI->requestAuthURL();
+                $localAPI->postLoginInteractive();
                 $retries = 0;
                 while ($retries < 60) {
                     $tailscaleInfo = new Info($tr);
@@ -194,7 +214,7 @@ try {
             $advertisedRoutes = $tailscaleInfo->getAdvertisedRoutes();
             $advertisedRoutes = array_diff($advertisedRoutes, [$_POST['route']]);
 
-            Utils::run_command("tailscale set --advertise-routes='" . implode(",", $advertisedRoutes) . "'");
+            $localAPI->patchPref("AdvertiseRoutes", array_values($advertisedRoutes));
             break;
         case 'add-route':
             if ( ! isset($_POST['route'])) {
@@ -210,7 +230,7 @@ try {
             $advertisedRoutes   = $tailscaleInfo->getAdvertisedRoutes();
             $advertisedRoutes[] = $_POST['route'];
 
-            Utils::run_command("tailscale set --advertise-routes='" . implode(",", $advertisedRoutes) . "'");
+            $localAPI->patchPref("AdvertiseRoutes", array_values($advertisedRoutes));
             break;
         case 'exit-node':
             if ( ! isset($_POST['node'])) {
@@ -224,7 +244,7 @@ try {
 
             Utils::logmsg("Setting exit node: {$_POST['node']}");
 
-            Utils::run_command("tailscale set --exit-node='{$_POST['node']}'");
+            $localAPI->patchPref("ExitNodeID", $_POST['node']);
             break;
     }
 } catch (\Throwable $e) {

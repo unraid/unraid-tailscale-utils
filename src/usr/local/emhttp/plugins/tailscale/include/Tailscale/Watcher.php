@@ -43,7 +43,7 @@ class Watcher
                     $need_ip = false;
 
                     $localAPI = new LocalAPI();
-                    $status   = $localAPI->getTailscaleStatus();
+                    $status   = $localAPI->getStatus();
                     $tsName   = $status->Self->DNSName;
 
                     Utils::run_task('Tailscale\System::applyTailscaleConfig', array($this->config));
@@ -57,7 +57,7 @@ class Watcher
                 // Watch for changes to the DNS name (e.g., if someone changes the tailnet name or the Tailscale name of the server via the admin console)
                 // If a change happens, refresh the Tailscale WebGUI certificate
                 $localAPI  = new LocalAPI();
-                $status    = $localAPI->getTailscaleStatus();
+                $status    = $localAPI->getStatus();
                 $newTsName = $status->Self->DNSName;
 
                 if ($newTsName != $tsName) {
