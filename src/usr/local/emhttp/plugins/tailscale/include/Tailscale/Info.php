@@ -7,6 +7,7 @@ class Info
     private string $useNetbios;
     private string $smbEnabled;
     private Translator $tr;
+    private LocalAPI $localAPI;
     private \stdClass $status;
     private \stdClass $prefs;
     private \stdClass $lock;
@@ -16,30 +17,29 @@ class Info
         $share_config = parse_ini_file("/boot/config/share.cfg") ?: array();
         $ident_config = parse_ini_file("/boot/config/ident.cfg") ?: array();
 
+        $this->localAPI = new LocalAPI();
+
         $this->tr         = $tr;
         $this->smbEnabled = $share_config['shareSMBEnabled'] ?? "";
         $this->useNetbios = $ident_config['USE_NETBIOS']     ?? "";
-        $this->status     = self::getStatus();
-        $this->prefs      = self::getPrefs();
-        $this->lock       = self::getLock();
+        $this->status     = $this->localAPI->getStatus();
+        $this->prefs      = $this->localAPI->getPrefs();
+        $this->lock       = $this->localAPI->getTkaStatus();
     }
 
-    public static function getStatus(): \stdClass
+    public function getStatus(): \stdClass
     {
-        exec("tailscale status --json", $out_status);
-        return (object) json_decode(implode($out_status));
+        return $this->status;
     }
 
-    public static function getPrefs(): \stdClass
+    public function getPrefs(): \stdClass
     {
-        exec("tailscale debug prefs", $out_prefs);
-        return (object) json_decode(implode($out_prefs));
+        return $this->prefs;
     }
 
-    public static function getLock(): \stdClass
+    public function getLock(): \stdClass
     {
-        exec("tailscale lock status -json=true", $out_status);
-        return (object) json_decode(implode($out_status));
+        return $this->lock;
     }
 
     private function tr(string $message): string
@@ -381,7 +381,7 @@ class Info
                 if (isset($status->Location->City)) {
                     $nodeName .= " (" . $status->Location->City . ")";
                 }
-                $exitNodes[$status->DNSName] = $nodeName;
+                $exitNodes[$status->ID] = $nodeName;
             }
         }
 
@@ -392,7 +392,7 @@ class Info
     {
         foreach ($this->status->Peer as $node => $status) {
             if ($status->ExitNode ?? false) {
-                return $status->DNSName;
+                return $status->ID;
             }
         }
 
