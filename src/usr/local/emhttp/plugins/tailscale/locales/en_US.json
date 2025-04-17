@@ -44,6 +44,7 @@
         "erase": "Erase Tailscale Configuration",
         "diagnostics": "Plugin Diagnostics",
         "donate": "Donate",
+        "reauthenticate": "Reauthenticate",
         "context": {
             "unraid_listen": "Configures Unraid services (SSH, WebGUI, SMB, etc.) to listen on Tailscale addresses.",
             "ip_forward": "Sets net.ipv4.ip_forward and net.ipv6.conf.all.forwarding to 1 in sysctl. This change occurs immediately when being enabled.",
@@ -58,7 +59,8 @@
             "ignore": "If set to ignore, the plugin will not modify the setting",
             "outbound_network": "These settings only apply to outbound network traffic from Unraid or running containers. They do not affect advertised routes, exit nodes, or the ability to access Unraid via MagicDNS. These should generally be left off unless specifically needed. Turning these on may cause network issues.",
             "save": "Tailscale will be restarted when changes are applied",
-            "donate": "If this plugin helps you, please consider donating."
+            "donate": "If this plugin helps you, please consider donating.",
+            "reauthenticate": "Force a Tailscale reauthentication. This will disconnect Tailscale until the authentication is completed."
         }
     },
     "help": {
@@ -97,6 +99,7 @@
         "use_exit_node": "Use Exit Node",
         "exit_node_local": "Allow LAN Access while using Exit Node",
         "unapproved": "Needs approval in admin console",
+        "connected_via": "Connected via Tailscale",
         "lock": {
             "node_key": "Node Key",
             "public_key": "Public Key",

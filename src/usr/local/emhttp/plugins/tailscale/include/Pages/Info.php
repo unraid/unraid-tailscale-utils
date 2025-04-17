@@ -32,6 +32,7 @@ echo Utils::printRow($tr->tr("info.online"), $tailscaleStatusInfo->Online);
 echo Utils::printRow($tr->tr("info.key_expire"), $tailscaleStatusInfo->KeyExpiration);
 echo Utils::printRow($tr->tr("info.tags"), $tailscaleStatusInfo->Tags);
 echo Utils::printRow("{$lockTranslate}: " . $tr->tr("enabled"), $tailscaleStatusInfo->LockEnabled);
+echo Utils::printRow($tr->tr("info.connected_via"), $tailscaleInfo->connectedViaTS() ? $tr->tr("yes") : $tr->tr("no"));
 
 if ($tailscaleStatusInfo->LockInfo != null) {
     echo Utils::printRow("{$lockTranslate}: " . $tr->tr("info.lock.signed"), $tailscaleStatusInfo->LockInfo->LockSigned);

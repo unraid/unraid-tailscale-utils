@@ -79,4 +79,9 @@ class LocalAPI
         $body = ["NodeKey" => $key];
         $this->tailscaleLocalAPI("v0/tka/sign", APIMethods::POST, (object) $body);
     }
+
+    public function expireKey(): void
+    {
+        $this->tailscaleLocalAPI('v0/set-expiry-sooner?expiry=0', APIMethods::POST);
+    }
 }

@@ -375,7 +375,7 @@ class Info
     {
         $exitNodes = array();
 
-        foreach ($this->status->Peer as $node => $status) {
+        foreach (($this->status->Peer ?? array()) as $node => $status) {
             if ($status->ExitNodeOption ?? false) {
                 $nodeName = $status->DNSName;
                 if (isset($status->Location->City)) {
@@ -390,12 +390,17 @@ class Info
 
     public function getCurrentExitNode(): string
     {
-        foreach ($this->status->Peer as $node => $status) {
+        foreach (($this->status->Peer ?? array()) as $node => $status) {
             if ($status->ExitNode ?? false) {
                 return $status->ID;
             }
         }
 
         return "";
+    }
+
+    public function connectedViaTS(): bool
+    {
+        return in_array($_SERVER['SERVER_ADDR'] ?? "", $this->status->TailscaleIPs ?? array());
     }
 }
