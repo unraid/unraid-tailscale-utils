@@ -211,7 +211,7 @@ if ($tailscaleConfig->Enable) {
 
     async function expireTailscaleKeyNow() {
         $('div.spinner.fixed').show('fast');
-        var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'expire-now'});
+        var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'expire-key'});
         location.reload();
     }
 </script>

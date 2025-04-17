@@ -236,6 +236,7 @@ try {
             if ($tailscaleInfo->connectedViaTS()) {
                 throw new \Exception("Cannot expire key while connected via Tailscale");
             }
+            Utils::logmsg("Expiring node key");
             $localAPI->expireKey();
             break;
         case 'exit-node':
