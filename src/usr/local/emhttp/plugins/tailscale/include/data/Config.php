@@ -232,6 +232,12 @@ try {
 
             $localAPI->patchPref("AdvertiseRoutes", array_values($advertisedRoutes));
             break;
+        case 'expire-key':
+            if ($tailscaleInfo->connectedViaTS()) {
+                throw new \Exception("Cannot expire key while connected via Tailscale");
+            }
+            $localAPI->expireKey();
+            break;
         case 'exit-node':
             if ( ! isset($_POST['node'])) {
                 throw new \Exception("Missing node parameter");

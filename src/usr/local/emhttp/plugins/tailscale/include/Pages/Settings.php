@@ -9,7 +9,20 @@ if (( ! isset($var)) || ( ! isset($display))) {
     echo("Missing required WebGUI variables");
     return;
 }
+
+// Used to disable buttons that should not be used over Tailscale since the connection will break.
+// (erase config, reauth, etc.)
+$tailscaleDisconnect = " disabled";
+
+if ($tailscaleConfig->Enable) {
+    $tailscaleInfo = $tailscaleInfo ?? new Info($tr);
+    if ( ! $tailscaleInfo->connectedViaTS()) {
+        $tailscaleDisconnect = "";
+    }
+}
+
 ?>
+
 <link type="text/css" rel="stylesheet" href="<?= Utils::auto_v('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?= Utils::auto_v('/webGui/styles/jquery.switchbutton.css');?>">
 <span class="status vhshift"><input type="checkbox" class="advancedview"></span>
@@ -157,6 +170,15 @@ if (( ! isset($var)) || ( ! isset($display))) {
 <?php } ?>
 
 <div class="advanced">
+<h3><?= $tr->tr("settings.reauthenticate"); ?></h3>
+
+<dl>
+    <dt><?= $tr->tr("settings.context.reauthenticate"); ?></dt>
+    <dd>
+        <input type="button" value="<?= $tr->tr('settings.reauthenticate'); ?>" onclick="expireTailscaleKeyNow()" <?= $tailscaleDisconnect; ?>>
+    </dd>
+</dl>
+
 <h3><?= $tr->tr("settings.erase"); ?></h3>
 
 <form method="POST" action="/update.php" target="progressFrame">
@@ -164,7 +186,7 @@ if (( ! isset($var)) || ( ! isset($display))) {
 <dl>
     <dt><?= $tr->tr("settings.context.erase"); ?></dt>
     <dd>
-        <input type="button" value="<?= $tr->tr('Erase'); ?>" onclick="requestErase(this)"><input id="tailscale_erase_confirm" type="submit" value="<?= $tr->tr('Confirm'); ?>" style="display: none;">
+        <input type="button" value="<?= $tr->tr('Erase'); ?>" onclick="requestErase(this)" <?= $tailscaleDisconnect; ?>><input id="tailscale_erase_confirm" type="submit" value="<?= $tr->tr('Confirm'); ?>" style="display: none;">
     </dd>
 </dl>
 </form>
@@ -185,6 +207,12 @@ if (( ! isset($var)) || ( ! isset($display))) {
         e.disabled = true;
         var confirmButton = document.getElementById('tailscale_erase_confirm');
         confirmButton.style.display = "inline";
+    }
+
+    async function expireTailscaleKeyNow() {
+        $('div.spinner.fixed').show('fast');
+        var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'expire-now'});
+        location.reload();
     }
 </script>
 <script>

@@ -398,4 +398,9 @@ class Info
 
         return "";
     }
+
+    public function connectedViaTS(): bool
+    {
+        return in_array($_SERVER['SERVER_ADDR'] ?? "", $this->status->TailscaleIPs ?? array());
+    }
 }
