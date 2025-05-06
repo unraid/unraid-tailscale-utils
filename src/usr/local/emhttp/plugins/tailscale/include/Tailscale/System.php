@@ -54,14 +54,45 @@ class System
             $connection = @fsockopen($tailscale_ipv4, $ident_config['PORT']);
 
             if (is_resource($connection)) {
-                if ((intval(date("i")) % 10 == 0)) {
-                    Utils::logmsg("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}");
-                }
+                Utils::logmsg("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}", false, true);
             } else {
                 Utils::logmsg("WebGUI not listening on {$tailscale_ipv4}:{$ident_config['PORT']}, terminating and restarting");
                 Utils::run_command("/etc/rc.d/rc.nginx term");
                 sleep(5);
                 Utils::run_command("/etc/rc.d/rc.nginx start");
+            }
+        }
+    }
+
+    public static function checkServeConfig(): void
+    {
+        $ident_config = parse_ini_file("/boot/config/ident.cfg") ?: array();
+
+        $httpPort = isset($ident_config['PORT']) && is_scalar($ident_config['PORT'])
+                     ? intval($ident_config['PORT']) : 80;
+        $httpsPort = -1;
+
+        if (($ident_config['USE_SSL'] ?? "no") != "no") {
+            $httpsPort = isset($ident_config['PORTSSL']) && is_scalar($ident_config['PORTSSL'])
+                         ? intval($ident_config['PORTSSL']) : 443;
+        }
+
+        $localAPI    = new LocalAPI();
+        $serveConfig = $localAPI->getServeConfig();
+
+        $tcpConfig = $serveConfig->TCP ?? array();
+
+        foreach ($tcpConfig as $key => $val) {
+            $configPort = intval($key);
+
+            if ($configPort == $httpPort || $configPort == $httpsPort) {
+                Utils::logmsg("Serve TCP Port {$configPort} conflicts with WebGUI, removing");
+                $localAPI->resetServeConfig();
+                Utils::run_command(self::RESTART_COMMAND);
+
+                return;
+            } else {
+                Utils::logmsg("Checked for WebGUI conflict with serve TCP Port {$configPort}", false, true);
             }
         }
     }

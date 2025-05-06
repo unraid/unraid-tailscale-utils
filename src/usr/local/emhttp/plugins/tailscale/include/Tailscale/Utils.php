@@ -194,8 +194,13 @@ class Utils
         return $output;
     }
 
-    public static function logmsg(string $message, bool $debug = false): void
+    public static function logmsg(string $message, bool $debug = false, bool $rateLimit = false): void
     {
+        if ($rateLimit && (intval(date("i")) % 10 != 0)) {
+            // Only log rate limited messages every 10 minutes
+            return;
+        }
+
         if ($debug) {
             if (defined("TAILSCALE_TRUNK")) {
                 $message = "DEBUG: " . $message;

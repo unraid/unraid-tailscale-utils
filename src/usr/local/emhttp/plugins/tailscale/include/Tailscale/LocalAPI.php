@@ -60,6 +60,16 @@ class LocalAPI
         return (object) json_decode($this->tailscaleLocalAPI('v0/tka/status'));
     }
 
+    public function getServeConfig(): \stdClass
+    {
+        return (object) json_decode($this->tailscaleLocalAPI('v0/serve-config'));
+    }
+
+    public function resetServeConfig(): void
+    {
+        $this->tailscaleLocalAPI("v0/serve-config", APIMethods::POST, new \stdClass());
+    }
+
     public function postLoginInteractive(): void
     {
         $this->tailscaleLocalAPI('v0/login-interactive', APIMethods::POST);
