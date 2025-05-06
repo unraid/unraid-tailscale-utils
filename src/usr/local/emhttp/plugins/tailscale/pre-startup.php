@@ -12,8 +12,6 @@ Utils::run_task('Tailscale\System::createTailscaledParamsFile', array($tailscale
 Utils::run_task('Tailscale\System::applyGRO');
 Utils::run_task('Tailscale\System::setExtraInterface', array($tailscaleConfig));
 Utils::run_task('Tailscale\System::enableIPForwarding', array($tailscaleConfig));
-Utils::run_task('Tailscale\System::patchNginx');
-Utils::run_task('Tailscale\System::patchSSH', array($tailscaleConfig));
 
 if ($tailscaleConfig->Enable) {
     Utils::run_command('/etc/rc.d/rc.tailscale restart > /dev/null &');

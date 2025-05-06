@@ -34,24 +34,6 @@ class System
         }
     }
 
-    public static function patchSSH(Config $config): void
-    {
-        $version = parse_ini_file('/etc/unraid-version') ?: array();
-
-        if ($version['version'] == "6.12.0") {
-            Utils::logmsg("Unraid 6.12.0: Checking SSH startup script");
-            $ssh = file_get_contents('/etc/rc.d/rc.sshd') ?: "";
-
-            if (str_contains($ssh, '$family')) {
-                Utils::logmsg("Unraid 6.12.0: Repairing SSH startup script");
-                $ssh = str_replace('$family', 'any', $ssh);
-                file_put_contents('/etc/rc.d/rc.sshd', $ssh);
-            }
-        } else {
-            Utils::logmsg("Unraid 6.12.0: SSH startup script not applicable");
-        }
-    }
-
     public static function checkWebgui(Config $config, string $tailscale_ipv4): void
     {
         // Make certain that the WebGUI is listening on the Tailscale interface
@@ -127,31 +109,6 @@ class System
             file_put_contents('/etc/sysctl.d/99-tailscale.conf', $sysctl);
             Utils::run_command("sysctl -p /etc/sysctl.d/99-tailscale.conf", true);
         }
-    }
-
-    public static function patchNginx(): void
-    {
-        $original = 'location ~ \.php$ {';
-        $replace  = <<<'END'
-            location ~ ^(.+\.php)(.*)$ {
-                fastcgi_split_path_info  ^(.+\.php)(.*)$;
-                fastcgi_param PATH_INFO  $fastcgi_path_info;
-            END;
-
-        $nginx = file_get_contents("/etc/rc.d/rc.nginx") ?: "";
-
-        if (strpos($nginx, $original) !== false) {
-            // Patch the rc.nginx file
-            Utils::logmsg("Detected original rc.nginx, applying patch.");
-
-            if ( ! file_exists("/etc/rc.d/rc.nginx.pre-tailscale")) {
-                copy("/etc/rc.d/rc.nginx", "/etc/rc.d/rc.nginx.pre-tailscale");
-            }
-            $newFile = str_replace($original, $replace, $nginx);
-            file_put_contents("/etc/rc.d/rc.nginx", $newFile);
-        }
-
-        Utils::run_command("/etc/rc.d/rc.nginx reload 2>&1");
     }
 
     public static function applyGRO(): void
