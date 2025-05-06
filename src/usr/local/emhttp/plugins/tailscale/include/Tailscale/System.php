@@ -2,6 +2,13 @@
 
 namespace Tailscale;
 
+enum NotificationType: string
+{
+    case NORMAL  = 'normal';
+    case WARNING = 'warning';
+    case ALERT   = 'alert';
+}
+
 class System
 {
     public const RESTART_COMMAND = "/usr/local/emhttp/webGui/scripts/reload_services";
@@ -87,6 +94,12 @@ class System
 
             if ($configPort == $httpPort || $configPort == $httpsPort) {
                 Utils::logmsg("Serve TCP Port {$configPort} conflicts with WebGUI, removing");
+                self::sendNotification(
+                    "Tailscale Serve Port Conflict",
+                    "Tailscale Serve Port Conflict",
+                    "Port {$configPort} conflicts with WebGUI port. The Tailscale serve config has been reset to remove the conflict.",
+                    NotificationType::ALERT
+                );
                 $localAPI->resetServeConfig();
                 Utils::run_command(self::RESTART_COMMAND);
 
@@ -184,23 +197,27 @@ class System
 
             switch (true) {
                 case $interval->days <= 7:
-                    $priority = 'alert';
+                    $priority = NotificationType::ALERT;
                     break;
                 case $interval->days <= 30:
-                    $priority = 'warning';
+                    $priority = NotificationType::WARNING;
                     break;
                 default:
                     return;
             }
 
-            $event = "Tailscale Key Expiration - {$priority} - {$expiryTime->format('Ymd')}";
+            $event = "Tailscale Key Expiration - {$priority->value} - {$expiryTime->format('Ymd')}";
             Utils::logmsg("Sending notification for key expiration: {$event}");
-
-            $command = self::NOTIFY_COMMAND . " -l '/Settings/Tailscale' -e " . escapeshellarg($event) . " -s " . escapeshellarg("Tailscale key is expiring") . " -d " . escapeshellarg("{$message}") . " -i \"{$priority}\" -x 2>/dev/null";
-            exec($command);
+            self::sendNotification($event, "Tailscale key is expiring", $message, $priority);
         } else {
             Utils::logmsg("Tailscale key expiration is not set.");
         }
+    }
+
+    public static function sendNotification(string $event, string $subject, string $message, NotificationType $priority): void
+    {
+        $command = self::NOTIFY_COMMAND . " -l '/Settings/Tailscale' -e " . escapeshellarg($event) . " -s " . escapeshellarg($subject) . " -d " . escapeshellarg("{$message}") . " -i \"{$priority->value}\" -x 2>/dev/null";
+        exec($command);
     }
 
     public static function refreshWebGuiCert(bool $restartIfChanged = true): void
