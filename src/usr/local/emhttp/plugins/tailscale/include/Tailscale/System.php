@@ -82,9 +82,22 @@ class System
         $localAPI    = new LocalAPI();
         // …
     }
-        $serveConfig = $localAPI->getServeConfig();
+    $localAPI    = new LocalAPI();
+    $serveConfig = $localAPI->getServeConfig();
 
-        $tcpConfig = $serveConfig->TCP ?? array();
+    // Check if we got a valid response
+    if (!isset($serveConfig) || !is_object($serveConfig)) {
+        Utils::logmsg("Failed to get valid serve config");
+        return;
+    }
+
+    $tcpConfig = isset($serveConfig->TCP) ? $serveConfig->TCP : array();
+
+    // Ensure tcpConfig is iterable
+    if (!is_array($tcpConfig) && !is_object($tcpConfig)) {
+        Utils::logmsg("TCP config is not iterable");
+        return;
+    }
 
         foreach ($tcpConfig as $key => $val) {
             $configPort = intval($key);
