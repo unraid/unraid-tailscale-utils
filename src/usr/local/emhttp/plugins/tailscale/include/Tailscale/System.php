@@ -66,6 +66,39 @@ class System
         }
     }
 
+    public static function checkServeConfig(): void
+    {
+        $ident_config = parse_ini_file("/boot/config/ident.cfg") ?: array();
+
+        $httpPort  = intval($ident_config['PORT'] ?? 80);
+        $httpsPort = -1;
+
+        if (($ident_config['USE_SSL'] ?? "no") != "no") {
+            $httpsPort = intval($ident_config['PORTSSL'] ?? 443);
+        }
+
+        $localAPI    = new LocalAPI();
+        $serveConfig = $localAPI->getServeConfig();
+
+        $tcpConfig = $serveConfig->TCP ?? array();
+
+        foreach ($tcpConfig as $key => $val) {
+            $configPort = intval($key);
+
+            if ($configPort == $httpPort || $configPort == $httpsPort) {
+                Utils::logmsg("Serve TCP Port {$configPort} conflicts with WebGUI, removing");
+                $localAPI->resetServeConfig();
+                Utils::run_command(self::RESTART_COMMAND);
+
+                return;
+            } else {
+                if ((intval(date("i")) % 10 == 0)) {
+                    Utils::logmsg("Checked for WebGUI conflict with serve TCP Port {$configPort}");
+                }
+            }
+        }
+    }
+
     public static function restartSystemServices(Config $config): void
     {
         if ($config->IncludeInterface) {

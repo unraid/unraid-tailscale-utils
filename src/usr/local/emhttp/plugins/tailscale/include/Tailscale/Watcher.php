@@ -52,6 +52,7 @@ class Watcher
                 }
 
                 Utils::run_task('Tailscale\System::checkWebgui', array($this->config, $tailscale_ipv4));
+                Utils::run_task('Tailscale\System::checkServeConfig');
                 Utils::run_task('Tailscale\System::fixLocalSubnetRoutes');
 
                 // Watch for changes to the DNS name (e.g., if someone changes the tailnet name or the Tailscale name of the server via the admin console)
