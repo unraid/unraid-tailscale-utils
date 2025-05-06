@@ -70,14 +70,18 @@ class System
     {
         $ident_config = parse_ini_file("/boot/config/ident.cfg") ?: array();
 
-        $httpPort  = intval($ident_config['PORT'] ?? 80);
+        $httpPort  = isset($ident_config['PORT']) && is_scalar($ident_config['PORT'])
+                     ? intval($ident_config['PORT']) : 80;
         $httpsPort = -1;
 
         if (($ident_config['USE_SSL'] ?? "no") != "no") {
-            $httpsPort = intval($ident_config['PORTSSL'] ?? 443);
+            $httpsPort = isset($ident_config['PORTSSL']) && is_scalar($ident_config['PORTSSL'])
+                         ? intval($ident_config['PORTSSL']) : 443;
         }
 
         $localAPI    = new LocalAPI();
+        // …
+    }
         $serveConfig = $localAPI->getServeConfig();
 
         $tcpConfig = $serveConfig->TCP ?? array();
