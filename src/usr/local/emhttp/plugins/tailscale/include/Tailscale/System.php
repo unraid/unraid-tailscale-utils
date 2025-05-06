@@ -54,9 +54,7 @@ class System
             $connection = @fsockopen($tailscale_ipv4, $ident_config['PORT']);
 
             if (is_resource($connection)) {
-                if ((intval(date("i")) % 10 == 0)) {
-                    Utils::logmsg("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}");
-                }
+                Utils::logmsg("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}", false, true);
             } else {
                 Utils::logmsg("WebGUI not listening on {$tailscale_ipv4}:{$ident_config['PORT']}, terminating and restarting");
                 Utils::run_command("/etc/rc.d/rc.nginx term");
@@ -70,7 +68,7 @@ class System
     {
         $ident_config = parse_ini_file("/boot/config/ident.cfg") ?: array();
 
-        $httpPort  = isset($ident_config['PORT']) && is_scalar($ident_config['PORT'])
+        $httpPort = isset($ident_config['PORT']) && is_scalar($ident_config['PORT'])
                      ? intval($ident_config['PORT']) : 80;
         $httpsPort = -1;
 
@@ -80,24 +78,9 @@ class System
         }
 
         $localAPI    = new LocalAPI();
-        // …
-    }
-    $localAPI    = new LocalAPI();
-    $serveConfig = $localAPI->getServeConfig();
+        $serveConfig = $localAPI->getServeConfig();
 
-    // Check if we got a valid response
-    if (!isset($serveConfig) || !is_object($serveConfig)) {
-        Utils::logmsg("Failed to get valid serve config");
-        return;
-    }
-
-    $tcpConfig = isset($serveConfig->TCP) ? $serveConfig->TCP : array();
-
-    // Ensure tcpConfig is iterable
-    if (!is_array($tcpConfig) && !is_object($tcpConfig)) {
-        Utils::logmsg("TCP config is not iterable");
-        return;
-    }
+        $tcpConfig = $serveConfig->TCP ?? array();
 
         foreach ($tcpConfig as $key => $val) {
             $configPort = intval($key);
@@ -109,9 +92,7 @@ class System
 
                 return;
             } else {
-                if ((intval(date("i")) % 10 == 0)) {
-                    Utils::logmsg("Checked for WebGUI conflict with serve TCP Port {$configPort}");
-                }
+                Utils::logmsg("Checked for WebGUI conflict with serve TCP Port {$configPort}", false, true);
             }
         }
     }

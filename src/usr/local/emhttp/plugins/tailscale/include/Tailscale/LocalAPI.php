@@ -67,8 +67,7 @@ class LocalAPI
 
     public function resetServeConfig(): void
     {
-        $body = [];
-        $this->tailscaleLocalAPI("v0/serve-config", APIMethods::POST, (object) $body);
+        $this->tailscaleLocalAPI("v0/serve-config", APIMethods::POST, new \stdClass());
     }
 
     public function postLoginInteractive(): void
