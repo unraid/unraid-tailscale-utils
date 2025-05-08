@@ -175,7 +175,7 @@ try {
             Utils::logmsg("Setting advertise exit node to " . ($enable ? "true" : "false"));
 
             $prefs      = $localAPI->getPrefs();
-            $routes     = $prefs->AdvertiseRoutes;
+            $routes     = $prefs->AdvertiseRoutes ?? array();
             $exitRoutes = Utils::getExitRoutes();
 
             if ($enable) {
