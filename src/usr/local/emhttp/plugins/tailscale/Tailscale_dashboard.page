@@ -4,7 +4,9 @@ Menu="Dashboard:0"
 <?php
 
 try {
-    require_once "/usr/local/emhttp/plugins/tailscale/include/page.php";
+    $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+    require_once "{$docroot}/plugins/tailscale/include/page.php";
+
     $mytiles['tailscale']['column2'] = Tailscale\getPage("Dashboard", false);
 } catch (Throwable $e) {
     $mytiles['tailscale']['column2'] = '<tbody title="Tailscale"><tr><td>An error occurred loading the Tailscale dashboard widget.</td></tr></tbody>';

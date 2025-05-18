@@ -3,7 +3,7 @@
 namespace Tailscale;
 
 try {
-    require_once "/usr/local/emhttp/plugins/tailscale/include/common.php";
+    require_once dirname(dirname(__FILE__)) . "/common.php";
 
     $tailscaleConfig = $tailscaleConfig ?? new Config();
     $tr              = $tr              ?? new Translator();

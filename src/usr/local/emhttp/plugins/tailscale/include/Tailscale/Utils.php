@@ -22,7 +22,16 @@ class Utils
     */
     private static function send_usage(string $url, array $content): int
     {
-        $body  = json_encode($content);
+        if (empty($url)) {
+            throw new \InvalidArgumentException("URL cannot be empty");
+        }
+
+        $body = json_encode($content);
+
+        if ( ! $body) {
+            throw new \InvalidArgumentException("Failed to encode JSON");
+        }
+
         $token = self::download_url($url . '?connect');
 
         $c = curl_init();
@@ -124,6 +133,10 @@ class Utils
 
     public static function download_url(string $url): string
     {
+        if (empty($url)) {
+            throw new \InvalidArgumentException("URL cannot be empty");
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
@@ -132,7 +145,6 @@ class Utils
         curl_setopt($ch, CURLOPT_TIMEOUT, 45);
         curl_setopt($ch, CURLOPT_ENCODING, "");
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_REFERER, "");
         curl_setopt($ch, CURLOPT_FAILONERROR, true);
         curl_setopt($ch, CURLOPT_USERAGENT, 'plugin-metrics/1.0.0');
         $out = curl_exec($ch) ?: false;
@@ -166,7 +178,12 @@ class Utils
 
     public static function auto_v(string $file): string
     {
-        global $docroot;
+        $docroot = $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
+
+        if ( ! is_string($docroot)) {
+            $docroot = '/usr/local/emhttp';
+        }
+
         $path = $docroot . $file;
         clearstatcache(true, $path);
         $time    = file_exists($path) ? filemtime($path) : 'autov_fileDoesntExist';
@@ -209,7 +226,7 @@ class Utils
             }
         }
         $timestamp = date('Y/m/d H:i:s');
-        $filename  = basename($_SERVER['PHP_SELF']);
+        $filename  = is_string($_SERVER['PHP_SELF']) ? basename($_SERVER['PHP_SELF']) : "unknown";
         file_put_contents("/var/log/tailscale-utils.log", "{$timestamp} {$filename}: {$message}" . PHP_EOL, FILE_APPEND);
     }
 
