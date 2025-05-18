@@ -23,6 +23,10 @@ function getLog(string $log, int $max): void
 ini_set('memory_limit', '512M'); // Increase memory limit
 
 try {
+    if ( ! is_string($_POST['log']) || ! is_numeric($_POST['max'])) {
+        throw new InvalidArgumentException("Invalid input");
+    }
+
     getLog($_POST['log'], intval($_POST['max']));
 } catch (Throwable $e) {
     echo '<span class="text">', htmlspecialchars($e->getMessage()), "</span>";

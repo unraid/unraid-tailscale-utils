@@ -2,7 +2,9 @@
 
 namespace Tailscale;
 
-foreach (glob("/usr/local/emhttp/plugins/tailscale/include/Tailscale/*.php") ?: array() as $file) {
+define(__NAMESPACE__ . "\PLUGIN_ROOT", dirname(dirname(__FILE__)));
+
+foreach (glob(PLUGIN_ROOT . "/include/" . __NAMESPACE__ . "/*.php") ?: array() as $file) {
     try {
         require $file;
     } catch (\Throwable $e) {
