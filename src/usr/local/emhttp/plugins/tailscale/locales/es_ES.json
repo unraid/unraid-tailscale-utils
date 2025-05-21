@@ -14,7 +14,15 @@
     "none": "Nada",
     "disabled": "Desactivado",
     "enabled": "Activado",
+    "disable": "Desactivar",
+    "enable": "Activar",
     "sign": "Firma",
+    "login": "Iniciar sesión",
+    "add": "Agregar",
+    "remove": "Eliminar",
+    "tailnet": "Tailnet",
+    "configuration": "Configuración",
+    "needs_login": "Este dispositivo necesita iniciar sesión en Tailscale. Actualice esta página después de iniciar sesión para ver el estado.",
     "tailscale_disabled": "Tailscale está desactivada actualmente. Se puede activar a través de la pestaña de ajustes.",
     "tailscale_lock": "Bloqueo de Tailscale",
     "settings": {
@@ -28,29 +36,31 @@
         "usage": "Permitir recolección de datos de uso",
         "services": "Servicios de Tailscale",
         "wireguard": "Puerto Wireguard",
-        "outbound_network": "Redes salientes de Tailscale",
-        "subnets": "Uso de subredes de Tailscale",
-        "dns": "Usar la configuración de DNS de Tailscale",
+        "outbound_network": "Opciones de red avanzadas",
+        "subnets": "Permitir subredes de Tailscale",
+        "dns": "Permitir configuración de DNS de Tailscale",
         "save": "Guardar configuración",
         "restart": "Reiniciar Tailscale",
         "erase": "Borrar configuración de Tailscale",
         "diagnostics": "Diagnósticos de plugin",
         "donate": "Donar",
+        "reauthenticate": "Reautentificar",
         "context": {
             "unraid_listen": "Configura los servicios de Unraid (SSH, WebGUI, SMB, etc.) para escuchar las direcciones de Tailscale.",
             "ip_forward": "Establece net.ipv4.ip_forward y net.ipv6.conf.all.forwarding a 1 en sysctl. Este cambio ocurre inmediatamente cuando se activa.",
             "taildrop": "Especifique la ruta para los archivos entrantes de Taildrop.",
-            "dns": "Acepte DNS de Tailscale.",
-            "subnets": "Acepte rutas de Tailscale.",
+            "dns": "Permite habilitar el DNS de Tailscale vía CLI o WebGUI. Si está deshabilitado, el DNS de Tailscale se deshabilitará al iniciar Tailscale.",
+            "subnets": "Permite habilitar las rutas de Tailscale vía CLI o WebGUI. Si está deshabilitado, las rutas de Tailscale se deshabilitarán al iniciar Tailscale.",
             "wireguard": "Cambie el puerto utilizado para las conexiones de Wireguard. Por lo general, no es necesario cambiarlo.",
             "usage": "Permite la recolección de datos de uso para el plugin de escala reducida. Esto envía un identificador anónimo, la versión actual de Unraid, la versión actual del plugin, y el estado habilitado/desactivado de algunas características. No se recopila información personal o de red.",
             "erase": "Cierra sesión en Tailscale y restablece todos los ajustes a los valores predeterminados",
             "restart": "Reinicie el daemon Tailscale y vuelva a aplicar la configuración.",
             "diagnostics": "Descargar diagnóstico (esto puede tardar algún tiempo en completarse)",
             "ignore": "Si se establece en Ignorar, el plugin no modificará la configuración",
-            "outbound_network": "Esta configuración solo se aplica al tráfico de red saliente de Unraid o contenedores en ejecución. No afectan a las rutas anunciadas, a los nodos de salida ni a la capacidad de acceder a Unraid a través de MagicDNS. Por lo general, deben dejarse a menos que sea específicamente necesario.",
+            "outbound_network": "Esta configuración solo se aplica al tráfico de red saliente de Unraid o contenedores en ejecución. No afectan a las rutas anunciadas, a los nodos de salida ni a la capacidad de acceder a Unraid a través de MagicDNS. Por lo general, deben dejarse desactivadas a menos que sea específicamente necesario. Activar estas opciones puede causar problemas de red.",
             "save": "Tailscale se reiniciará cuando se apliquen los cambios",
-            "donate": "Si este plugin le ayuda, por favor considere la posibilidad de donar."
+            "donate": "Si este plugin le ayuda, por favor considere la posibilidad de donar.",
+            "reauthenticate": "Forzar una reautenticación de Tailscale. Esto desconectará Tailscale hasta que se complete la autenticación."
         }
     },
     "help": {
@@ -84,6 +94,12 @@
         "routes": "Rutas anunciadas",
         "accept_routes": "Aceptar rutas",
         "accept_dns": "Aceptar DNS",
+        "run_ssh": "SSH de Tailscale",
+        "advertise_exit_node": "Ejecutar como nodo de salida",
+        "use_exit_node": "Usar nodo de salida",
+        "exit_node_local": "Permitir acceso LAN al usar nodo de salida",
+        "unapproved": "Requiere aprobación en la consola de administración",
+        "connected_via": "Conectado a través de Tailscale",
         "lock": {
             "node_key": "Clave de nodo",
             "public_key": "Clave pública",
@@ -93,7 +109,7 @@
     },
     "warnings": {
         "key_expiration": "La clave de Tailscale expirará en %s días el %s.",
-        "netbios": "NetBIOS está habilitado en la <a href='/Settings/SMB'>configuración de SMB</a>, lo que puede impedir que se acceda a los recursos compartidos a través de Tailscale.",
+        "netbios": "NetBIOS está habilitado en <a href='/Settings/SMB'>configuración de SMB</a>, lo que puede impedir que se acceda a los recursos compartidos a través de Tailscale.",
         "lock": "La tailnet tiene habilitado el bloqueo, pero este nodo no se ha firmado. No podrá comunicarse con la tailnet."
     },
     "lock": {
@@ -105,5 +121,22 @@
         "unsigned": "La tailnet tiene habilitado el bloqueo y el nodo actual no está firmado. Este nodo no puede comunicarse con la tailnet.",
         "unsigned_instructions": "Para permitir que este nodo se comunique, necesitará confiar en la siguiente clave de un nodo firmante",
         "disabled": "Tu tailnet no tiene bloqueo activado."
+    },
+    "status_page": {
+        "exit_node": "Nodo de salida",
+        "connection_type": "Tipo de conexión",
+        "connection_addr": "Conexión",
+        "tx_bytes": "Bytes Tx",
+        "rx_bytes": "Bytes Rx",
+        "relay": "Relevo",
+        "direct": "Directo",
+        "exit_active": "Activo",
+        "exit_available": "Hay disponible",
+        "idle": "Inactivo",
+        "offline": "Desconectado",
+        "active": "Activo",
+        "login_name": "Nombre de usuario",
+        "shared": "Usuario compartido entrante",
+        "action": "Acción"
     }
 }

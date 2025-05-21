@@ -14,7 +14,15 @@
     "none": "Keine",
     "disabled": "Deaktiviert",
     "enabled": "Aktiviert",
+    "disable": "Deaktivieren",
+    "enable": "Aktivieren",
     "sign": "Signieren",
+    "login": "Anmelden",
+    "add": "Hinzufügen",
+    "remove": "Entfernen",
+    "tailnet": "Tailnet",
+    "configuration": "Konfiguration",
+    "needs_login": "Dieses Gerät muss bei Tailscale angemeldet sein. Aktualisieren Sie diese Seite nach der Anmeldung, um den Status anzuzeigen.",
     "tailscale_disabled": "Tailscale ist derzeit deaktiviert. Es kann über die Registerkarte Einstellungen aktiviert werden.",
     "tailscale_lock": "Tailscale Lock",
     "settings": {
@@ -28,29 +36,31 @@
         "usage": "Erfassung von Nutzungsdaten zulassen",
         "services": "Tailscale-Dienste",
         "wireguard": "Wireguard-Port",
-        "outbound_network": "Tailscale Ausgehende Verbindungen",
-        "subnets": "Tailscale Subnetze verwenden",
-        "dns": "Tailscale DNS Einstellungen verwenden",
+        "outbound_network": "Erweiterte Netzwerkoptionen",
+        "subnets": "Tailscale-Subnetze zulassen",
+        "dns": "Tailscale-DNS-Einstellungen zulassen",
         "save": "Einstellungen speichern",
         "restart": "Tailscale neu starten",
         "erase": "Tailscale Konfiguration löschen",
         "diagnostics": "Plugin-Diagnose",
         "donate": "Spenden",
+        "reauthenticate": "Erneut authentifizieren",
         "context": {
             "unraid_listen": "Konfiguriert Unraid-Dienste (SSH, WebGUI, SMB usw.) so, dass sie auf Tailscale-Adressen verfügbar sind.",
             "ip_forward": "Setzt net.ipv4.ip_forward und net.ipv6.conf.all.forwarding in sysctl auf 1. Diese Änderung tritt sofort nach der Aktivierung auf.",
             "taildrop": "Geben Sie den Pfad für eingehende Taildrop-Dateien an.",
-            "dns": "DNS aus dem Tailnet akzeptieren.",
-            "subnets": "Routen aus dem Tailnet akzeptieren.",
+            "dns": "Erlaubt das Aktivieren von Tailscale-DNS über die CLI oder das WebGUI. Wenn deaktiviert, wird Tailscale-DNS deaktiviert, wenn Tailscale startet.",
+            "subnets": "Erlaubt das Aktivieren von Tailscale-Routen über die CLI oder das WebGUI. Wenn deaktiviert, werden die Tailscale-Routen beim Start von Tailscale deaktiviert.",
             "wireguard": "Port, der für Wireguard-Verbindungen verwendet wird. Dies muss in der Regel nicht geändert werden.",
             "usage": "Ermöglicht die Erfassung von Nutzungsdaten für das Tailscale-Plugin. Dadurch werden eine anonymisierte Kennung, die aktuelle Unraid-Version, die aktuelle Version des Plugins gesendet, und den aktiviert/deaktivierten Status einiger Features. Es werden keine persönlichen oder Netzwerkinformationen gesammelt.",
             "erase": "Meldet sich von Tailscale ab und setzt alle Einstellungen auf die Standardeinstellungen zurück",
             "restart": "Starten Sie den Tailscale-Daemon neu, und wenden Sie die Einstellungen erneut an.",
             "diagnostics": "Diagnose Daten herunterladen (dies kann einige Zeit in Anspruch nehmen)",
             "ignore": "Wenn dies auf ignorieren gesetzt ist, ändert das Plugin die Einstellung nicht",
-            "outbound_network": "Diese Einstellungen gelten nur für ausgehenden Netzwerkdatenverkehr von Unraid oder ausgeführten Containern. Sie haben keinen Einfluss auf verbreitete Routen, Exit-Nodes oder die Möglichkeit, über MagicDNS auf Unraid zuzugreifen. Diese Einstellungen sollten im Allgemeinen deaktiviert gelassen werden, es sei denn, sie werden ausdrücklich benötigt.",
+            "outbound_network": "Diese Einstellungen gelten nur für ausgehenden Netzwerkdatenverkehr von Unraid oder laufenden Containern. Sie beeinflussen weder beworbene Routen, Exit-Nodes noch die Möglichkeit, über MagicDNS auf Unraid zuzugreifen. Diese sollten im Allgemeinen ausgeschaltet bleiben, außer sie werden explizit benötigt. Das Aktivieren kann Netzwerkprobleme verursachen.",
             "save": "Tailscale wird neu gestartet, damit Änderungen übernommen werden",
-            "donate": "Wenn dieses Plugin Ihnen hilft, erwägen Sie bitte eine Spende."
+            "donate": "Wenn dieses Plugin Ihnen hilft, erwägen Sie bitte eine Spende.",
+            "reauthenticate": "Erzwingt eine erneute Authentifizierung von Tailscale. Dabei wird Tailscale getrennt, bis die Authentifizierung abgeschlossen ist."
         }
     },
     "help": {
@@ -84,6 +94,12 @@
         "routes": "Veröffentlichte Routen",
         "accept_routes": "Routen akzeptieren",
         "accept_dns": "DNS akzeptieren",
+        "run_ssh": "Tailscale-SSH",
+        "advertise_exit_node": "Als Exit-Node betreiben",
+        "use_exit_node": "Exit-Node verwenden",
+        "exit_node_local": "LAN-Zugriff beim Verwenden des Exit-Nodes erlauben",
+        "unapproved": "Genehmigung in der Admin-Konsole erforderlich",
+        "connected_via": "Verbunden über Tailscale",
         "lock": {
             "node_key": "Node Schlüssel",
             "public_key": "Öffentlicher Schlüssel",
@@ -93,7 +109,7 @@
     },
     "warnings": {
         "key_expiration": "Der Tailscale Schlüssel wird in %s Tagen um %s ablaufen.",
-        "netbios": "NetBIOS ist in den <a href='/Settings/SMB'>SMB-Einstellungen aktiviert</a> - dies kann verhindern, dass über Tailscale auf Freigaben zugegriffen werden kann.",
+        "netbios": "NetBIOS ist in den SMB-Einstellungen aktiviert. Dies kann verhindern, dass über Tailscale auf Freigaben zugegriffen werden kann.",
         "lock": "Für das Tailnet ist die Sperre aktiviert, aber dieser Node wurde nicht signiert. Es wird nicht in der Lage sein, mit dem Tailnet zu kommunizieren."
     },
     "lock": {
@@ -105,5 +121,22 @@
         "unsigned": "In Ihrem Tailnet ist die Sperre aktiviert, und der aktuelle Knoten ist nicht signiert. Dieser Knoten kann nicht mit dem Tailnet kommunizieren.",
         "unsigned_instructions": "Damit dieser Knoten kommunizieren kann, müssen Sie dem folgenden Schlüssel von einem Signaturknoten vertrauen",
         "disabled": "Für Ihr Tailnet ist die Sperre nicht aktiviert."
+    },
+    "status_page": {
+        "exit_node": "Exit-Node",
+        "connection_type": "Verbindungstyp",
+        "connection_addr": "Verbindung",
+        "tx_bytes": "Tx-Bytes",
+        "rx_bytes": "Rx-Bytes",
+        "relay": "Relay",
+        "direct": "Direkt",
+        "exit_active": "Aktiv",
+        "exit_available": "Verfügbar",
+        "idle": "Leerlauf",
+        "offline": "Offline",
+        "active": "Aktiv",
+        "login_name": "Anmeldename",
+        "shared": "Shared-In-Benutzer",
+        "action": "Aktion"
     }
 }
