@@ -78,17 +78,6 @@ if ($tailscaleConfig->Enable) {
 </dl>
 <blockquote class='inline_help'><?= $tr->tr("settings.context.taildrop"); ?></blockquote>
 
-<dl>
-    <dt><?= $tr->tr("settings.usage"); ?></dt>
-    <dd>
-        <select name='USAGE' size='1'>
-            <?= Utils::make_option($tailscaleConfig->Usage, '1', $tr->tr("yes"));?>
-            <?= Utils::make_option( ! $tailscaleConfig->Usage, '0', $tr->tr("no"));?>
-        </select>
-    </dd>
-</dl>
-<blockquote class='inline_help'><?= $tr->tr("settings.context.usage"); ?></blockquote>
-
 <div class="advanced">
     <h3><?= $tr->tr("settings.services"); ?></h3>
 

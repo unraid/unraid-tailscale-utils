@@ -17,44 +17,6 @@ class Utils
         }
     }
 
-    /**
-    * @param array<mixed> $content
-    */
-    private static function send_usage(string $url, array $content): int
-    {
-        if (empty($url)) {
-            throw new \InvalidArgumentException("URL cannot be empty");
-        }
-
-        $body = json_encode($content);
-
-        if ( ! $body) {
-            throw new \InvalidArgumentException("Failed to encode JSON");
-        }
-
-        $token = self::download_url($url . '?connect');
-
-        $c = curl_init();
-        curl_setopt($c, CURLOPT_URL, $url);
-
-        $headers = [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $token
-        ];
-
-        curl_setopt($c, CURLOPT_POST, true);
-        curl_setopt($c, CURLOPT_POSTFIELDS, $body);
-        curl_setopt($c, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($c, CURLOPT_USERAGENT, 'plugin-metrics/1.0.0');
-
-        curl_exec($c);
-        if ( ! curl_errno($c)) {
-            $info = curl_getinfo($c);
-            return $info['http_code'];
-        }
-        return -1;
-    }
-
     public static function setPHPDebug(): void
     {
         $version = parse_ini_file('/var/local/emhttp/plugins/tailscale/tailscale.ini');
@@ -68,88 +30,6 @@ class Utils
             error_reporting(E_ALL);
             define("TAILSCALE_TRUNK", true);
         }
-    }
-
-    public static function sendUsageData(Config $config): void
-    {
-        $endpoint = "https://plugin-usage.edacerton.win/";
-
-        if ($config->Usage) {
-            $var     = parse_ini_file('/usr/local/emhttp/state/var.ini');
-            $version = parse_ini_file('/var/local/emhttp/plugins/tailscale/tailscale.ini');
-
-            if ( ! $var || ! $version) {
-                Utils::logmsg("Could not retrieve system data, skipping usage data.");
-                return;
-            }
-
-            $tailscaleInfo = new Info(new Translator());
-
-            $prefs = $tailscaleInfo->getPrefs();
-            if (isset($prefs->LoggedOut) ? ($prefs->LoggedOut ? true : false) : true) {
-                Utils::logmsg("Skipping usage data collection; not logged in.");
-                return;
-            }
-
-            $customControl = false;
-
-            if ($prefs->ControlURL != "https://controlplane.tailscale.com") {
-                $customControl = true;
-            }
-
-            $content = array(
-                'clientId'       => hash("crc32b", $var['flashGUID']),
-                'plugin'         => 'tailscale',
-                'plugin_version' => $version['VERSION'],
-                'plugin_branch'  => $version['BRANCH'],
-                'unraid_version' => $var['version'],
-                'bool1'          => $tailscaleInfo->acceptsDNS(),
-                'bool2'          => $tailscaleInfo->acceptsRoutes(),
-                'bool3'          => $config->IncludeInterface,
-                'bool4'          => (bool) $tailscaleInfo->getAdvertisedRoutes(),
-                'bool5'          => $tailscaleInfo->advertisesExitNode(),
-                'num1'           => $customControl ? 0 : 1
-            );
-
-            $attempts = 0;
-            $delay    = rand(0, 300);
-            do {
-                Utils::logmsg("Waiting for {$delay} seconds before sending usage data.");
-                sleep($delay);
-                $delay += 300;
-                $attempts++;
-
-                $result = self::send_usage($endpoint, $content);
-                Utils::logmsg("Usage data sent.");
-            } while (($result != '200') && ($attempts < 3));
-
-            if ($result != '200') {
-                Utils::logmsg("Error occurred while transmitting usage data.");
-            }
-        } else {
-            Utils::logmsg("Usage collection disabled.");
-        }
-    }
-
-    public static function download_url(string $url): string
-    {
-        if (empty($url)) {
-            throw new \InvalidArgumentException("URL cannot be empty");
-        }
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 45);
-        curl_setopt($ch, CURLOPT_ENCODING, "");
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_FAILONERROR, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'plugin-metrics/1.0.0');
-        $out = curl_exec($ch) ?: false;
-        curl_close($ch);
-        return strval($out);
     }
 
     public static function printRow(string $title, string $value): string
