@@ -9,5 +9,4 @@ require_once "{$docroot}/plugins/tailscale/include/common.php";
 $tailscaleConfig = $tailscaleConfig ?? new Config();
 
 Utils::run_task('Tailscale\System::notifyOnKeyExpiration');
-Utils::run_task('Tailscale\Utils::sendUsageData', array($tailscaleConfig));
 Utils::run_task('Tailscale\System::refreshWebGuiCert');
