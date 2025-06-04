@@ -5,3 +5,5 @@ parameters:
 		- page
 	paths:
 		- src
+	excludePaths:
+		- */vendor/*

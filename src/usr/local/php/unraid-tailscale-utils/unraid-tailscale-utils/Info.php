@@ -2,6 +2,8 @@
 
 namespace Tailscale;
 
+use EDACerton\PluginUtils\Translator;
+
 class Info
 {
     private string $useNetbios;

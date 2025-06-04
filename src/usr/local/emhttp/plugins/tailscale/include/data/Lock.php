@@ -2,11 +2,18 @@
 
 namespace Tailscale;
 
+use EDACerton\PluginUtils\Translator;
+
 try {
     require_once dirname(dirname(__FILE__)) . "/common.php";
 
+    if ( ! defined(__NAMESPACE__ . '\PLUGIN_ROOT') || ! defined(__NAMESPACE__ . '\PLUGIN_NAME')) {
+        throw new \RuntimeException("Common file not loaded.");
+    }
+
+    $tr = $tr ?? new Translator(PLUGIN_ROOT);
+
     $tailscaleConfig = $tailscaleConfig ?? new Config();
-    $tr              = $tr              ?? new Translator();
 
     if ( ! $tailscaleConfig->Enable) {
         echo("{}");

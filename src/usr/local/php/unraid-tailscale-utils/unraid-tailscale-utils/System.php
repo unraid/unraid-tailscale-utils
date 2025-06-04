@@ -18,7 +18,7 @@ class System
     {
         $ips = parse_ini_file("/boot/config/network.cfg") ?: array();
         if (array_key_exists(('IPADDR'), $ips)) {
-            $route_table = Utils::run_command("ip route list table 52", false, false);
+            $route_table = Utils::runwrap("ip route list table 52", false, false);
 
             $ipaddr = is_array($ips['IPADDR']) ? $ips['IPADDR'] : array($ips['IPADDR']);
 
@@ -26,8 +26,8 @@ class System
                 foreach ($route_table as $route) {
                     $net = explode(' ', $route)[0];
                     if (Utils::ip4_in_network($ip, $net)) {
-                        Utils::logmsg("Detected local IP {$ip} in Tailscale route {$net}, removing");
-                        Utils::run_command("ip route del '{$net}' dev tailscale1 table 52");
+                        Utils::logwrap("Detected local IP {$ip} in Tailscale route {$net}, removing");
+                        Utils::runwrap("ip route del '{$net}' dev tailscale1 table 52");
                     }
                 }
             }
@@ -43,12 +43,12 @@ class System
             $connection = @fsockopen($tailscale_ipv4, $ident_config['PORT']);
 
             if (is_resource($connection)) {
-                Utils::logmsg("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}", false, true);
+                Utils::logwrap("WebGUI listening on {$tailscale_ipv4}:{$ident_config['PORT']}", false, true);
             } else {
-                Utils::logmsg("WebGUI not listening on {$tailscale_ipv4}:{$ident_config['PORT']}, terminating and restarting");
-                Utils::run_command("/etc/rc.d/rc.nginx term");
+                Utils::logwrap("WebGUI not listening on {$tailscale_ipv4}:{$ident_config['PORT']}, terminating and restarting");
+                Utils::runwrap("/etc/rc.d/rc.nginx term");
                 sleep(5);
-                Utils::run_command("/etc/rc.d/rc.nginx start");
+                Utils::runwrap("/etc/rc.d/rc.nginx start");
             }
         }
     }
@@ -71,7 +71,7 @@ class System
             $configPort = intval($key);
 
             if ($configPort == $httpPort || $configPort == $httpsPort) {
-                Utils::logmsg("Serve TCP Port {$configPort} conflicts with WebGUI, removing");
+                Utils::logwrap("Serve TCP Port {$configPort} conflicts with WebGUI, removing");
                 self::sendNotification(
                     "Tailscale Serve Port Conflict",
                     "Tailscale Serve Port Conflict",
@@ -79,11 +79,11 @@ class System
                     NotificationType::ALERT
                 );
                 $localAPI->resetServeConfig();
-                Utils::run_command(self::RESTART_COMMAND);
+                Utils::runwrap(self::RESTART_COMMAND);
 
                 return;
             } else {
-                Utils::logmsg("Checked for WebGUI conflict with serve TCP Port {$configPort}", false, true);
+                Utils::logwrap("Checked for WebGUI conflict with serve TCP Port {$configPort}", false, true);
             }
         }
     }
@@ -93,42 +93,42 @@ class System
         if ($config->IncludeInterface) {
             self::refreshWebGuiCert(false);
 
-            Utils::run_command(self::RESTART_COMMAND);
+            Utils::runwrap(self::RESTART_COMMAND);
         }
     }
 
     public static function enableIPForwarding(Config $config): void
     {
         if ($config->Enable) {
-            Utils::logmsg("Enabling IP forwarding");
+            Utils::logwrap("Enabling IP forwarding");
             $sysctl = "net.ipv4.ip_forward = 1" . PHP_EOL . "net.ipv6.conf.all.forwarding = 1";
             file_put_contents('/etc/sysctl.d/99-tailscale.conf', $sysctl);
-            Utils::run_command("sysctl -p /etc/sysctl.d/99-tailscale.conf", true);
+            Utils::runwrap("sysctl -p /etc/sysctl.d/99-tailscale.conf", true);
         }
     }
 
     public static function applyGRO(): void
     {
         /** @var array<int, array<string>> $ip_route */
-        $ip_route = (array) json_decode(implode(Utils::run_command('ip -j route get 8.8.8.8')), true);
+        $ip_route = (array) json_decode(implode(Utils::runwrap('ip -j route get 8.8.8.8')), true);
 
         // Check if a device was returned
         if ( ! isset($ip_route[0]['dev'])) {
-            Utils::logmsg("Default interface could not be detected.");
+            Utils::logwrap("Default interface could not be detected.");
             return;
         }
 
         $dev = $ip_route[0]['dev'];
 
         /** @var array<string, array<string>> $ethtool */
-        $ethtool = ((array) json_decode(implode(Utils::run_command("ethtool --json -k {$dev}")), true))[0];
+        $ethtool = ((array) json_decode(implode(Utils::runwrap("ethtool --json -k {$dev}")), true))[0];
 
         if (isset($ethtool['rx-udp-gro-forwarding']) && ! $ethtool['rx-udp-gro-forwarding']['active']) {
-            Utils::run_command("ethtool -K {$dev} rx-udp-gro-forwarding on");
+            Utils::runwrap("ethtool -K {$dev} rx-udp-gro-forwarding on");
         }
 
         if (isset($ethtool['rx-gro-list']) && $ethtool['rx-gro-list']['active']) {
-            Utils::run_command("ethtool -K {$dev} rx-gro-list off");
+            Utils::runwrap("ethtool -K {$dev} rx-gro-list off");
         }
     }
 
@@ -146,7 +146,7 @@ class System
             $intervalPrint = $interval->format('%a');
 
             $message = "The Tailscale key will expire in {$intervalPrint} days on {$expiryPrint}.";
-            Utils::logmsg($message);
+            Utils::logwrap($message);
 
             switch (true) {
                 case $interval->days <= 7:
@@ -160,10 +160,10 @@ class System
             }
 
             $event = "Tailscale Key Expiration - {$priority->value} - {$expiryTime->format('Ymd')}";
-            Utils::logmsg("Sending notification for key expiration: {$event}");
+            Utils::logwrap("Sending notification for key expiration: {$event}");
             self::sendNotification($event, "Tailscale key is expiring", $message, $priority);
         } else {
-            Utils::logmsg("Tailscale key expiration is not set.");
+            Utils::logwrap("Tailscale key expiration is not set.");
         }
     }
 
@@ -181,7 +181,7 @@ class System
         $certDomains = $status->CertDomains;
 
         if (count($certDomains ?? array()) === 0) {
-            Utils::logmsg("Cannot generate certificate for WebGUI -- HTTPS not enabled for Tailnet.");
+            Utils::logwrap("Cannot generate certificate for WebGUI -- HTTPS not enabled for Tailnet.");
             return;
         }
 
@@ -198,9 +198,9 @@ class System
             $pemHash = sha1_file($pemFile);
         }
 
-        Utils::logmsg("Certificate bundle hash: {$pemHash}");
+        Utils::logwrap("Certificate bundle hash: {$pemHash}");
 
-        Utils::run_command("tailscale cert --cert-file={$certFile} --key-file={$keyFile} --min-validity=720h {$dnsName}");
+        Utils::runwrap("tailscale cert --cert-file={$certFile} --key-file={$keyFile} --min-validity=720h {$dnsName}");
 
         if (
             file_exists($certFile) && file_exists($keyFile) && filesize($certFile) > 0 && filesize($keyFile) > 0
@@ -209,11 +209,11 @@ class System
             file_put_contents($pemFile, file_get_contents($keyFile), FILE_APPEND);
 
             if ((sha1_file($pemFile) != $pemHash) && $restartIfChanged) {
-                Utils::logmsg("WebGUI certificate has changed, restarting nginx");
-                Utils::run_command("/etc/rc.d/rc.nginx reload");
+                Utils::logwrap("WebGUI certificate has changed, restarting nginx");
+                Utils::runwrap("/etc/rc.d/rc.nginx reload");
             }
         } else {
-            Utils::logmsg("Something went wrong when creating WebGUI certificate, skipping nginx update.");
+            Utils::logwrap("Something went wrong when creating WebGUI certificate, skipping nginx update.");
         }
     }
 
@@ -242,10 +242,10 @@ class System
             if ($in_array != $config->IncludeInterface) {
                 if ($config->IncludeInterface) {
                     $include_array[] = $ifname;
-                    Utils::logmsg("{$ifname} added to include_interfaces");
+                    Utils::logwrap("{$ifname} added to include_interfaces");
                 } else {
                     $include_array = array_diff($include_array, [$ifname]);
-                    Utils::logmsg("{$ifname} removed from include_interfaces");
+                    Utils::logwrap("{$ifname} removed from include_interfaces");
                 }
                 $write_file = true;
             }
@@ -260,7 +260,7 @@ class System
                     END;
 
                 file_put_contents($network_extra_file, $file);
-                Utils::logmsg("Updated network-extra.cfg");
+                Utils::logwrap("Updated network-extra.cfg");
             }
         }
     }
@@ -268,7 +268,7 @@ class System
     private static function disableTailscaleFeature(LocalAPI $localAPI, bool $allow, string $flag): void
     {
         if ($allow) {
-            Utils::logmsg("Ignoring {$flag}");
+            Utils::logwrap("Ignoring {$flag}");
         } else {
             $localAPI->patchPref($flag, false);
         }

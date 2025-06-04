@@ -2,11 +2,19 @@
 
 namespace Tailscale;
 
+use EDACerton\PluginUtils\Translator;
+
 try {
     require_once dirname(dirname(__FILE__)) . "/common.php";
 
+    if ( ! defined(__NAMESPACE__ . '\PLUGIN_ROOT') || ! defined(__NAMESPACE__ . '\PLUGIN_NAME')) {
+        throw new \RuntimeException("Common file not loaded.");
+    }
+
+    $tr    = $tr    ?? new Translator(PLUGIN_ROOT);
+    $utils = $utils ?? new Utils(PLUGIN_NAME);
+
     $tailscaleConfig = $tailscaleConfig ?? new Config();
-    $tr              = $tr              ?? new Translator();
 
     if ( ! $tailscaleConfig->Enable) {
         echo("{}");
@@ -162,7 +170,7 @@ try {
             }
 
             $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
-            Utils::logmsg("Setting feature: {$features[$_POST['feature']]} to " . ($enable ? "true" : "false"));
+            $utils->logmsg("Setting feature: {$features[$_POST['feature']]} to " . ($enable ? "true" : "false"));
 
             $localAPI->patchPref($features[$_POST['feature']], $enable);
             break;
@@ -172,7 +180,7 @@ try {
             }
 
             $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
-            Utils::logmsg("Setting advertise exit node to " . ($enable ? "true" : "false"));
+            $utils->logmsg("Setting advertise exit node to " . ($enable ? "true" : "false"));
 
             $prefs      = $localAPI->getPrefs();
             $routes     = $prefs->AdvertiseRoutes ?? array();
@@ -187,7 +195,7 @@ try {
             $localAPI->patchPref("AdvertiseRoutes", array_values($routes));
             break;
         case 'up':
-            Utils::logmsg("Getting Auth URL");
+            $utils->logmsg("Getting Auth URL");
             $authURL = $tailscaleInfo->getAuthURL();
             if ($authURL == "") {
                 $localAPI->postLoginInteractive();
@@ -209,7 +217,7 @@ try {
                 throw new \Exception("Missing route parameter");
             }
 
-            Utils::logmsg("Removing route: {$_POST['route']}");
+            $utils->logmsg("Removing route: {$_POST['route']}");
 
             $advertisedRoutes = $tailscaleInfo->getAdvertisedRoutes();
             $advertisedRoutes = array_diff($advertisedRoutes, [$_POST['route']]);
@@ -225,7 +233,7 @@ try {
                 throw new \Exception("Invalid route: {$_POST['route']}");
             }
 
-            Utils::logmsg("Adding route: {$_POST['route']}");
+            $utils->logmsg("Adding route: {$_POST['route']}");
 
             $advertisedRoutes   = $tailscaleInfo->getAdvertisedRoutes();
             $advertisedRoutes[] = $_POST['route'];
@@ -236,7 +244,7 @@ try {
             if ($tailscaleInfo->connectedViaTS()) {
                 throw new \Exception("Cannot expire key while connected via Tailscale");
             }
-            Utils::logmsg("Expiring node key");
+            $utils->logmsg("Expiring node key");
             $localAPI->expireKey();
             break;
         case 'exit-node':
@@ -249,7 +257,7 @@ try {
                 throw new \Exception("Invalid node parameter");
             }
 
-            Utils::logmsg("Setting exit node: {$_POST['node']}");
+            $utils->logmsg("Setting exit node: {$_POST['node']}");
 
             $localAPI->patchPref("ExitNodeID", $_POST['node']);
             break;

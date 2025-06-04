@@ -12,6 +12,15 @@ enum APIMethods
 class LocalAPI
 {
     private const tailscaleSocket = '/var/run/tailscale/tailscaled.sock';
+    private Utils $utils;
+
+    public function __construct()
+    {
+        if ( ! defined(__NAMESPACE__ . "\PLUGIN_ROOT") || ! defined(__NAMESPACE__ . "\PLUGIN_NAME")) {
+            throw new \RuntimeException("Common file not loaded.");
+        }
+        $this->utils = new Utils(PLUGIN_NAME);
+    }
 
     private function tailscaleLocalAPI(string $url, APIMethods $method = APIMethods::GET, object $body = new \stdClass()): string
     {
@@ -37,14 +46,14 @@ class LocalAPI
         if ($method == APIMethods::POST) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $body_encoded);
-            Utils::logmsg("Tailscale Local API: {$url} POST " . $body_encoded);
+            $this->utils->logmsg("Tailscale Local API: {$url} POST " . $body_encoded);
             $headers[] = "Content-Type: application/json";
         }
 
         if ($method == APIMethods::PATCH) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($ch, CURLOPT_POSTFIELDS, $body_encoded);
-            Utils::logmsg("Tailscale Local API: {$url} PATCH " . $body_encoded);
+            $this->utils->logmsg("Tailscale Local API: {$url} PATCH " . $body_encoded);
             $headers[] = "Content-Type: application/json";
         }
 

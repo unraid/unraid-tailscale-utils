@@ -18,7 +18,12 @@ class Watcher
 
         $tsName = '';
 
-        Utils::logmsg("Starting tailscale-watcher");
+        if ( ! defined(__NAMESPACE__ . '\PLUGIN_ROOT') || ! defined(__NAMESPACE__ . '\PLUGIN_NAME')) {
+            throw new \RuntimeException("Common file not loaded.");
+        }
+        $utils = new Utils(PLUGIN_NAME);
+
+        $utils->logmsg("Starting tailscale-watcher");
 
         // @phpstan-ignore while.alwaysTrue
         while (true) {
@@ -39,21 +44,21 @@ class Watcher
 
             if (isset($tailscale_ipv4)) {
                 if ($need_ip) {
-                    Utils::logmsg("Tailscale IP detected, applying configuration");
+                    $utils->logmsg("Tailscale IP detected, applying configuration");
                     $need_ip = false;
 
                     $localAPI = new LocalAPI();
                     $status   = $localAPI->getStatus();
                     $tsName   = $status->Self->DNSName;
 
-                    Utils::run_task('Tailscale\System::applyTailscaleConfig', array($this->config));
-                    Utils::run_task('Tailscale\System::applyGRO');
-                    Utils::run_task('Tailscale\System::restartSystemServices', array($this->config));
+                    $utils->run_task('Tailscale\System::applyTailscaleConfig', array($this->config));
+                    $utils->run_task('Tailscale\System::applyGRO');
+                    $utils->run_task('Tailscale\System::restartSystemServices', array($this->config));
                 }
 
-                Utils::run_task('Tailscale\System::checkWebgui', array($this->config, $tailscale_ipv4));
-                Utils::run_task('Tailscale\System::checkServeConfig');
-                Utils::run_task('Tailscale\System::fixLocalSubnetRoutes');
+                $utils->run_task('Tailscale\System::checkWebgui', array($this->config, $tailscale_ipv4));
+                $utils->run_task('Tailscale\System::checkServeConfig');
+                $utils->run_task('Tailscale\System::fixLocalSubnetRoutes');
 
                 // Watch for changes to the DNS name (e.g., if someone changes the tailnet name or the Tailscale name of the server via the admin console)
                 // If a change happens, refresh the Tailscale WebGUI certificate
@@ -62,13 +67,13 @@ class Watcher
                 $newTsName = $status->Self->DNSName;
 
                 if ($newTsName != $tsName) {
-                    Utils::logmsg("Detected DNS name change");
+                    $utils->logmsg("Detected DNS name change");
                     $tsName = $newTsName;
 
-                    Utils::run_task('Tailscale\System::refreshWebGuiCert');
+                    $utils->run_task('Tailscale\System::refreshWebGuiCert');
                 }
             } else {
-                Utils::logmsg("Waiting for Tailscale IP");
+                $utils->logmsg("Waiting for Tailscale IP");
             }
 
             sleep($timer);

@@ -2,11 +2,19 @@
 
 namespace Tailscale;
 
+use EDACerton\PluginUtils\Translator;
+
 try {
     require_once dirname(dirname(__FILE__)) . "/common.php";
 
+    if ( ! defined(__NAMESPACE__ . '\PLUGIN_ROOT') || ! defined(__NAMESPACE__ . '\PLUGIN_NAME')) {
+        throw new \RuntimeException("Common file not loaded.");
+    }
+
+    $tr    = $tr    ?? new Translator(PLUGIN_ROOT);
+    $utils = $utils ?? new Utils(PLUGIN_NAME);
+
     $tailscaleConfig = $tailscaleConfig ?? new Config();
-    $tr              = $tr              ?? new Translator();
 
     if ( ! $tailscaleConfig->Enable) {
         echo("{}");
@@ -88,7 +96,7 @@ try {
             foreach ($tailscaleInfo->getPeerStatus() as $peer) {
                 if ($peer->Name == $_POST['host']) {
                     $peerIP = escapeshellarg($peer->IP[0]);
-                    $out    = implode("<br>", Utils::run_command("tailscale ping {$peerIP}"));
+                    $out    = implode("<br>", $utils->run_command("tailscale ping {$peerIP}"));
                     break;
                 }
             }
