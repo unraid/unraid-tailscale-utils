@@ -11,7 +11,7 @@ try {
         throw new \RuntimeException("Common file not loaded.");
     }
 
-    $tr    = $tr       ?? new Translator(PLUGIN_ROOT);
+    $tr    = $tr    ?? new Translator(PLUGIN_ROOT);
     $utils = $utils ?? new Utils(PLUGIN_NAME);
 
     $tailscaleConfig = $tailscaleConfig ?? new Config();
