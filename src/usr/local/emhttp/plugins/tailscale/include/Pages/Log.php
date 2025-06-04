@@ -12,7 +12,13 @@
 ?>
 <?php
 
-$tr = $tr ?? new Tailscale\Translator();
+use EDACerton\PluginUtils\Translator;
+
+if ( ! defined('Tailscale\PLUGIN_ROOT') || ! defined('Tailscale\PLUGIN_NAME')) {
+    throw new \RuntimeException("Common file not loaded.");
+}
+
+$tr = $tr ?? new Translator(Tailscale\PLUGIN_ROOT);
 
 $log  = '/var/log/tailscale.log';
 $prev = '/var/log/tailscale-utils.log';

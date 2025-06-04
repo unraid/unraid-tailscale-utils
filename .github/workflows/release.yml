@@ -9,6 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        uses: "php-actions/composer@v6"
+        with:
+          dev: no
+          working_dir: "src/usr/local/php/unraid-tailscale-utils"
+
       - id: build_files
         run: |
           mkdir release

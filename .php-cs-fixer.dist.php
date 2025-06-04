@@ -5,6 +5,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
     ->name('*.php')
     ->name('*.page')
+    ->exclude(['vendor'])
 ;
 
 $config = new PhpCsFixer\Config();

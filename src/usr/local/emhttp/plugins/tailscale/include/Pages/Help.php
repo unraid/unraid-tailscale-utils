@@ -2,7 +2,14 @@
 
 namespace Tailscale;
 
-$tr = $tr ?? new Translator();
+use EDACerton\PluginUtils\Translator;
+
+if ( ! defined(__NAMESPACE__ . '\PLUGIN_ROOT') || ! defined(__NAMESPACE__ . '\PLUGIN_NAME')) {
+    throw new \RuntimeException("Common file not loaded.");
+}
+
+$tr = $tr ?? new Translator(PLUGIN_ROOT);
+
 function help_block(string $section, Translator $tr, string $header = "h3"): string
 {
     $title = $tr->tr("settings.{$section}");
