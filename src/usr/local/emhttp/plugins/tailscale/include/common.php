@@ -20,7 +20,7 @@ namespace Tailscale;
 */
 
 define(__NAMESPACE__ . "\PLUGIN_ROOT", dirname(dirname(__FILE__)));
-define(__NAMESPACE__ . "\PLUGIN_NAME", "tailscale");
+define(__NAMESPACE__ . "\PLUGIN_NAME", "tailscale-utils");
 
 // @phpstan-ignore requireOnce.fileNotFound
 require_once "/usr/local/php/unraid-tailscale-utils/vendor/autoload.php";
