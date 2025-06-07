@@ -1,4 +1,4 @@
-# Contributing to enhanced.log
+# Contributing to unraid-tailscale-utils
 
 Thank you for your interest in contributing to **unraid-tailscale-utils**!
 
