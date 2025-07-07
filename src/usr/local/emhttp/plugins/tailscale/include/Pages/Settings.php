@@ -1,7 +1,5 @@
 <?php
 
-namespace Tailscale;
-
 /*
     Copyright (C) 2025  Derek Kaser
 
@@ -18,6 +16,8 @@ namespace Tailscale;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+namespace Tailscale;
 
 use EDACerton\PluginUtils\Translator;
 
@@ -147,7 +147,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.funnel"); ?></dt>
     <dd>
-        <select name='ALLOW_FUNNEL' id='ALLOW_FUNNEL' onchange="showSettingWarning('funnel','#ALLOW_FUNNEL', 'https://forums.unraid.net');" size='1'>
+        <select name='ALLOW_FUNNEL' id='ALLOW_FUNNEL' onchange="showSettingWarning('funnel','#ALLOW_FUNNEL');" size='1'>
             <?= Utils::make_option( ! $tailscaleConfig->AllowFunnel, '0', $tr->tr("no"));?>
             <?= Utils::make_option($tailscaleConfig->AllowFunnel, '1', $tr->tr("yes"));?>
         </select>
@@ -260,7 +260,7 @@ if ($tailscaleConfig->Enable) {
         });
     });
 
-function showSettingWarning(message, element, moreLink = '') {
+function showSettingWarning(message, element) {
     // If setting the value to 0, we don't need a warning message.
     if ($(element).val() == '0') {
         return;
@@ -271,6 +271,14 @@ function showSettingWarning(message, element, moreLink = '') {
         'subnet': "<?= $tr->tr("warnings.subnet"); ?>",
         'dns': "<?= $tr->tr("warnings.dns"); ?>"
     };
+
+    const links = {
+        'funnel': "https://forums.unraid.net/",
+        'subnet': "",
+        'dns': ""
+    };
+
+    const moreLink = links[message] || "";
 
     var dialogText = messages[message];
     dialogText += "<br><br><?= $tr->tr("warnings.caution"); ?>";
@@ -290,7 +298,7 @@ function showSettingWarning(message, element, moreLink = '') {
         },
         function(isConfirmed){
             if (!isConfirmed) {
-                // Set the ALLOW_FUNNEL SELECT back to 0
+                // Set the select element back to 0
                 $(element).val('0');
             }
         }

@@ -1,8 +1,6 @@
 #!/usr/bin/php -q
 <?php
 
-namespace Tailscale;
-
 /*
     Copyright (C) 2025  Derek Kaser
 
@@ -19,6 +17,8 @@ namespace Tailscale;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+namespace Tailscale;
 
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
 

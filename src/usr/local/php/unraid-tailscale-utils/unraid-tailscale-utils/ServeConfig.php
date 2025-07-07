@@ -1,7 +1,5 @@
 <?php
 
-namespace Tailscale;
-
 /*
     Copyright (C) 2025  Derek Kaser
 
@@ -19,12 +17,24 @@ namespace Tailscale;
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+namespace Tailscale;
+
 class ServeConfig
 {
     private \stdClass $config;
 
     public function __construct(string $hostname, string $port, string $target)
     {
+        // Validate the hostname
+        if ( ! filter_var($hostname, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+            throw new \InvalidArgumentException("Invalid hostname: {$hostname}");
+        }
+
+        // Validate the port
+        if ( ! is_numeric($port) || (int)$port < 1 || (int)$port > 65535) {
+            throw new \InvalidArgumentException("Invalid port: {$port}");
+        }
+
         $hostAndPort = "{$hostname}:{$port}";
 
         $this->config = new \stdClass();

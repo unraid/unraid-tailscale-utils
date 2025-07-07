@@ -1,7 +1,5 @@
 <?php
 
-namespace Tailscale;
-
 /*
     Copyright (C) 2025  Derek Kaser
 
@@ -18,6 +16,8 @@ namespace Tailscale;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+namespace Tailscale;
 
 class Utils extends \EDACerton\PluginUtils\Utils
 {
