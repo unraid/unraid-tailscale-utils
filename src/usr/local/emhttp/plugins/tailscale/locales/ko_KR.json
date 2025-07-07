@@ -16,6 +16,8 @@
     "enabled": "활성화됨",
     "disable": "비활성화",
     "enable": "활성화",
+    "cancel": "취소",
+    "accept": "수락",
     "sign": "서명",
     "login": "로그인",
     "add": "추가",
@@ -25,6 +27,7 @@
     "needs_login": "이 장치는 Tailscale에 로그인해야 합니다. 로그인 후 이 페이지를 새로고침하여 상태를 확인하세요.",
     "tailscale_disabled": "Tailscale이(가) 현재 비활성화되어 있습니다. 설정 탭에서 활성화할 수 있습니다.",
     "tailscale_lock": "Tailscale 잠금",
+    "warning": "경고",
     "settings": {
         "basic": "기본 보기",
         "advanced": "고급 보기",
@@ -33,7 +36,6 @@
         "unraid_listen": "Unraid 서비스가 Tailscale IP로 수신 대기",
         "ip_forward": "IP 포워딩 활성화",
         "taildrop": "Taildrop 위치",
-        "usage": "사용 데이터 수집 허용",
         "services": "Tailscale 서비스",
         "wireguard": "Wireguard 포트",
         "outbound_network": "고급 네트워크 옵션",
@@ -43,8 +45,8 @@
         "restart": "Tailscale 다시 시작",
         "erase": "Tailscale 구성 삭제",
         "diagnostics": "플러그인 진단",
-        "donate": "기부",
         "reauthenticate": "다시 인증",
+        "funnel": "Tailscale Funnel 허용",
         "context": {
             "unraid_listen": "Unraid 서비스(SSH, WebGUI, SMB 등)가 Tailscale 주소에서 수신 대기하도록 구성합니다.",
             "ip_forward": "sysctl에서 net.ipv4.ip_forward 및 net.ipv6.conf.all.forwarding을 1로 설정합니다. 이 설정은 활성화 시 즉시 적용됩니다.",
@@ -52,32 +54,13 @@
             "dns": "CLI 또는 WebGUI를 통해 Tailscale DNS를 활성화할 수 있습니다. 비활성화하면 Tailscale 시작 시 Tailscale DNS가 비활성화됩니다.",
             "subnets": "CLI 또는 WebGUI를 통해 Tailscale 라우트를 활성화할 수 있습니다. 비활성화하면 Tailscale 시작 시 Tailscale 라우트가 비활성화됩니다.",
             "wireguard": "Wireguard 연결에 사용할 포트를 변경합니다. 일반적으로 이 설정을 변경할 필요는 없습니다.",
-            "usage": "Tailscale 플러그인의 사용 데이터 수집을 허용합니다. 익명화된 식별자, 현재 Unraid 버전, 플러그인 버전, 일부 기능의 활성/비활성 상태가 전송됩니다. 개인 정보나 네트워크 정보는 수집되지 않습니다.",
             "erase": "Tailscale에서 로그아웃하고 모든 설정을 기본값으로 초기화합니다.",
             "restart": "Tailscale 데몬을 다시 시작하고 설정을 재적용합니다.",
             "diagnostics": "진단을 다운로드합니다(완료까지 시간이 걸릴 수 있습니다).",
-            "ignore": "무시로 설정하면 플러그인이 이 설정을 수정하지 않습니다.",
-            "outbound_network": "이 설정은 Unraid 및 실행 중인 컨테이너에서 발생하는 아웃바운드 트래픽에만 적용됩니다. 광고된 라우트, 종료 노드, MagicDNS를 통한 Unraid 접근에는 영향을 주지 않습니다. 특별히 필요하지 않으면 일반적으로 꺼두는 것이 좋습니다. 이 기능을 켜면 네트워크 문제를 일으킬 수 있습니다.",
             "save": "변경 사항이 적용되면 Tailscale이 다시 시작됩니다.",
-            "donate": "이 플러그인이 도움이 되었다면 기부를 고려해 주세요.",
-            "reauthenticate": "Tailscale 재인증을 강제합니다. 인증이 완료될 때까지 Tailscale 연결이 끊깁니다."
+            "reauthenticate": "Tailscale 재인증을 강제합니다. 인증이 완료될 때까지 Tailscale 연결이 끊깁니다.",
+            "funnel": "WebGUI를 통해 Tailscale funnel을 활성화할 수 있습니다. 비활성화하면 Tailscale funnel이 비활성화됩니다."
         }
-    },
-    "help": {
-        "initial": "초기 구성",
-        "key_expiration": "서버의 키 만료를 비활성화하고 싶을 수 있습니다(인증 키를 사용하여 CLI로 연결하거나, 이후 Tailscale 관리 콘솔에서 설정할 수 있습니다).",
-        "certificates": "인증서",
-        "certificates_instructions": "Tailscale HTTPS 인증서는 WebGUI에 사용할 수 있습니다. 호스트 이름은 Tailscale에서 사용된 이름과 일치해야 합니다. <ol><li>Tailnet에 HTTPS를 활성화합니다.</li><li>설정 -> 관리 액세스에서 로컬 TLD를 Tailnet 이름(관리 콘솔 DNS 페이지에 표시된 대로)으로 설정합니다.</li><li>새 인증서를 생성하고 WebGUI 구성에 복사합니다. (User Scripts 플러그인에서도 실행할 수 있습니다.)</li></ol>",
-        "certificates_docker": "이 인증서를 Docker 컨테이너에서 사용할 수도 있습니다. 예를 들어, Minio에서 생성된 인증서를 사용하려면:",
-        "dns": "활성화 시, Unraid는 Tailscale 관리 콘솔에 설정된 DNS 설정(MagicDNS 및 네임서버 포함)을 사용합니다. 비활성화 시, Unraid는 Unraid 네트워크 설정에 구성된 DNS를 사용합니다.",
-        "subnets": "활성화 시, Unraid는 tailnet의 서브넷 라우터에서 광고된 라우트를 허용합니다. 비활성화 시, Unraid는 서브넷 라우터의 라우트를 허용하지 않습니다.",
-        "outbound_network": "설정을 무시로 지정하면 플러그인이 Tailscale에서 해당 설정을 변경하지 않습니다. CLI를 통해 설정을 직접 구성하려는 경우에 유용합니다.",
-        "taildrop": "유효한 경로를 입력하면 Unraid 서버가 Taildrop을 통해 파일 수신을 허용합니다.",
-        "unraid_listen": "Tailscale 인터페이스를 Unraid '추가 인터페이스' 설정에 추가합니다. 이로 인해 Web GUI 및 SSH와 같은 서비스에 Tailscale IP로 접근할 수 있습니다.",
-        "ip_forward": "이 설정은 IPv4 및 IPv6 포워딩을 위한 sysctl 값을 수정합니다. Tailscale이 서브넷 라우터나 종료 노드로 구성된 경우 유용합니다. 예로 설정하면 IPv4와 IPv6 포워딩이 모두 켜집니다. 아니오로 설정하면 플러그인은 포워딩 설정을 수정하지 않습니다.",
-        "support": "지원",
-        "support_forums": "이 플러그인에 대한 지원은 Unraid 포럼의 지원 스레드를 통해 제공됩니다:",
-        "support_advanced": "서브넷 라우터 또는 Docker ipvlan/macvlan 네트워크와 같은 고급 네트워크 기능 사용 지원은 네트워크 구성에 따라 제한될 수 있습니다."
     },
     "info": {
         "online": "온라인",
@@ -100,6 +83,8 @@
         "exit_node_local": "Exit Node 사용 중 LAN 접근 허용",
         "unapproved": "관리 콘솔에서 승인이 필요합니다.",
         "connected_via": "Tailscale을 통해 연결됨",
+        "funnel_port": "WebGUI용 Funnel 포트",
+        "port_in_use": "사용 중인 포트",
         "lock": {
             "node_key": "노드 키",
             "public_key": "공개 키",
@@ -110,7 +95,12 @@
     "warnings": {
         "key_expiration": "Tailscale 키가 %s일 뒤 %s에 만료됩니다.",
         "netbios": "<a href='/Settings/SMB'>SMB 설정</a>에서 NetBIOS가 활성화되어 있습니다 - 이로 인해 공유를 Tailscale을 통해 액세스할 수 없을 수 있습니다.",
-        "lock": "Tailnet에 잠금이 활성화되었지만, 이 노드는 서명되지 않았습니다. Tailnet과 통신할 수 없습니다."
+        "lock": "Tailnet에 잠금이 활성화되었지만, 이 노드는 서명되지 않았습니다. Tailnet과 통신할 수 없습니다.",
+        "funnel": "Unraid WebGUI에 대해 Tailscale Funnel을 활성화하면 서버가 인터넷에 노출되어 무단 액세스 및 잠재적인 공격의 위험이 크게 증가합니다. 이 기능은 보안상의 영향을 완전히 이해하는 경우에만 활성화해야 합니다. 원격 액세스를 위한 권장/안전한 방법은 Funnel을 활성화하는 대신 WebGUI에 액세스할 장치에 Tailscale을 설치하는 것입니다.",
+        "subnet": "Unraid 서버에서 Tailscale 서브넷을 수락하면 일부 네트워크 구성에서 로컬 네트워크 연결이 방해받을 수 있습니다. Unraid 서버가 서브넷 라우터 또는 종료 노드로 동작하기 위해 라우트 수락은 필요하지 않습니다. Unraid 서버에서 다른 장치가 광고하는 원격 서브넷에 연결해야 할 때만 이 옵션을 활성화하세요.",
+        "dns": "서버에서 Tailscale MagicDNS를 활성화하면 Docker 컨테이너 내의 이름 해석이 방해받아 애플리케이션 연결 문제가 발생할 수 있습니다. MagicDNS는 다른 장치에서 'unraid.tailnet.ts.net'과 같은 MagicDNS 이름으로 Unraid 서버에 액세스하기 위해 서버에서 활성화할 필요가 없습니다.",
+        "caution": "신중하게 진행하시고 계속하기 전에 이 변경의 영향을 충분히 이해했는지 확인하세요.",
+        "more_info": "자세한 정보:"
     },
     "lock": {
         "sign": "노드 서명",

@@ -2,6 +2,23 @@
 
 namespace Tailscale;
 
+/*
+    Copyright (C) 2025  Derek Kaser
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 use EDACerton\PluginUtils\Translator;
 
 try {
@@ -91,6 +108,35 @@ try {
                     <tr><td>{$tr->tr("info.exit_node_local")}</td><td>{$tailscaleConInfo->ExitNodeLocal}</td><td style="text-align: right;">{$exitLocalButton}</td></tr>
 
                     EOT;
+
+                if (Utils::isFunnelAllowed() && $tailscaleConfig->AllowFunnel) {
+                    // Create a list of ports similar to the one used by the exit node selection.
+                    // Available ports can be obtained with $tailscaleInfo->getAllowedFunnelPorts
+                    // Any port that is returned by Utils::get_assigned_ports should not be selectable
+                    $funnelPorts   = $tailscaleInfo->getAllowedFunnelPorts();
+                    $assignedPorts = $utils->get_assigned_ports();
+
+                    $utils->logmsg("Funnel ports: " . implode(", ", $funnelPorts));
+                    $utils->logmsg("Assigned ports: " . implode(", ", $assignedPorts));
+
+                    $funnelSelect = "<select id='funnelPortSelect' onchange='setFunnelPort()' style='width: 100%'>";
+                    $funnelSelect .= "<option value=''>{$tr->tr("none")}</option>";
+
+                    foreach ($funnelPorts as $port) {
+                        $currentPort = $tailscaleInfo->getFunnelPort();
+                        $selected    = $currentPort == $port ? "selected" : "";
+                        $disablePort = ( ! in_array($port, $assignedPorts) || $port == $currentPort);
+
+                        $disableAttr = $disablePort ? "" : ' disabled="disabled"';
+                        $disableText = $disablePort ? "" : " ({$tr->tr("info.port_in_use")})";
+
+                        $funnelSelect .= "<option value='{$port}' {$selected} {$disableAttr}>{$port} {$disableText}</option>";
+                    }
+                    $funnelSelect .= "</select>";
+                    $configRows   .= <<<EOT
+                        <tr><td>{$tr->tr("info.funnel_port")}</td><td>&nbsp;</td><td style="text-align: right;">{$funnelSelect}</td></tr>
+                        EOT;
+                }
 
                 $routesRows = "";
 
@@ -260,6 +306,32 @@ try {
             $utils->logmsg("Setting exit node: {$_POST['node']}");
 
             $localAPI->patchPref("ExitNodeID", $_POST['node']);
+            break;
+        case 'funnel-port':
+            if ( ! isset($_POST['port'])) {
+                throw new \Exception("Missing port parameter");
+            }
+
+            // If port is empty, reset the serve config, this disables funnel
+            if ($_POST['port'] == '') {
+                $utils->logmsg("Resetting funnel port");
+                $localAPI->resetServeConfig();
+                break;
+            }
+
+            $identCfg = parse_ini_file("/boot/config/ident.cfg", false, INI_SCANNER_RAW) ?: array();
+            if ( ! isset($identCfg['PORT'])) {
+                throw new \Exception("Ident configuration does not contain PORT");
+            }
+
+            $serveConfig = new ServeConfig(
+                trim($tailscaleInfo->getDNSName(), "."),
+                $_POST['port'],
+                "http://localhost:" . $identCfg['PORT']
+            );
+
+            $utils->logmsg("Object: " . json_encode($serveConfig->getConfig(), JSON_UNESCAPED_SLASHES));
+            $localAPI->setServeConfig($serveConfig);
             break;
     }
 } catch (\Throwable $e) {

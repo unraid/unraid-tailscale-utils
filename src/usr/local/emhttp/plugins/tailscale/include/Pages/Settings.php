@@ -1,5 +1,22 @@
 <?php
 
+/*
+    Copyright (C) 2025  Derek Kaser
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace Tailscale;
 
 use EDACerton\PluginUtils\Translator;
@@ -95,38 +112,52 @@ if ($tailscaleConfig->Enable) {
         </dd>
     </dl>
     <blockquote class='inline_help'><?= $tr->tr("settings.context.wireguard"); ?></blockquote>
-
-    <h3><?= $tr->tr("settings.outbound_network"); ?></h3>
-    <h4><?= $tr->tr("settings.context.outbound_network"); ?></h4>
-
-    <dl>
-        <dt><?= $tr->tr("settings.subnets"); ?></dt>
-        <dd>
-            <select name='ACCEPT_ROUTES' size='1'>
-                <?= Utils::make_option( ! $tailscaleConfig->AllowRoutes, '0', $tr->tr("no"));?>
-                <?= Utils::make_option($tailscaleConfig->AllowRoutes, '1', $tr->tr("yes"));?>
-            </select>
-        </dd>
-    </dl>
-    <blockquote class='inline_help'>
-        <?= $tr->tr("settings.context.subnets"); ?>
-        <?= $tr->tr("settings.context.ignore"); ?>
-    </blockquote>
-
-    <dl>
-        <dt><?= $tr->tr("settings.dns"); ?></dt>
-        <dd>
-            <select name='ACCEPT_DNS' size='1'>
-                <?= Utils::make_option( ! $tailscaleConfig->AllowDNS, '0', $tr->tr("no"));?>
-                <?= Utils::make_option($tailscaleConfig->AllowDNS, '1', $tr->tr("yes"));?>
-            </select>
-        </dd>
-    </dl>
-    <blockquote class='inline_help'>
-        <?= $tr->tr("settings.context.dns"); ?>
-        <?= $tr->tr("settings.context.ignore"); ?>
-    </blockquote>
 </div>
+
+<h3><?= $tr->tr("settings.outbound_network"); ?></h3>
+
+<dl>
+    <dt><?= $tr->tr("settings.subnets"); ?></dt>
+    <dd>
+        <select name='ACCEPT_ROUTES' id='ACCEPT_ROUTES' onchange='showSettingWarning("subnet","#ACCEPT_ROUTES");' size='1'>
+            <?= Utils::make_option( ! $tailscaleConfig->AllowRoutes, '0', $tr->tr("no"));?>
+            <?= Utils::make_option($tailscaleConfig->AllowRoutes, '1', $tr->tr("yes"));?>
+        </select>
+    </dd>
+</dl>
+<blockquote class='inline_help'>
+    <?= $tr->tr("settings.context.subnets"); ?>
+</blockquote>
+
+<dl>
+    <dt><?= $tr->tr("settings.dns"); ?></dt>
+    <dd>
+        <select name='ACCEPT_DNS' id='ACCEPT_DNS' onchange='showSettingWarning("dns","#ACCEPT_DNS");' size='1'>
+            <?= Utils::make_option( ! $tailscaleConfig->AllowDNS, '0', $tr->tr("no"));?>
+            <?= Utils::make_option($tailscaleConfig->AllowDNS, '1', $tr->tr("yes"));?>
+        </select>
+    </dd>
+</dl>
+<blockquote class='inline_help'>
+    <?= $tr->tr("settings.context.dns"); ?>
+</blockquote>
+
+<?php if (Utils::isFunnelAllowed()) { ?>
+
+<dl>
+    <dt><?= $tr->tr("settings.funnel"); ?></dt>
+    <dd>
+        <select name='ALLOW_FUNNEL' id='ALLOW_FUNNEL' onchange="showSettingWarning('funnel','#ALLOW_FUNNEL');" size='1'>
+            <?= Utils::make_option( ! $tailscaleConfig->AllowFunnel, '0', $tr->tr("no"));?>
+            <?= Utils::make_option($tailscaleConfig->AllowFunnel, '1', $tr->tr("yes"));?>
+        </select>
+    </dd>
+</dl>
+<blockquote class='inline_help'>
+    <?= $tr->tr("settings.context.funnel"); ?>
+</blockquote>
+
+<?php } ?>
 
 <h3><?= $tr->tr("settings.save"); ?></h3>
 
@@ -188,14 +219,6 @@ if ($tailscaleConfig->Enable) {
 </form>
 </div>
 
-<h3><?= $tr->tr("settings.donate"); ?></h3>
-<dl>
-    <dt><?= $tr->tr("settings.context.donate"); ?></dt>
-    <dd>
-        <input type="button" value="Paypal" onclick="window.open('https://paypal.me/edacerton', '_blank')"> <input type="button" value="GitHub" onclick="window.open('https://github.com/sponsors/dkaser', '_blank')">
-    </dd>
-</dl>
-
 <script src="<?= Utils::auto_v('/webGui/javascript/jquery.filetree.js');?>"></script>
 <script src="<?= Utils::auto_v('/webGui/javascript/jquery.switchbutton.js');?>"></script>
 <script>
@@ -236,4 +259,50 @@ if ($tailscaleConfig->Enable) {
             $.cookie('tailscale_view_mode', $('.advancedview').is(':checked') ? 'advanced' : 'basic', {expires:3650});
         });
     });
+
+function showSettingWarning(message, element) {
+    // If setting the value to 0, we don't need a warning message.
+    if ($(element).val() == '0') {
+        return;
+    }
+
+    const messages = {
+        'funnel': "<?= $tr->tr("warnings.funnel"); ?>",
+        'subnet': "<?= $tr->tr("warnings.subnet"); ?>",
+        'dns': "<?= $tr->tr("warnings.dns"); ?>"
+    };
+
+    const links = {
+        'funnel': "https://forums.unraid.net/",
+        'subnet': "",
+        'dns': ""
+    };
+
+    const moreLink = links[message] || "";
+
+    var dialogText = messages[message];
+    dialogText += "<br><br><?= $tr->tr("warnings.caution"); ?>";
+    if (moreLink) {
+        dialogText += "<br><br><?= $tr->tr("warnings.more_info"); ?>";
+        dialogText += "<br><br><a href='" + moreLink + "' target='_blank'>" + moreLink + "</a>";
+    }
+
+    swal({
+        title: "<?= $tr->tr("warning"); ?>",
+        text: dialogText,
+        type: "warning",
+        confirmButtonText: "<?= $tr->tr("accept"); ?>",
+        showCancelButton: true,
+        cancelButtonText: "<?= $tr->tr("cancel"); ?>",
+        html: true
+        },
+        function(isConfirmed){
+            if (!isConfirmed) {
+                // Set the select element back to 0
+                $(element).val('0');
+            }
+        }
+    );
+}
+
 </script>
