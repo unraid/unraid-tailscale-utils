@@ -2,6 +2,23 @@
 
 namespace Tailscale;
 
+/*
+    Copyright (C) 2025  Derek Kaser
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 enum APIMethods
 {
     case GET;
@@ -28,7 +45,7 @@ class LocalAPI
             throw new \InvalidArgumentException("URL cannot be empty");
         }
 
-        $body_encoded = json_encode($body);
+        $body_encoded = json_encode($body, JSON_UNESCAPED_SLASHES);
 
         if ( ! $body_encoded) {
             throw new \InvalidArgumentException("Failed to encode JSON");
@@ -87,6 +104,11 @@ class LocalAPI
     public function resetServeConfig(): void
     {
         $this->tailscaleLocalAPI("v0/serve-config", APIMethods::POST, new \stdClass());
+    }
+
+    public function setServeConfig(ServeConfig $serveConfig): void
+    {
+        $this->tailscaleLocalAPI("v0/serve-config", APIMethods::POST, $serveConfig->getConfig());
     }
 
     public function postLoginInteractive(): void

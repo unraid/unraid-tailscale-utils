@@ -2,6 +2,23 @@
 
 namespace Tailscale;
 
+/*
+    Copyright (C) 2025  Derek Kaser
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 class Utils extends \EDACerton\PluginUtils\Utils
 {
     public function setPHPDebug(): void
@@ -109,5 +126,64 @@ class Utils extends \EDACerton\PluginUtils\Utils
     public static function getExitRoutes(): array
     {
         return ["0.0.0.0/0", "::/0"];
+    }
+
+    public static function isFunnelAllowed(): bool
+    {
+        $directives = ["allow 127.0.0.1;", "allow ::1;"];
+
+        $nginxConfig = file_get_contents('/etc/nginx/nginx.conf');
+        if ($nginxConfig === false) {
+            return false; // Unable to read the nginx configuration file
+        }
+
+        // Search $nginxConfig for the allow directives.
+        foreach ($directives as $directive) {
+            if (strpos($nginxConfig, $directive) !== false) {
+                return false; // Directive found, funnel not safe to use
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Get a list of ports that are currently assigned to services.
+     * This is a best-effort approach, especially since docker might not be running during configuration.
+     *
+     * @return array<int>
+     */
+    public function get_assigned_ports(): array
+    {
+        $ports    = array();
+        $identCfg = parse_ini_file("/boot/config/ident.cfg", false, INI_SCANNER_RAW) ?: array();
+        if (isset($identCfg['PORT'])) {
+            $ports[] = intval($identCfg['PORT']);
+        }
+        if (isset($identCfg['PORTSSL']) && isset($identCfg['USE_SSL']) && $identCfg['USE_SSL'] === 'yes') {
+            $ports[] = intval($identCfg['PORTSSL']);
+        }
+        if (isset($identCfg['PORTTELNET']) && isset($identCfg['USE_TELNET']) && $identCfg['USE_TELNET'] === 'yes') {
+            $ports[] = intval($identCfg['PORTTELNET']);
+        }
+        if (isset($identCfg['PORTSSH']) && isset($identCfg['USE_SSH']) && $identCfg['USE_SSH'] === 'yes') {
+            $ports[] = intval($identCfg['PORTSSH']);
+        }
+
+        // Get any open TCP ports from the system
+        $netstatOutput = shell_exec("netstat -tuln | grep LISTEN");
+        if ($netstatOutput) {
+            $lines = explode("\n", trim($netstatOutput));
+            foreach ($lines as $line) {
+                if (preg_match('/:(\d+)\s+/', $line, $matches)) {
+                    $port = intval($matches[1]);
+                    if ($port > 0 && $port < 65536) {
+                        $ports[] = $port;
+                    }
+                }
+            }
+        }
+
+        return array_unique($ports);
     }
 }

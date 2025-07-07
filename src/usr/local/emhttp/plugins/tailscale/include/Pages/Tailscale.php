@@ -2,6 +2,23 @@
 
 namespace Tailscale;
 
+/*
+    Copyright (C) 2025  Derek Kaser
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 use EDACerton\PluginUtils\Translator;
 
 $docroot = $docroot ?? $_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp';
@@ -51,6 +68,9 @@ function showTailscaleConfig() {
     $('#connectionTable').html(data.connection);
     $('div.spinner.fixed').hide('fast');
     $("#exitNodeSelect").select2();
+    if ($("#funnelPortSelect").length) {
+        $("#funnelPortSelect").select2();
+    }
     tailscaleControlsDisabled(false);
     validateTailscaleRoute();
   },"json");
@@ -81,6 +101,12 @@ async function setTailscaleExitNode() {
     $('div.spinner.fixed').show('fast');
     tailscaleControlsDisabled(true);
     var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'exit-node', node: $('#exitNodeSelect').val()});
+    showTailscaleConfig();
+}
+async function setFunnelPort() {
+    $('div.spinner.fixed').show('fast');
+    tailscaleControlsDisabled(true);
+    var res = await $.post('/plugins/tailscale/include/data/Config.php',{action: 'funnel-port', port: $('#funnelPortSelect').val()});
     showTailscaleConfig();
 }
 async function removeTailscaleRoute(route) {

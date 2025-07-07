@@ -2,6 +2,23 @@
 
 namespace Tailscale;
 
+/*
+    Copyright (C) 2025  Derek Kaser
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 use EDACerton\PluginUtils\Translator;
 
 class Info
@@ -13,6 +30,7 @@ class Info
     private \stdClass $status;
     private \stdClass $prefs;
     private \stdClass $lock;
+    private \stdClass $serve;
 
     public function __construct(Translator $tr)
     {
@@ -27,6 +45,7 @@ class Info
         $this->status     = $this->localAPI->getStatus();
         $this->prefs      = $this->localAPI->getPrefs();
         $this->lock       = $this->localAPI->getTkaStatus();
+        $this->serve      = $this->localAPI->getServeConfig();
     }
 
     public function getStatus(): \stdClass
@@ -404,5 +423,52 @@ class Info
     public function connectedViaTS(): bool
     {
         return in_array($_SERVER['SERVER_ADDR'] ?? "", $this->status->TailscaleIPs ?? array());
+    }
+
+    /**
+     * @return array<int>
+     */
+    public function getAllowedFunnelPorts(): array
+    {
+        $allowedPorts = array();
+
+        if (isset($this->status->Self->CapMap)) {
+            $prefix = "https://tailscale.com/cap/funnel-ports?ports=";
+            foreach ($this->status->Self->CapMap as $cap => $value) {
+                if (strpos($cap, $prefix) === 0) {
+                    $ports = explode(",", substr($cap, strlen($prefix)));
+                    foreach ($ports as $port) {
+                        $allowedPorts[] = intval($port);
+                    }
+                    break;
+                }
+            }
+        }
+        return $allowedPorts;
+    }
+
+    public function getFunnelPort(): ?int
+    {
+        if (isset($this->serve->AllowFunnel) && $this->serve->AllowFunnel) {
+            $funnelKeys = array_keys((array)$this->serve->AllowFunnel);
+            if (count($funnelKeys) > 0) {
+                $funnelKey = $funnelKeys[0];
+                $parts     = explode(":", strval($funnelKey));
+                if (count($parts) == 2 && is_numeric($parts[1])) {
+                    return intval($parts[1]);
+                }
+            }
+        }
+
+        return null; // Funnel not enabled
+    }
+
+    public function getDNSName(): string
+    {
+        if ( ! isset($this->status->Self->DNSName)) {
+            throw new \RuntimeException("DNSName not set in Tailscale status.");
+        }
+
+        return $this->status->Self->DNSName;
     }
 }

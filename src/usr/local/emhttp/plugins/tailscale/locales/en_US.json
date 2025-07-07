@@ -16,6 +16,8 @@
     "enabled": "Enabled",
     "disable": "Disable",
     "enable": "Enable",
+    "cancel": "Cancel",
+    "accept": "Accept",
     "sign": "Sign",
     "login": "Login",
     "add": "Add",
@@ -25,6 +27,7 @@
     "needs_login": "This device needs to be logged in to Tailscale. Refresh this page after logging in to view the status.",
     "tailscale_disabled": "Tailscale is currently disabled. It can be enabled via the Settings tab.",
     "tailscale_lock": "Tailscale Lock",
+    "warning": "Warning",
     "settings": {
         "basic": "Basic View",
         "advanced": "Advanced View",
@@ -33,7 +36,6 @@
         "unraid_listen": "Unraid services listen on Tailscale IP",
         "ip_forward": "Enable IP Forwarding",
         "taildrop": "Taildrop Location",
-        "usage": "Allow Usage Data Collection",
         "services": "Tailscale Services",
         "wireguard": "Wireguard Port",
         "outbound_network": "Advanced Network Options",
@@ -43,8 +45,8 @@
         "restart": "Restart Tailscale",
         "erase": "Erase Tailscale Configuration",
         "diagnostics": "Plugin Diagnostics",
-        "donate": "Donate",
         "reauthenticate": "Reauthenticate",
+        "funnel": "Allow Tailscale Funnel",
         "context": {
             "unraid_listen": "Configures Unraid services (SSH, WebGUI, SMB, etc.) to listen on Tailscale addresses.",
             "ip_forward": "Sets net.ipv4.ip_forward and net.ipv6.conf.all.forwarding to 1 in sysctl. This change occurs immediately when being enabled.",
@@ -52,32 +54,13 @@
             "dns": "Allows Tailscale DNS to be enabled via the CLI or WebGUI. If disabled, Tailscale DNS will be disabled when Tailscale starts.",
             "subnets": "Allows Tailscale routes to be enabled via the CLI or WebGUI. If disabled, Tailscale routes will be disabled when Tailscale starts.",
             "wireguard": "Change the port used for Wireguard conections. This usually does not need to be changed.",
-            "usage": "Allows collection of usage data for the Tailscale plugin. This sends an anonymized identifier, the current Unraid version, the current version of the plugin, and the enabled/disabled status of some features. No personal or network information is collected.",
             "erase": "Logs out of Tailscale and resets all settings to defaults",
             "restart": "Restart the Tailscale daemon and reapply settings.",
             "diagnostics": "Download diagnostics (this may take some time to complete)",
-            "ignore": "If set to ignore, the plugin will not modify the setting",
-            "outbound_network": "These settings only apply to outbound network traffic from Unraid or running containers. They do not affect advertised routes, exit nodes, or the ability to access Unraid via MagicDNS. These should generally be left off unless specifically needed. Turning these on may cause network issues.",
             "save": "Tailscale will be restarted when changes are applied",
-            "donate": "If this plugin helps you, please consider donating.",
-            "reauthenticate": "Force a Tailscale reauthentication. This will disconnect Tailscale until the authentication is completed."
+            "reauthenticate": "Force a Tailscale reauthentication. This will disconnect Tailscale until the authentication is completed.",
+            "funnel": "Allows Tailscale funnel to be enabled via the WebGUI. If disabled, Tailscale funnel will be disabled."
         }
-    },
-    "help": {
-        "initial": "Initial Configuration",
-        "key_expiration": "You may want to disable key expiration for your server (either by using an auth key and connecting via the CLI, or afterwards via the Tailscale admin console).",
-        "certificates": "Certificates",
-        "certificates_instructions": "A Tailscale HTTPS certificate can be used for the WebGUI. Your hostname must match the name used for the machine in Tailscale. <ol><li>Enable HTTPS for your tailnet.</li><li>Set the Local TLD in Settings->Management Access to your Tailnet name (as displayed in the DNS page of your Tailscale admin console)</li><li>Generate a new certificate and copy the to the WebGUI configuration. (This can also be run via the User Scripts plugin.)</li></ol>",
-        "certificates_docker": "It is also possible to use these certificates for Docker containers. For example, to use the generated certificate for Minio:",
-        "dns": "When enabled, Unraid will use the DNS settings configured in the Tailscale admin console, including MagicDNS and nameservers. When disabled, Unraid will use the DNS settings configured in the Unraid network settings.",
-        "subnets": "When enabled, Unraid will accept routes advertisted from subnet routers in the tailnet. When disabled, Unraid will not accept routes from subnet routers.",
-        "outbound_network": "If a setting is set to Ignore, the plugin will not make any changes to the setting in Tailscale. This is useful if you wish to configure settings via CLI instead of the WebGUI.",
-        "taildrop": "Enter a valid path here to enable the Unraid server to accept files via Taildrop.",
-        "unraid_listen": "Adds the Tailscale interface to the Unraid 'extra interfaces' setting. This allows services such as the Web GUI and SSH to be accessed via the Tailscale IP.",
-        "ip_forward": "This setting modifies the sysctl settings for IPv4 and IPv6 forwarding. This is useful when Tailscale is configured to be a subnet router or exit node. When set to Yes, IPv4 and IPv6 forwarding are both turned on. When set to No, the plugin does not modify the forwarding settings.",
-        "support": "Support",
-        "support_forums": "Support for this plugin is available via the support thread on the Unraid forums:",
-        "support_advanced": "Support for use of advanced networking features such as subnet routers or docker ipvlan/macvlan networks will be limited since advanced network features can be dependent on the underlying network configuration."
     },
     "info": {
         "online": "Online",
@@ -100,6 +83,8 @@
         "exit_node_local": "Allow LAN Access while using Exit Node",
         "unapproved": "Needs approval in admin console",
         "connected_via": "Connected via Tailscale",
+        "funnel_port": "Funnel Port for WebGUI",
+        "port_in_use": "Port in Use",
         "lock": {
             "node_key": "Node Key",
             "public_key": "Public Key",
@@ -110,7 +95,12 @@
     "warnings": {
         "key_expiration": "The Tailscale key will expire in %s days on %s.",
         "netbios": "NetBIOS is enabled in <a href='/Settings/SMB'>SMB settings</a> - this can prevent shares from being accessed via Tailscale.",
-        "lock": "The tailnet has lock enabled, but this node has not been signed. It will not be able to communicate with the tailnet."
+        "lock": "The tailnet has lock enabled, but this node has not been signed. It will not be able to communicate with the tailnet.",
+        "funnel": "Enabling Tailscale Funnel for the Unraid WebGUI exposes your server to the internet, significantly increasing the risk of unauthorized access and potential attacks. This feature should only be enabled if you fully understand the security impact. The recommended/secure approach for remote access is to install Tailscale on the devices you plan to use to access the WebGUI instead of enabling Funnel.",
+        "subnet": "Accepting Tailscale subnets on your Unraid server can disrupt local network connectivity in certain network configurations. Accepting routes is not required for your Unraid server to function as a subnet router or exit node. Only enable this option if your Unraid server needs to connect to remote subnets advertised by other devices.",
+        "dns": "Enabling Tailscale MagicDNS on your server can disrupt name resolution inside Docker containers, potentially causing connectivity issues for applications. MagicDNS does not need to be enabled on the server for you to access your Unraid server using MagicDNS names (e.g., 'unraid.tailnet.ts.net') from other devices.",
+        "caution": "Proceed with caution and ensure you understand the implications of this change before continuing.",
+        "more_info": "For more information:"
     },
     "lock": {
         "sign": "Sign Nodes",

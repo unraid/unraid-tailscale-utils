@@ -16,6 +16,8 @@
     "enabled": "Aktiviert",
     "disable": "Deaktivieren",
     "enable": "Aktivieren",
+    "cancel": "Abbrechen",
+    "accept": "Akzeptieren",
     "sign": "Signieren",
     "login": "Anmelden",
     "add": "Hinzufügen",
@@ -25,6 +27,7 @@
     "needs_login": "Dieses Gerät muss bei Tailscale angemeldet sein. Aktualisieren Sie diese Seite nach der Anmeldung, um den Status anzuzeigen.",
     "tailscale_disabled": "Tailscale ist derzeit deaktiviert. Es kann über die Registerkarte Einstellungen aktiviert werden.",
     "tailscale_lock": "Tailscale Lock",
+    "warning": "Warnung",
     "settings": {
         "basic": "Einfache Ansicht",
         "advanced": "Erweiterte Ansicht",
@@ -33,7 +36,6 @@
         "unraid_listen": "Unraid-Dienste verfügbar via Tailscale IP",
         "ip_forward": "IP Forwarding aktivieren",
         "taildrop": "Taildrop Speicherort",
-        "usage": "Erfassung von Nutzungsdaten zulassen",
         "services": "Tailscale-Dienste",
         "wireguard": "Wireguard-Port",
         "outbound_network": "Erweiterte Netzwerkoptionen",
@@ -43,8 +45,8 @@
         "restart": "Tailscale neu starten",
         "erase": "Tailscale Konfiguration löschen",
         "diagnostics": "Plugin-Diagnose",
-        "donate": "Spenden",
         "reauthenticate": "Erneut authentifizieren",
+        "funnel": "Tailscale Funnel zulassen",
         "context": {
             "unraid_listen": "Konfiguriert Unraid-Dienste (SSH, WebGUI, SMB usw.) so, dass sie auf Tailscale-Adressen verfügbar sind.",
             "ip_forward": "Setzt net.ipv4.ip_forward und net.ipv6.conf.all.forwarding in sysctl auf 1. Diese Änderung tritt sofort nach der Aktivierung auf.",
@@ -52,32 +54,13 @@
             "dns": "Erlaubt das Aktivieren von Tailscale-DNS über die CLI oder das WebGUI. Wenn deaktiviert, wird Tailscale-DNS deaktiviert, wenn Tailscale startet.",
             "subnets": "Erlaubt das Aktivieren von Tailscale-Routen über die CLI oder das WebGUI. Wenn deaktiviert, werden die Tailscale-Routen beim Start von Tailscale deaktiviert.",
             "wireguard": "Port, der für Wireguard-Verbindungen verwendet wird. Dies muss in der Regel nicht geändert werden.",
-            "usage": "Ermöglicht die Erfassung von Nutzungsdaten für das Tailscale-Plugin. Dadurch werden eine anonymisierte Kennung, die aktuelle Unraid-Version, die aktuelle Version des Plugins gesendet, und den aktiviert/deaktivierten Status einiger Features. Es werden keine persönlichen oder Netzwerkinformationen gesammelt.",
             "erase": "Meldet sich von Tailscale ab und setzt alle Einstellungen auf die Standardeinstellungen zurück",
             "restart": "Starten Sie den Tailscale-Daemon neu, und wenden Sie die Einstellungen erneut an.",
             "diagnostics": "Diagnose Daten herunterladen (dies kann einige Zeit in Anspruch nehmen)",
-            "ignore": "Wenn dies auf ignorieren gesetzt ist, ändert das Plugin die Einstellung nicht",
-            "outbound_network": "Diese Einstellungen gelten nur für ausgehenden Netzwerkdatenverkehr von Unraid oder laufenden Containern. Sie beeinflussen weder beworbene Routen, Exit-Nodes noch die Möglichkeit, über MagicDNS auf Unraid zuzugreifen. Diese sollten im Allgemeinen ausgeschaltet bleiben, außer sie werden explizit benötigt. Das Aktivieren kann Netzwerkprobleme verursachen.",
             "save": "Tailscale wird neu gestartet, damit Änderungen übernommen werden",
-            "donate": "Wenn dieses Plugin Ihnen hilft, erwägen Sie bitte eine Spende.",
-            "reauthenticate": "Erzwingt eine erneute Authentifizierung von Tailscale. Dabei wird Tailscale getrennt, bis die Authentifizierung abgeschlossen ist."
+            "reauthenticate": "Erzwingt eine erneute Authentifizierung von Tailscale. Dabei wird Tailscale getrennt, bis die Authentifizierung abgeschlossen ist.",
+            "funnel": "Erlaubt das Aktivieren von Tailscale Funnel über das WebGUI. Wenn deaktiviert, wird Tailscale Funnel deaktiviert."
         }
-    },
-    "help": {
-        "initial": "Erstkonfiguration",
-        "key_expiration": "Möglicherweise möchten Sie den Schlüsselablauf für Ihren Server deaktivieren (entweder mithilfe eines Authentifizierungsschlüssels und einer Verbindung über die CLI oder anschließend über die Tailscale-Verwaltungskonsole).",
-        "certificates": "Zertifikate",
-        "certificates_instructions": "Für die WebGUI kann ein Tailscale-HTTPS-Zertifikat verwendet werden. Ihr Hostname muss mit dem Namen übereinstimmen, der für den Computer in Tailscale verwendet wird. <ol><li>Aktivieren Sie HTTPS für Ihr Tailnet.</li><li>Legen Sie die lokale TLD unter Einstellungen->Verwaltungszugriff auf Ihren Tailnet-Namen fest (wie auf der DNS-Seite Ihrer Tailscale-Verwaltungskonsole angezeigt)</li><li>Generieren Sie ein neues Zertifikat und kopieren Sie es in die WebGUI-Konfiguration. (Dies kann auch über das Benutzerskripte-Plugin ausgeführt werden.)</li></ol>",
-        "certificates_docker": "Es ist auch möglich, diese Zertifikate für Docker-Container zu verwenden. So verwenden Sie beispielsweise das generierte Zertifikat für Minio:",
-        "dns": "Wenn diese Option aktiviert ist, verwendet Unraid die DNS-Einstellungen, die in der Tailscale-Verwaltungskonsole konfiguriert wurden, einschließlich MagicDNS und Nameserver. Wenn diese Option deaktiviert ist, verwendet Unraid die DNS-Einstellungen, die in den Unraid-Netzwerkeinstellungen konfiguriert sind.",
-        "subnets": "Wenn diese Option aktiviert ist, akzeptiert Unraid Routen, die von Subnetz-Routern im Tailnet angekündigt werden. Wenn diese Option deaktiviert ist, akzeptiert Unraid keine Routen von Subnetz-Routern.",
-        "outbound_network": "Wenn eine Einstellung auf Ignorieren gesetzt ist, nimmt das Plugin keine Änderungen an der Einstellung in Tailscale vor. Dies ist nützlich, wenn Sie Einstellungen über die CLI statt über die WebGUI konfigurieren möchten.",
-        "taildrop": "Geben Sie hier einen gültigen Pfad ein, damit der Unraid-Server Dateien über Taildrop akzeptieren kann.",
-        "unraid_listen": "Fügt die Tailscale-Schnittstelle zur Unraid-Einstellung \"Zusätzliche Schnittstellen\" hinzu. Damit kann über die Tailscale-IP auf Dienste wie die Web-GUI und SSH zugegriffen werden.",
-        "ip_forward": "Diese Einstellung ändert die sysctl-Einstellungen für IPv4 und IPv6-Weiterleitung. Dies ist nützlich, wenn Tailscale als Subnetzrouter oder Exitknoten konfiguriert ist. Wenn diese Option auf Ja festgelegt ist, sind sowohl die IPv4- als auch die IPv6-Weiterleitung aktiviert. Wenn diese Option auf Nein gesetzt ist, ändert das Plugin die Weiterleitungseinstellungen nicht.",
-        "support": "Support",
-        "support_forums": "Support für dieses Plugin ist über den Support-Thread in den Unraid-Foren verfügbar:",
-        "support_advanced": "Die Unterstützung für die Verwendung erweiterter Netzwerkfunktionen wie Subnetzrouter oder Docker-IPVLAN-/MACVLAN-Netzwerke ist eingeschränkt, da erweiterte Netzwerkfunktionen von der zugrunde liegenden Netzwerkkonfiguration abhängen können."
     },
     "info": {
         "online": "Online",
@@ -100,6 +83,8 @@
         "exit_node_local": "LAN-Zugriff beim Verwenden des Exit-Nodes erlauben",
         "unapproved": "Genehmigung in der Admin-Konsole erforderlich",
         "connected_via": "Verbunden über Tailscale",
+        "funnel_port": "Funnel-Port für WebGUI",
+        "port_in_use": "Verwendeter Port",
         "lock": {
             "node_key": "Node Schlüssel",
             "public_key": "Öffentlicher Schlüssel",
@@ -110,7 +95,12 @@
     "warnings": {
         "key_expiration": "Der Tailscale Schlüssel wird in %s Tagen um %s ablaufen.",
         "netbios": "NetBIOS ist in den SMB-Einstellungen aktiviert. Dies kann verhindern, dass über Tailscale auf Freigaben zugegriffen werden kann.",
-        "lock": "Für das Tailnet ist die Sperre aktiviert, aber dieser Node wurde nicht signiert. Es wird nicht in der Lage sein, mit dem Tailnet zu kommunizieren."
+        "lock": "Für das Tailnet ist die Sperre aktiviert, aber dieser Node wurde nicht signiert. Es wird nicht in der Lage sein, mit dem Tailnet zu kommunizieren.",
+        "funnel": "Das Aktivieren von Tailscale Funnel für das Unraid WebGUI macht Ihren Server über das Internet zugänglich und erhöht das Risiko unbefugten Zugriffs und potenzieller Angriffe erheblich. Diese Funktion sollte nur aktiviert werden, wenn Sie die Sicherheitsauswirkungen vollständig verstehen. Die empfohlene/​sichere Methode für den Fernzugriff ist, Tailscale auf den Geräten zu installieren, mit denen Sie auf das WebGUI zugreifen möchten, anstatt Funnel zu aktivieren.",
+        "subnet": "Das Akzeptieren von Tailscale-Subnetzen auf Ihrem Unraid-Server kann in bestimmten Netzwerkkonfigurationen die lokale Netzwerkverbindung stören. Das Akzeptieren von Routen ist nicht erforderlich, damit Ihr Unraid-Server als Subnetz-Router oder Exit-Node fungiert. Aktivieren Sie diese Option nur, wenn Ihr Unraid-Server eine Verbindung zu von anderen Geräten angekündigten entfernten Subnetzen herstellen muss.",
+        "dns": "Das Aktivieren von Tailscale MagicDNS auf Ihrem Server kann die Namensauflösung innerhalb von Docker-Containern stören und möglicherweise zu Verbindungsproblemen für Anwendungen führen. MagicDNS muss auf dem Server nicht aktiviert sein, damit Sie mit anderen Geräten über MagicDNS-Namen (z. B. \"unraid.tailnet.ts.net\") auf Ihren Unraid-Server zugreifen können.",
+        "caution": "Gehen Sie mit Vorsicht vor und stellen Sie sicher, dass Sie die Auswirkungen dieser Änderung verstehen, bevor Sie fortfahren.",
+        "more_info": "Weitere Informationen:"
     },
     "lock": {
         "sign": "Nodes signieren",

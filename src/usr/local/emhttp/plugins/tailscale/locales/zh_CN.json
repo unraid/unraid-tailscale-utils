@@ -16,6 +16,8 @@
     "enabled": "已启用",
     "disable": "禁用",
     "enable": "启用",
+    "cancel": "取消",
+    "accept": "接受",
     "sign": "登录",
     "login": "登录",
     "add": "添加",
@@ -25,6 +27,7 @@
     "needs_login": "此设备需要登录 Tailscale。登录后请刷新此页面以查看状态。",
     "tailscale_disabled": "Tailscale 当前已禁用。可以通过“设置选项卡”启用。",
     "tailscale_lock": "Tailscale 锁",
+    "warning": "警告",
     "settings": {
         "basic": "基本视图",
         "advanced": "高级视图",
@@ -33,7 +36,6 @@
         "unraid_listen": "Unraid 服务监听 Tailscale IP",
         "ip_forward": "启用 IP 转发",
         "taildrop": "Taildrop 位置",
-        "usage": "允许采集使用数据",
         "services": "Tailscale 服务",
         "wireguard": "Wireguard 端口",
         "outbound_network": "高级网络选项",
@@ -43,8 +45,8 @@
         "restart": "重启 Tailscale",
         "erase": "清除 Tailscale 配置",
         "diagnostics": "插件诊断",
-        "donate": "捐赠",
         "reauthenticate": "重新认证",
+        "funnel": "允许 Tailscale Funnel",
         "context": {
             "unraid_listen": "将Unraid服务（如SSH、WebGUI、SMB等）配置为Tailscale监听地址",
             "ip_forward": "在 sysctl 中将 net.ipv4.ip_forward 和 net.ipv6.conf.all.forwarding 设置为 1。启用后，此更改会立即发生。",
@@ -52,32 +54,13 @@
             "dns": "允许通过 CLI 或 WebGUI 启用 Tailscale DNS。如果禁用，当 Tailscale 启动时，Tailscale DNS 也将被禁用。",
             "subnets": "允许通过 CLI 或 WebGUI 启用 Tailscale 路由。如果禁用，当 Tailscale 启动时，Tailscale 路由也将被禁用。",
             "wireguard": "更改用于 Wireguard 连接的端口。这项通常不需要更改。",
-            "usage": "允许收集 Tailscale 插件的使用数据。这将发送一个匿名标识符、当前 Unraid 版本、插件的当前版本以及某些功能的启用/禁用状态。不会收集任何个人或网络信息。",
             "erase": "注销 Tailscale 并重置所有设置为默认值",
             "restart": "重新启动 Tailscale 守护程序并重新应用设置。",
             "diagnostics": "下载诊断记录（这可能需要一些时间才能完成）",
-            "ignore": "如果设置为忽略，则插件不会修改设置",
-            "outbound_network": "这些设置仅适用于来自 Unraid 或正在运行的容器的出站网络流量。它们不会影响公告路由、出口节点或通过 MagicDNS 访问 Unraid 的能力。除非特别需要，这些设置通常应保持关闭。启用这些选项可能会导致网络问题。",
             "save": "应用更改时，Tailscale 将重新启动",
-            "donate": "如果这个插件帮助到您，可以考虑捐赠哦。",
-            "reauthenticate": "强制进行 Tailscale 重新认证。这将在认证完成之前断开 Tailscale 的连接。"
+            "reauthenticate": "强制进行 Tailscale 重新认证。这将在认证完成之前断开 Tailscale 的连接。",
+            "funnel": "允许通过 WebGUI 启用 Tailscale Funnel。如果禁用，Tailscale Funnel 将被禁用。"
         }
-    },
-    "help": {
-        "initial": "初始化配置",
-        "key_expiration": "您可能希望禁用服务器的密钥过期（通过使用身份验证密钥并通过 CLI 连接，或者之后通过 Tailscale 管理控制台）。",
-        "certificates": "证书",
-        "certificates_instructions": "Tailscale HTTPS 证书可用于 WebGUI。您的主机名必须与 Tailscale 中用于机器名称匹配。 <ol><li>为 Tailnet 启用 HTTPS。</li><li>在“设置”->管理访问中将本地 TLD 设置为您的 Tailnet 名称（如 Tailscale 管理控制台的 DNS 页面中所示）</li><li>生成新证书并将其复制到 WebGUI 配置。（这也可以通过用户脚本插件运行。）</li></ol>",
-        "certificates_docker": "也可以将这些证书用于 Docker 容器。例如，要使用 Minio 生成的证书：",
-        "dns": "启用后，Unraid 将使用在 Tailscale 管理控制台中配置的 DNS 设置，包括 MagicDNS 和 nameservers。禁用后，Unraid 将使用在 Unraid 网络设置中配置的 DNS 设置。",
-        "subnets": "启用后，Unraid 将接受从 tailnet 中的子网路由器通告的路由。禁用后，Unraid 将不接受来自子网路由器的路由。",
-        "outbound_network": "如果设置为忽略，插件将不会对 Tailscale 中的设置进行任何更改。 如果您想通过 CLI 而不是 WebGUI 配置，该选项将是有用的。",
-        "taildrop": "输入一个有效的路径以启用 Unraid 服务器通过 Taildrop 接收文件。",
-        "unraid_listen": "将 Tailscale 接口添加到 Unraid '额外接口' 设置。 这样可以通过 Tailscale IP 访问 web 界面和 SSH 等服务。",
-        "ip_forward": "此设置将修改 IPv4 和 IPv6 转发的 sysctl 设置。 当 Tailscale 设置为 subnet router 或 exit node 时，这是有用的。 当设置为“是”，IPv4和IPv6转发都已打开。当设置为“否”时，插件不修改转发设置。",
-        "support": "支持",
-        "support_forums": "可通过 Unraid 论坛上的帖子获得对此插件的支持：",
-        "support_advanced": "对使用高级网络功能（如子网路由器或 docker ipvlan/macvlan 网络）的支持将受到限制，因为高级网络功能可能依赖于基础网络配置。"
     },
     "info": {
         "online": "在线",
@@ -100,6 +83,8 @@
         "exit_node_local": "使用出口节点时允许 LAN 访问",
         "unapproved": "需要在管理控制台批准",
         "connected_via": "通过 Tailscale 连接",
+        "funnel_port": "WebGUI 的 Funnel 端口",
+        "port_in_use": "端口正在使用",
         "lock": {
             "node_key": "节点密钥",
             "public_key": "公开密钥",
@@ -110,7 +95,12 @@
     "warnings": {
         "key_expiration": "Tailscale 密钥将在 %s 天内在 %s 过期。",
         "netbios": "NetBIOS 在 <a href='/Settings/SMB'>SMB 设置</a>中已启用 - 这可以阻止通过 Tailscale 访问共享。",
-        "lock": "尾网（tailnet）已启用锁定，但该节点尚未签名。 它将无法与尾网通信。"
+        "lock": "尾网（tailnet）已启用锁定，但该节点尚未签名。 它将无法与尾网通信。",
+        "funnel": "为 Unraid WebGUI 启用 Tailscale Funnel 会使您的服务器暴露在 Internet 上，极大增加未经授权访问和潜在攻击的风险。只有在您充分理解安全影响的情况下才应启用此功能。建议和安全的远程访问方式是，在您计划用于访问 WebGUI 的设备上安装 Tailscale，而不是启用 Funnel。",
+        "subnet": "在您的 Unraid 服务器上接受 Tailscale 子网会在某些网络配置下破坏本地网络连接。作为子网路由器或出口节点，您的 Unraid 服务器并不需要接受路由。只有当您的 Unraid 服务器需要连接其他设备所发布的远程子网时，才应启用该选项。",
+        "dns": "在服务器上启用 Tailscale MagicDNS 可能会干扰 Docker 容器中的名称解析，可能导致应用程序连通性问题。您无需在服务器上启用 MagicDNS，也能从其他设备使用 MagicDNS 名称（如 'unraid.tailnet.ts.net'）访问您的 Unraid 服务器。",
+        "caution": "请谨慎操作，并确保在继续前已了解此更改的影响。",
+        "more_info": "详细信息："
     },
     "lock": {
         "sign": "为节点签名",
