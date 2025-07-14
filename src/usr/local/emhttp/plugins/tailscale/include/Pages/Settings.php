@@ -273,7 +273,7 @@ function showSettingWarning(message, element) {
     };
 
     const links = {
-        'funnel': "https://forums.unraid.net/",
+        'funnel': "https://docs.unraid.net/unraid-os/manual/security/tailscale/",
         'subnet': "",
         'dns': ""
     };
