@@ -62,7 +62,7 @@ if ($tailscaleConfig->Enable) {
     <dl>
         <dt><?= $tr->tr("settings.enable_tailscale"); ?></dt>
         <dd>
-            <select name='ENABLE_TAILSCALE' size='1'>
+            <select name='ENABLE_TAILSCALE' size='1' class='narrow'>
                 <?= Utils::make_option($tailscaleConfig->Enable, '1', $tr->tr("yes"));?>
                 <?= Utils::make_option( ! $tailscaleConfig->Enable, '0', $tr->tr("no"));?>
             </select>
@@ -72,7 +72,7 @@ if ($tailscaleConfig->Enable) {
     <dl>
         <dt><?= $tr->tr("settings.unraid_listen"); ?></dt>
         <dd>
-            <select name='INCLUDE_INTERFACE' size='1'>
+            <select name='INCLUDE_INTERFACE' size='1' class='narrow'>
                 <?= Utils::make_option($tailscaleConfig->IncludeInterface, '1', $tr->tr("yes"));?>
                 <?= Utils::make_option( ! $tailscaleConfig->IncludeInterface, '0', $tr->tr("no"));?>
             </select>
@@ -83,7 +83,7 @@ if ($tailscaleConfig->Enable) {
     <dl>
         <dt><?= $tr->tr("settings.ip_forward"); ?></dt>
         <dd>
-            <select name='SYSCTL_IP_FORWARD' size='1'>
+            <select name='SYSCTL_IP_FORWARD' size='1' class='narrow'>
                 <?= Utils::make_option($tailscaleConfig->IPForward, '1', $tr->tr("yes"));?>
                 <?= Utils::make_option( ! $tailscaleConfig->IPForward, '0', $tr->tr("no"));?>
             </select>
@@ -95,7 +95,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.taildrop"); ?></dt>
     <dd>
-        <input type="text" id="taildropdir" name="TAILDROP_DIR" autocomplete="off" spellcheck="false"
+        <input type="text" id="taildropdir" name="TAILDROP_DIR" autocomplete="off" spellcheck="false" class="narrow"
         data-pickfolders="true" data-pickfilter="HIDE_FILES_FILTER" data-pickroot="/mnt" pattern="^[^\\]*/$"
         value="<?= htmlspecialchars($tailscaleConfig->TaildropDir);?>">
     </dd>
@@ -119,7 +119,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.subnets"); ?></dt>
     <dd>
-        <select name='ACCEPT_ROUTES' id='ACCEPT_ROUTES' onchange='showSettingWarning("subnet","#ACCEPT_ROUTES");' size='1'>
+        <select name='ACCEPT_ROUTES' id='ACCEPT_ROUTES' onchange='showSettingWarning("subnet","#ACCEPT_ROUTES");' size='1' class='narrow'>
             <?= Utils::make_option( ! $tailscaleConfig->AllowRoutes, '0', $tr->tr("no"));?>
             <?= Utils::make_option($tailscaleConfig->AllowRoutes, '1', $tr->tr("yes"));?>
         </select>
@@ -132,7 +132,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.dns"); ?></dt>
     <dd>
-        <select name='ACCEPT_DNS' id='ACCEPT_DNS' onchange='showSettingWarning("dns","#ACCEPT_DNS");' size='1'>
+        <select name='ACCEPT_DNS' id='ACCEPT_DNS' onchange='showSettingWarning("dns","#ACCEPT_DNS");' size='1' class='narrow'>
             <?= Utils::make_option( ! $tailscaleConfig->AllowDNS, '0', $tr->tr("no"));?>
             <?= Utils::make_option($tailscaleConfig->AllowDNS, '1', $tr->tr("yes"));?>
         </select>
@@ -147,7 +147,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.funnel"); ?></dt>
     <dd>
-        <select name='ALLOW_FUNNEL' id='ALLOW_FUNNEL' onchange="showSettingWarning('funnel','#ALLOW_FUNNEL');" size='1'>
+        <select name='ALLOW_FUNNEL' id='ALLOW_FUNNEL' onchange="showSettingWarning('funnel','#ALLOW_FUNNEL');" size='1' class='narrow'>
             <?= Utils::make_option( ! $tailscaleConfig->AllowFunnel, '0', $tr->tr("no"));?>
             <?= Utils::make_option($tailscaleConfig->AllowFunnel, '1', $tr->tr("yes"));?>
         </select>
@@ -164,7 +164,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><strong><?= $tr->tr("settings.context.save"); ?></strong></dt>
     <dd>
-        <input type="submit" name="#apply" value="<?= $tr->tr('Apply'); ?>"><input type="button" id="DONE" value="<?= $tr->tr('Back'); ?>" onclick="done()">
+        <span><input type="submit" name="#apply" value="<?= $tr->tr('Apply'); ?>"><input type="button" id="DONE" value="<?= $tr->tr('Back'); ?>" onclick="done()"></span>
     </dd>
 </dl>
 </form>
@@ -176,7 +176,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.context.restart"); ?></dt>
     <dd>
-        <input type="submit" value="<?= $tr->tr('Restart'); ?>">
+        <span><input type="submit" value="<?= $tr->tr('Restart'); ?>"></span>
     </dd>
 </dl>
 </form>
@@ -189,7 +189,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.context.diagnostics"); ?></dt>
     <dd>
-        <input type="submit" value="<?= $tr->tr('Download'); ?> ">
+        <span><input type="submit" value="<?= $tr->tr('Download'); ?> "></span>
     </dd>
 </dl>
 </form>
@@ -202,7 +202,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.context.reauthenticate"); ?></dt>
     <dd>
-        <input type="button" value="<?= $tr->tr('settings.reauthenticate'); ?>" onclick="expireTailscaleKeyNow()" <?= $tailscaleDisconnect; ?>>
+        <span><input type="button" value="<?= $tr->tr('settings.reauthenticate'); ?>" onclick="expireTailscaleKeyNow()" <?= $tailscaleDisconnect; ?>></span>
     </dd>
 </dl>
 
@@ -213,7 +213,7 @@ if ($tailscaleConfig->Enable) {
 <dl>
     <dt><?= $tr->tr("settings.context.erase"); ?></dt>
     <dd>
-        <input type="button" value="<?= $tr->tr('Erase'); ?>" onclick="requestErase(this)" <?= $tailscaleDisconnect; ?>><input id="tailscale_erase_confirm" type="submit" value="<?= $tr->tr('Confirm'); ?>" style="display: none;">
+        <span><input type="button" value="<?= $tr->tr('Erase'); ?>" onclick="requestErase(this)" <?= $tailscaleDisconnect; ?>><input id="tailscale_erase_confirm" type="submit" value="<?= $tr->tr('Confirm'); ?>" style="display: none;"></span>
     </dd>
 </dl>
 </form>
