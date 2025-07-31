@@ -1,3 +1,0 @@
-#!/bin/bash
-
-composer --working-dir src/usr/local/php/unraid-tailscale-utils/ "$@"
